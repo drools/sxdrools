@@ -33,7 +33,7 @@ public class ScheduleSwapMove implements Move {
     }
 
     public void doMove(ScoreDirector scoreDirector) {
-    	//System.out.println(this.toString());
+    	System.out.println(this.toString());
         Day oldLeftDay = leftSchedule.getDay();
         Day oldRightDay = rightSchedule.getDay();
         Classroom oldLeftClassroom = leftSchedule.getClassroom();
