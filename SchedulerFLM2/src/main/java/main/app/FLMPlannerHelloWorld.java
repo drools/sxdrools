@@ -22,6 +22,8 @@ public class FLMPlannerHelloWorld {
 		importer.importFromXLS(inFile);
 		DataStorage storage = importer.getStorage();
 		
+		long startTimeCounter = System.currentTimeMillis();
+		
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
         solverFactory.configure(SOLVER_CONFIG);
         Solver solver = solverFactory.buildSolver();
@@ -32,11 +34,12 @@ public class FLMPlannerHelloWorld {
         
         ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
 
+        long elapsedTimeMillis = System.currentTimeMillis()-startTimeCounter;
         
         PlannerSolution solvedSolution = (PlannerSolution) solver.getBestSolution();
         
         System.out.println(solvedSolution.getScore());
-        System.out.println("early terminate:" + solver.isTerminateEarly());
+        System.out.println("Elapsed time: " + elapsedTimeMillis/(60*1000F) + "min "+ elapsedTimeMillis/1000F + "sec");
         
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();
