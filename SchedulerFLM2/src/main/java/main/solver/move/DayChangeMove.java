@@ -30,7 +30,7 @@ public class DayChangeMove implements Move {
     }
 
     public void doMove(ScoreDirector scoreDirector) {
-    	System.out.println(this.toString());
+    	//System.out.println(this.toString());
     	ScheduleMoveHelper.moveDay(scoreDirector, schedule, toDay);
     }
 

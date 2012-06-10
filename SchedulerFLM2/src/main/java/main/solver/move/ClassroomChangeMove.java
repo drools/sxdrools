@@ -31,7 +31,7 @@ public class ClassroomChangeMove implements Move  {
 
     public void doMove(ScoreDirector scoreDirector) {
     	//System.out.println(scoreDirector.toString() + " " + this.toString());
-    	System.out.println(this.toString());
+    	//System.out.println(this.toString());
     	ScheduleMoveHelper.moveClassroom(scoreDirector, schedule, toClassroom);
     }
 
