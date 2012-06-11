@@ -34,31 +34,87 @@ public class ImportData {
 	
 	private boolean importClassroomMaster(Sheet sheet) {
 		if ((!sheet.getName().equals("ClassroomMaster"))||
-				(!sheet.getCell(0, 0).getContents().equals("ID"))||(!sheet.getCell(1, 0).getContents().equals("Capacity"))||
-				(!sheet.getCell(2, 0).getContents().equals("PC"))) {
+				(!sheet.getCell(0, 0).getContents().equals("ID"))||
+				(!sheet.getCell(1, 0).getContents().equals("Capacity"))||
+				(!sheet.getCell(2, 0).getContents().equals("PC"))||
+				(!sheet.getCell(3, 0).getContents().equals("PC Type"))) {
 			return false;
 		}
 		
 		for (int i=1;i<sheet.getRows();i++) {
+			try {
 			storage.classroomList.add(new Classroom(i-1,
-					sheet.getCell(0, i).getContents(),Integer.parseInt(sheet.getCell(1, i).getContents()),
-					Boolean.parseBoolean(sheet.getCell(2, i).getContents())));
+					sheet.getCell(0, i).getContents(),
+					sheet.getCell(1, i).getContents(),
+					sheet.getCell(2, i).getContents(),
+					sheet.getCell(3, i).getContents()));
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error in ClassroomMaster row " + i);
+			}
     	}
 		
 		return true;
 	}
 	
+	/*private static boolean parseBool(String s) {
+		if (s.equals("")) {
+			return (boolean) null;
+		}
+	}*/
+	
 	private boolean importCourseMaster(Sheet sheet) {
 		if (!(sheet.getName().equals("CourseMaster"))||
-				(!sheet.getCell(0, 0).getContents().equals("ID"))||(!sheet.getCell(1, 0).getContents().equals("Expected Size"))||
-				(!sheet.getCell(2, 0).getContents().equals("Length"))||(!sheet.getCell(3, 0).getContents().equals("PC"))) {
+				(!sheet.getCell(0, 0).getContents().equals("ID"))||
+				(!sheet.getCell(1, 0).getContents().equals("Expected Size"))||
+				(!sheet.getCell(2, 0).getContents().equals("Minimum Size"))||
+				(!sheet.getCell(3, 0).getContents().equals("Length"))||
+				(!sheet.getCell(4, 0).getContents().equals("PC"))||
+				(!sheet.getCell(5, 0).getContents().equals("Fixed Room"))||
+				(!sheet.getCell(6, 0).getContents().equals("Required PC"))) {
 			return false;
 		}
 		
 		for (int i=1;i<sheet.getRows();i++) {
-			storage.courseList.add(new Course(i-1,
-					sheet.getCell(0, i).getContents(),Integer.parseInt(sheet.getCell(1, i).getContents()),
-					Integer.parseInt(sheet.getCell(2, i).getContents()),Boolean.parseBoolean(sheet.getCell(3, i).getContents())));
+			try {
+				storage.courseList.add(new Course(i-1,
+						sheet.getCell(0, i).getContents(),
+						sheet.getCell(1, i).getContents(),
+						sheet.getCell(2, i).getContents(),
+						sheet.getCell(3, i).getContents(),
+						sheet.getCell(4, i).getContents(),
+						sheet.getCell(5, i).getContents(),
+						sheet.getCell(6, i).getContents()));
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error in CourseMaster row " + i);
+				e.printStackTrace();
+			}
+    	}
+		
+		return true;
+	}
+	
+	private boolean importBlockedClassroomMaster(Sheet sheet) {
+		if (!(sheet.getName().equals("BlockedClassRoomMaster"))||
+				(!sheet.getCell(0, 0).getContents().equals("Classroom"))||
+				(!sheet.getCell(1, 0).getContents().equals("Day"))) {
+			return false;
+		}
+		
+		for (int i=1;i<sheet.getRows();i++) {
+			try {
+				
+				storage.blockedClassroomList.add(new BlockedClassroom(
+						storage.getClassroom(sheet.getCell(0, i).getContents()),
+						storage.getDay(sheet.getCell(1, i).getContents())));
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error in CourseMaster row " + i);
+			}
     	}
 		
 		return true;
@@ -66,15 +122,29 @@ public class ImportData {
 	
 	private boolean importDayMaster(Sheet sheet) {
 		if ((!sheet.getName().equals("DayMaster"))||
-				(!sheet.getCell(0, 0).getContents().equals("ID"))||(!sheet.getCell(1, 0).getContents().equals("DayWeek"))||
-				(!sheet.getCell(2, 0).getContents().equals("Week"))) {
+				(!sheet.getCell(0, 0).getContents().equals("ID"))||
+				(!sheet.getCell(1, 0).getContents().equals("DayWeek"))||
+				(!sheet.getCell(2, 0).getContents().equals("DayWeekHoliday"))||
+				(!sheet.getCell(3, 0).getContents().equals("Week"))) {
 			return false;
 		}
 		
 		for (int i=1;i<sheet.getRows();i++) {
-			storage.dayList.add(new Day(i-1,
-					sheet.getCell(0, i).getContents(),DayWeek.parseDayWeek(Integer.parseInt(sheet.getCell(1, i).getContents())),
-					Week.parseWeek(Integer.parseInt(sheet.getCell(2, i).getContents()))));
+			try {
+				/*storage.dayList.add(new Day(i-1,
+					sheet.getCell(0, i).getContents(),
+						DayWeek.parseDayWeek(Integer.parseInt(sheet.getCell(1, i).getContents())),
+						Week.parseWeek(Integer.parseInt(sheet.getCell(2, i).getContents()))));*/
+				storage.dayList.add(new Day(i-1,
+						sheet.getCell(0, i).getContents(),
+						sheet.getCell(1, i).getContents(),
+						sheet.getCell(2, i).getContents(),
+						sheet.getCell(3, i).getContents()));
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error in DayMaster row " + i);
+			}
     	}
 		
 		return true;
@@ -94,6 +164,7 @@ public class ImportData {
         	System.out.println("Import Course = " + importCourseMaster(workbook.getSheet(0)));
         	System.out.println("Import Classroom = " + importClassroomMaster(workbook.getSheet(1)));
         	System.out.println("Import Day = " + importDayMaster(workbook.getSheet(2)));
+        	System.out.println("Import BlockedClassroom = " + importBlockedClassroomMaster(workbook.getSheet(3)));
         	
         	// Initialize Schedule Data
         	

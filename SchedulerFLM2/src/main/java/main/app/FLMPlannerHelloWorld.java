@@ -16,7 +16,25 @@ public class FLMPlannerHelloWorld {
 
 	public static final String SOLVER_CONFIG = "/FLMPlannerSolverConfig.xml";
 	
+	public static void testMethod() {
+		Course c1 = new Course(1,13,1,true);
+		ArrayList<String> sPC = new ArrayList<String>();
+		sPC.add("PRIMERGY");
+		sPC.add("D750/A");
+		c1.setSupportedPCList(sPC);
+		Classroom r1 = new Classroom(3,15,true) ;
+		r1.setPcType("D750/A");
+		Schedule s1 = new Schedule(c1,r1,null);
+		
+		System.out.println(s1.checkPCRequirement());
+	}
+	
 	public static void runData(String inFile, String outFile) {
+		
+		//testMethod();
+		
+		
+		
 		ImportData importer = new ImportData();
 		//importer.initialtest();
 		importer.importFromXLS(inFile);
@@ -52,8 +70,9 @@ public class FLMPlannerHelloWorld {
         
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();*/
-        //scoreDirector.
         
+		
+		
         ExportData exporter = new ExportData(solvedSolution.getScheduleList());
         
         //exporter.showInitialTestResult();
@@ -61,7 +80,7 @@ public class FLMPlannerHelloWorld {
         //System.out.println("Export to XLS: " + exporter.exportToXLS(outFile));
         System.out.println("Export to XLS: " + exporter.exportToXLS_debug(outFile));
         
-        //System.out.println(solvedSolution.getScheduleList().get(6).conflictDayCheck(solvedSolution.getScheduleList().get(7)));
+        
 	}
 
 	

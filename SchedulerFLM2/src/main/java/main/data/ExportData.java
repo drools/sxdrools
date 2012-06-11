@@ -31,7 +31,8 @@ public class ExportData {
 					+ " PC " + (schedule.getCourse().isPC()==schedule.getClassroom().isPC()));
 		}
 	}
-	
+
+//export with length for TEST Convenience	
 public boolean exportToXLS_debug(String filename) {
 		
 		try{

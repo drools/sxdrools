@@ -85,8 +85,21 @@ public class Schedule {
     		return false;
     	} else {
     		// would planning course finish in week? (FRI = 4) 
-    		return ((int) day.getDayweek().getDayweek() <= 5-course.getLength());
+    		return ((int) day.getDayweek1().getDayweek() <= 5-course.getLength());
     	}
+    }
+    
+    //PC requirement check
+    public boolean checkPCRequirement() {
+    	return course.getSupportedPCList().contains(classroom.getPcType());
+    }
+    
+    //PC check room condition
+    public boolean checkFixedRoomRequirement() {
+    	if (course.getFixedRoomList() == null) {
+    		return true;
+    	}
+    	return course.getFixedRoomList().contains(classroom.getID());
     }
     
     @Override

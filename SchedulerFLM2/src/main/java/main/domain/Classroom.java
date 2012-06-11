@@ -7,6 +7,7 @@ public class Classroom implements Serializable {
 	private boolean PC;
 	private int classroomID;
 	private String ID;
+	private String pcType;
 	
 	public Classroom() {}
 	
@@ -21,6 +22,14 @@ public class Classroom implements Serializable {
 		this.PC = PC;
 		this.classroomID = classroomID;
 		this.ID=ID;
+	}
+	
+	public Classroom(int classroomID, String ID, String capacity, String PC, String pcType) {
+		this.capacity=Integer.parseInt(capacity);
+		this.PC = Boolean.parseBoolean(PC);
+		this.classroomID = classroomID;
+		this.ID=ID;
+		this.pcType=pcType;
 	}
 	
 	
@@ -55,6 +64,7 @@ public class Classroom implements Serializable {
 		c.PC = PC;
 		c.classroomID = classroomID;
 		c.ID = ID;
+		c.pcType = pcType;
 		return c;
 	}
 	
@@ -73,6 +83,14 @@ public class Classroom implements Serializable {
 
 	public void setID(String iD) {
 		ID = iD;
+	}
+
+	public String getPcType() {
+		return pcType;
+	}
+
+	public void setPcType(String pcType) {
+		this.pcType = pcType;
 	}
 	
 }

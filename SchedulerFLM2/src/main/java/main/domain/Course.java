@@ -1,6 +1,8 @@
 package main.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Course implements Serializable {
 	private int courseID;
@@ -8,6 +10,9 @@ public class Course implements Serializable {
 	private int length;
 	private boolean PC;
 	private String ID;
+	private ArrayList<String> supportedPCList;
+	private ArrayList<String> fixedRoomList;
+	private int minESize;
 	
 	public Course() { }
 	
@@ -24,6 +29,27 @@ public class Course implements Serializable {
 		this.length=length;
 		this.PC=PC;
 		this.ID=ID;
+	}
+	
+	public Course(int courseID, String ID, String eSize, String minSize, String length, 
+			String PC, String fixedRoom, String supportedPC) {
+		this.courseID=courseID;
+		this.eSize=Integer.parseInt(eSize);
+		this.length=Integer.parseInt(length);
+		if (!minSize.equals("")) {
+			this.minESize = Integer.parseInt(minSize);
+		} else {
+			this.minESize = 0;
+		}
+		
+		if (PC.equals("")) {
+			//this.PC = (Boolean) null;
+		} else {
+			this.PC = Boolean.parseBoolean(PC);
+		}
+		this.ID=ID;
+		this.supportedPCList = new ArrayList<String>(Arrays.asList(supportedPC.split(",")));
+		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom.split(",")));
 	}
 	
 	public int getCourseID() {
@@ -59,6 +85,14 @@ public class Course implements Serializable {
 		c.length=length;
 		c.PC=PC;
 		c.ID=ID;
+		c.supportedPCList = new ArrayList<String>();
+		for (String s : supportedPCList) {
+			c.supportedPCList.add(s);
+		}
+		c.fixedRoomList = new ArrayList<String>();
+		for (String s1 : fixedRoomList) {
+			c.fixedRoomList.add(s1);
+		}
 		return c;
 	}
 	
@@ -72,5 +106,29 @@ public class Course implements Serializable {
 
 	public void setID(String iD) {
 		ID = iD;
+	}
+
+	public ArrayList<String> getSupportedPCList() {
+		return supportedPCList;
+	}
+
+	public void setSupportedPCList(ArrayList<String> supportedPC) {
+		this.supportedPCList = supportedPC;
+	}
+
+	public ArrayList<String> getFixedRoomList() {
+		return fixedRoomList;
+	}
+
+	public void setFixedRoomList(ArrayList<String> fixedRoom) {
+		this.fixedRoomList = fixedRoom;
+	}
+
+	public int getMinESize() {
+		return minESize;
+	}
+
+	public void setMinESize(int minESize) {
+		this.minESize = minESize;
 	}
 }
