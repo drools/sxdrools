@@ -39,7 +39,7 @@ public class FLMPlannerHelloWorld {
         PlannerSolution solvedSolution = (PlannerSolution) solver.getBestSolution();
         
         System.out.println(solvedSolution.getScore());
-        System.out.println("Elapsed time: " + elapsedTimeMillis/(60*1000F) + "min "+ elapsedTimeMillis/1000F + "sec");
+        System.out.println("Elapsed time: " + (int) (elapsedTimeMillis/(60*1000F)) + "min "+ elapsedTimeMillis/1000F + "sec");
         
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();
