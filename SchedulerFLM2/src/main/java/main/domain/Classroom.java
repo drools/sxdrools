@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class Classroom implements Serializable {
 	private int capacity;
-	private boolean PC;
+	private Boolean PC;
 	private int classroomID;
 	private String ID;
 	private String pcType;
 	
 	public Classroom() {}
 	
-	public Classroom(int classroomID, int capacity, boolean PC) {
+	public Classroom(int classroomID, int capacity, Boolean PC) {
 		this.capacity=capacity;
 		this.PC = PC;
 		this.classroomID = classroomID;
 	}
 	
-	public Classroom(int classroomID, String ID, int capacity, boolean PC) {
+	public Classroom(int classroomID, String ID, int capacity, Boolean PC) {
 		this.capacity=capacity;
 		this.PC = PC;
 		this.classroomID = classroomID;
@@ -41,11 +41,11 @@ public class Classroom implements Serializable {
 		this.capacity = capacity;
 	}
 	
-	public boolean isPC() {
+	public Boolean getPC() {
 		return PC;
 	}
 	
-	public void setPC(boolean pC) {
+	public void setPC(Boolean pC) {
 		PC = pC;
 	}
 	

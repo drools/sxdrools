@@ -8,22 +8,23 @@ public class Course implements Serializable {
 	private int courseID;
 	private int eSize;
 	private int length;
-	private boolean PC;
+	private Boolean PC;
 	private String ID;
 	private ArrayList<String> supportedPCList;
 	private ArrayList<String> fixedRoomList;
+	//minEsize == 0 means course size is fixed
 	private int minESize;
 	
 	public Course() { }
 	
-	public Course(int courseID, int eSize, int length, boolean PC) {
+	public Course(int courseID, int eSize, int length, Boolean PC) {
 		this.courseID=courseID;
 		this.eSize=eSize;
 		this.length=length;
 		this.PC=PC;
 	}
 	
-	public Course(int courseID, String ID, int eSize, int length, boolean PC) {
+	public Course(int courseID, String ID, int eSize, int length, Boolean PC) {
 		this.courseID=courseID;
 		this.eSize=eSize;
 		this.length=length;
@@ -39,11 +40,12 @@ public class Course implements Serializable {
 		if (!minSize.equals("")) {
 			this.minESize = Integer.parseInt(minSize);
 		} else {
+			//minEsize == 0 means course size is fixed
 			this.minESize = 0;
 		}
 		
 		if (PC.equals("")) {
-			//this.PC = (Boolean) null;
+			this.PC = (Boolean) null;
 		} else {
 			this.PC = Boolean.parseBoolean(PC);
 		}
@@ -70,10 +72,10 @@ public class Course implements Serializable {
 	public void setLength(int length) {
 		this.length = length;
 	}
-	public boolean isPC() {
+	public Boolean getPC() {
 		return PC;
 	}
-	public void setPC(boolean pC) {
+	public void setPC(Boolean pC) {
 		PC = pC;
 	}
 
@@ -131,4 +133,5 @@ public class Course implements Serializable {
 	public void setMinESize(int minESize) {
 		this.minESize = minESize;
 	}
+
 }

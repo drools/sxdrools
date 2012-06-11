@@ -62,14 +62,18 @@ public class FLMPlannerHelloWorld {
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();
         
-        /*List<Schedule> listSch = solvedSolution.getScheduleList();
-        listSch.get(6).setDay(storage.dayList.get(3));
-        listSch.get(6).setClassroom(storage.classroomList.get(0));
-        solvedSolution.setScheduleList(listSch);
+        List<Schedule> listSch = solvedSolution.getScheduleList();
+        //listSch.get(0).setDay(storage.dayList.get(0));
+        //listSch.get(0).setClassroom(storage.classroomList.get(0));
+        listSch.get(6).setDay(storage.dayList.get(2));
+        listSch.get(6).setClassroom(storage.classroomList.get(1));
+        //solvedSolution.setScheduleList(listSch);
+        solver.setPlanningProblem(solvedSolution);
+        solvedSolution.setScheduleList(initialSolution.getScheduleList());
         System.out.println(solvedSolution.getScore());
         
         scoreDirector.setWorkingSolution(solvedSolution);
-        scoreDirector.calculateScore();*/
+        scoreDirector.calculateScore();
         
 		
 		

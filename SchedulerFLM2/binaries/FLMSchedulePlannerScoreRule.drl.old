@@ -52,7 +52,7 @@ end
 
 rule "pcRequirement"
     when
-        $schedule : Schedule(classroom.PC != course.PC)
+        $schedule : Schedule(course.PC != null, classroom.PC != course.PC)
     then
         insertLogical(new IntConstraintOccurrence("pcRequirement", ConstraintType.NEGATIVE_HARD,
                 1,

@@ -27,7 +27,7 @@ rule "classroomOccupancy"
         
     then
         insertLogical(new IntConstraintOccurrence("classroomOccupancy", ConstraintType.NEGATIVE_HARD,
-                2,
+                1,
                 $leftSchedule, $rightSchedule));
 end
 
@@ -37,7 +37,7 @@ rule "overCapacity"
         
     then
         insertLogical(new IntConstraintOccurrence("overCapacity", ConstraintType.NEGATIVE_HARD,
-                1,
+                2,
                 $schedule));
 end
 
@@ -46,16 +46,16 @@ rule "notFinishInWeek"
         $schedule : Schedule( finishInWeek == false )       
     then
         insertLogical(new IntConstraintOccurrence("notFinishInWeek", ConstraintType.NEGATIVE_HARD,
-                1,
+                3,
                 $schedule));
 end
 
 rule "pcRequirement"
     when
-        $schedule : Schedule(classroom.PC != course.PC)
+        $schedule : Schedule(course.PC != null, classroom.PC != course.PC)
     then
         insertLogical(new IntConstraintOccurrence("pcRequirement", ConstraintType.NEGATIVE_HARD,
-                1,
+                4,
                 $schedule));
 end
 

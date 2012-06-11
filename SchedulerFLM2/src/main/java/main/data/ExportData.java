@@ -28,7 +28,7 @@ public class ExportData {
 		for (Schedule schedule:scheduleList) {
 			System.out.println(schedule.toString()+ 
 					" ||||| " + "Size "+(schedule.getCourse().geteSize()<=schedule.getClassroom().getCapacity()) 
-					+ " PC " + (schedule.getCourse().isPC()==schedule.getClassroom().isPC()));
+					+ " PC " + (schedule.getCourse().getPC()==schedule.getClassroom().getPC()));
 		}
 	}
 
