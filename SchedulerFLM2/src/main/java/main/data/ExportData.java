@@ -1,5 +1,6 @@
+//パッケージの作成
 package main.data;
-
+//パッケージのインポート
 import java.util.List;
 
 import main.domain.Schedule;
@@ -15,14 +16,20 @@ import jxl.write.WriteException;
 import java.util.Locale;
 
 public class ExportData {
+	//メンバ変数の定義
+	//スケジュール
 	private List<Schedule> scheduleList;
 	
+	//コンストラクタの設定
+	//引数なし
 	public ExportData() { }
-	
+	//引数あり
 	public ExportData(List<Schedule> scheduleList) {
 		this.scheduleList=scheduleList;
 	}
 	
+	//メソッド
+	//初期テストの結果表示
 	public void showInitialTestResult() {
 		System.out.println(" ======Result====== ");
 		for (Schedule schedule:scheduleList) {
@@ -31,9 +38,10 @@ public class ExportData {
 					+ " PC " + (schedule.getCourse().getPC()==schedule.getClassroom().getPC()));
 		}
 	}
-
-//export with length for TEST Convenience	
-public boolean exportToXLS_debug(String filename) {
+	
+	//エクセルシートへのエクスポート（テスト用）
+	//export with length for TEST Convenience	
+	public boolean exportToXLS_debug(String filename) {
 		
 		try{
 			WritableWorkbook workbook = Workbook.createWorkbook(new File(filename)); 
@@ -72,6 +80,7 @@ public boolean exportToXLS_debug(String filename) {
 		
 	}
 	
+	//エクセルシートのエクスポート（仮）
 	public boolean exportToXLS(String filename) {
 		
 		try{

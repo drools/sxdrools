@@ -1,10 +1,13 @@
+//パッケージの作成
 package main.domain;
-
+//パッケージのインポート
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Course implements Serializable {
+	
+	//メンバ変数の定義
 	private int courseID;
 	private int eSize;
 	private int length;
@@ -15,15 +18,17 @@ public class Course implements Serializable {
 	//minEsize == 0 means course size is fixed
 	private int minESize;
 	
+	//コンストラクタの設定
+	//引数なし
 	public Course() { }
-	
+	//引数あり（コースID、コース定員、コース期間、PC）
 	public Course(int courseID, int eSize, int length, Boolean PC) {
 		this.courseID=courseID;
 		this.eSize=eSize;
 		this.length=length;
 		this.PC=PC;
 	}
-	
+	//引数あり（+ID）
 	public Course(int courseID, String ID, int eSize, int length, Boolean PC) {
 		this.courseID=courseID;
 		this.eSize=eSize;
@@ -31,7 +36,7 @@ public class Course implements Serializable {
 		this.PC=PC;
 		this.ID=ID;
 	}
-	
+	//引数あり（+最小可能人数）
 	public Course(int courseID, String ID, String eSize, String minSize, String length, 
 			String PC, String fixedRoom, String supportedPC) {
 		this.courseID=courseID;
@@ -54,29 +59,62 @@ public class Course implements Serializable {
 		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom.split(",")));
 	}
 	
+	//ゲッター・セッター
+	//コースID
 	public int getCourseID() {
 		return courseID;
 	}
 	public void setCourseID(int courseID) {
 		this.courseID = courseID;
 	}
+	//コース定員
 	public int geteSize() {
 		return eSize;
 	}
 	public void seteSize(int eSize) {
 		this.eSize = eSize;
 	}
+	//コース期間
 	public int getLength() {
 		return length;
 	}
 	public void setLength(int length) {
 		this.length = length;
 	}
+	//PC
 	public Boolean getPC() {
 		return PC;
 	}
 	public void setPC(Boolean pC) {
 		PC = pC;
+	}
+	//ID
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	//対応PCリスト
+	public ArrayList<String> getSupportedPCList() {
+		return supportedPCList;
+	}
+	public void setSupportedPCList(ArrayList<String> supportedPC) {
+		this.supportedPCList = supportedPC;
+	}
+	//指定教室リスト
+	public ArrayList<String> getFixedRoomList() {
+		return fixedRoomList;
+	}
+	public void setFixedRoomList(ArrayList<String> fixedRoom) {
+		this.fixedRoomList = fixedRoom;
+	}
+	//最小可能人数
+	public int getMinESize() {
+		return minESize;
+	}
+	public void setMinESize(int minESize) {
+		this.minESize = minESize;
 	}
 
 	//complex method
@@ -96,42 +134,8 @@ public class Course implements Serializable {
 			c.fixedRoomList.add(s1);
 		}
 		return c;
-	}
-	
+	}	
 	public String toString() {
 		return "CourseID " + ID + " size " + eSize + " PC " + PC;
 	}
-
-	public String getID() {
-		return ID;
-	}
-
-	public void setID(String iD) {
-		ID = iD;
-	}
-
-	public ArrayList<String> getSupportedPCList() {
-		return supportedPCList;
-	}
-
-	public void setSupportedPCList(ArrayList<String> supportedPC) {
-		this.supportedPCList = supportedPC;
-	}
-
-	public ArrayList<String> getFixedRoomList() {
-		return fixedRoomList;
-	}
-
-	public void setFixedRoomList(ArrayList<String> fixedRoom) {
-		this.fixedRoomList = fixedRoom;
-	}
-
-	public int getMinESize() {
-		return minESize;
-	}
-
-	public void setMinESize(int minESize) {
-		this.minESize = minESize;
-	}
-
 }

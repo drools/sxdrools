@@ -1,5 +1,6 @@
+//パッケージの作成
 package main.data;
-
+//パッケージのインポート
 import main.domain.BlockedClassroom;
 import main.domain.Classroom;
 import main.domain.Day;
@@ -10,13 +11,20 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DataStorage {
-	public List<Classroom> classroomList;
-	public List<Day> dayList;
-	public List<Course> courseList;
-	public List<BlockedClassroom> blockedClassroomList;
 	
-	public List<Schedule> scheduleList;
+	//メンバ変数の定義
+	//教室
+	public final List<Classroom> classroomList;
+	//営業日
+	public final List<Day> dayList;
+	//コース
+	public final List<Course> courseList;
+	//ブロック教室
+	public final List<BlockedClassroom> blockedClassroomList;
+	//スケジュール
+	public final List<Schedule> scheduleList;
 	
+	//データ倉庫の作成
 	public DataStorage() {
 		classroomList = new ArrayList<Classroom>();
 		dayList = new ArrayList<Day>();
@@ -25,7 +33,8 @@ public class DataStorage {
 		scheduleList = new ArrayList<Schedule>();
 		blockedClassroomList = new ArrayList<BlockedClassroom>();
 	}
-	
+	//ゲッター・セッター
+	//営業日
 	public Day getDay(String day) {
 		for (Day d : dayList) {
 			if (d.getID().equals(day)) {
@@ -34,7 +43,7 @@ public class DataStorage {
 		}
 		return null;
 	}
-	
+	//教室
 	public Classroom getClassroom(String classroom) {
 		for (Classroom c : classroomList) {
 			if (c.getID().equals(classroom)) {

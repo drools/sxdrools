@@ -1,5 +1,6 @@
+//パッケージの作成
 package main.data;
-
+//パッケージのインポート
 import main.domain.*;
 import java.io.File; 
 import java.io.IOException;
@@ -10,28 +11,31 @@ import jxl.*;
 
 import java.util.Locale;
 
-
-
 public class ImportData {
+	//メンバ変数の定義
 	private DataStorage storage;
 	
+	//コンストラクタの設定
+	//引数なし
 	public ImportData() {
 		storage = new DataStorage();
 	}
-	
+	//引数あり
 	public ImportData(DataStorage storage) {
 		this.storage = storage;
 	}
-	
-	// setter - getter
+
+	//セッター・ゲッター
+	//データ倉庫
 	public void setStorage(DataStorage storage) {
 		this.storage = storage;
 	}
-	
 	public DataStorage getStorage() {
 		return storage;
 	}
 	
+	//メソッド
+	//教室マスタのインポート
 	private boolean importClassroomMaster(Sheet sheet) {
 		if ((!sheet.getName().equals("ClassroomMaster"))||
 				(!sheet.getCell(0, 0).getContents().equals("ID"))||
@@ -64,6 +68,7 @@ public class ImportData {
 		}
 	}*/
 	
+	//コース開催条件マスタのインポート
 	private boolean importCourseMaster(Sheet sheet) {
 		if (!(sheet.getName().equals("CourseMaster"))||
 				(!sheet.getCell(0, 0).getContents().equals("ID"))||
@@ -96,11 +101,12 @@ public class ImportData {
 		
 		return true;
 	}
-	
+	//ブロック教室マスタのインポート
 	private boolean importBlockedClassroomMaster(Sheet sheet) {
 		if (!(sheet.getName().equals("BlockedClassRoomMaster"))||
 				(!sheet.getCell(0, 0).getContents().equals("Classroom"))||
-				(!sheet.getCell(1, 0).getContents().equals("Day"))) {
+				(!sheet.getCell(1, 0).getContents().equals("Day"))||
+				(!sheet.getCell(2, 0).getContents().equals("Length"))) {
 			return false;
 		}
 		
@@ -109,7 +115,8 @@ public class ImportData {
 				
 				storage.blockedClassroomList.add(new BlockedClassroom(
 						storage.getClassroom(sheet.getCell(0, i).getContents()),
-						storage.getDay(sheet.getCell(1, i).getContents())));
+						storage.getDay(sheet.getCell(1, i).getContents()),
+						sheet.getCell(2, i).getContents()));
 			}
 			catch (Exception e)
 			{
@@ -119,7 +126,7 @@ public class ImportData {
 		
 		return true;
 	}
-	
+	//営業日マスタのインポート
 	private boolean importDayMaster(Sheet sheet) {
 		if ((!sheet.getName().equals("DayMaster"))||
 				(!sheet.getCell(0, 0).getContents().equals("ID"))||
@@ -149,7 +156,7 @@ public class ImportData {
 		
 		return true;
 	}
-	
+	//エクセルシートのインポート
 	public void importFromXLS(String filename) {
 		
 		storage = new DataStorage();
@@ -189,8 +196,7 @@ public class ImportData {
         }
 
 	}
-	
-	// initial test data
+	//初期テスト用データ
 	public void initialtest() {
 		storage = new DataStorage();
 		

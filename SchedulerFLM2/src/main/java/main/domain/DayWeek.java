@@ -1,14 +1,18 @@
+//パッケージの作成
 package main.domain;
 
 public enum DayWeek {
 	MON(0), TUE(1), WED(2), THU(3), FRI(4);
 	
+	//メンバ変数の定義
 	private final int dayweek;
 	
+	//コンストラクタの設定
 	DayWeek (int dayweek) {
 		this.dayweek = dayweek;
 	}
-
+	
+	//??
 	static DayWeek parseDayWeek(String dayweek) {
 		if (dayweek == "MON") {
 			return MON;

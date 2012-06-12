@@ -1,5 +1,6 @@
+//パッケージの作成
 package main.domain;
-
+//パッケージのインポート
 import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.variable.PlanningVariable;
 import org.drools.planner.api.domain.variable.ValueRange;
@@ -7,16 +8,18 @@ import org.drools.planner.api.domain.variable.ValueRangeType;
 
 @PlanningEntity
 public class Schedule {
+	//変数定義
 	private Course course;
-	
 	private int scheduleID;
 	
 	//Planning variable
 	private Classroom classroom;
 	private Day day;
 	
+	//コンストラクタの設定
+	//引数なし
 	public Schedule() {}
-	
+	//引数あり（コース,教室,営業日）
 	public Schedule(Course course, Classroom classroom, Day day) {
 		this.scheduleID=course.getCourseID();
 		this.course=course;
@@ -24,13 +27,15 @@ public class Schedule {
 		this.day=day;
 	}
 	
+	//ゲッター・セッター
+	//スケジュールID
 	public int getScheduleID() {
 		return scheduleID;
 	}
 	public void setScheduleID(int scheduleID) {
 		this.scheduleID = scheduleID;
 	}
-	
+	//コース
 	public Course getCourse() {
 		return course;
 	}
@@ -56,8 +61,7 @@ public class Schedule {
 		this.day = day;
 	}
 	
-	// complex class
-  
+    // complex method
     public Schedule clone() {
     	Schedule c = new Schedule();
 		c.course=course.clone();
@@ -66,8 +70,13 @@ public class Schedule {
 		c.scheduleID=scheduleID;
 		return c;
     }
-    
-    //Schedule day conflict check
+       
+    @Override
+    public String toString() {
+    	return course.toString() + "@" + classroom.toString() + " on " + day.toString();
+    }
+    	
+    //コース開催日程の重複
     public boolean conflictDayCheck(Schedule c) {
     	if ((c==null)||(day ==null)||(classroom ==null)) {
     		return false;
@@ -79,7 +88,7 @@ public class Schedule {
     	}
     }
     
-    //finish in week check
+    //営業日内での開催
     public boolean finishInWeek() {
     	if (day == null) {
     		return false;
@@ -89,22 +98,17 @@ public class Schedule {
     	}
     }
     
-    //PC requirement check
+    //PCの種類チェック
     public boolean checkPCRequirement() {
     	return course.getSupportedPCList().contains(classroom.getPcType());
     }
     
-    //PC check room condition
+    //指定教室のチェック
     public boolean checkFixedRoomRequirement() {
     	if (course.getFixedRoomList() == null) {
     		return true;
     	}
     	return course.getFixedRoomList().contains(classroom.getID());
-    }
-    
-    @Override
-    public String toString() {
-    	return course.toString() + "@" + classroom.toString() + " on " + day.toString();
     }
     
 }
