@@ -138,7 +138,19 @@ public class Course implements Serializable {
 			c.fixedRoomList.add(s1);
 		}
 		return c;
-	}	
+	}
+	
+	public boolean equals(Course c) {
+		if (c==null) {
+			return false;
+		}
+		if (c.getID().equals(ID)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public String toString() {
 		return "CourseID " + ID + " size " + eSize + " PC " + PC;
 	}

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.drools.planner.api.domain.solution.PlanningEntityCollectionProperty;
 import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScore;
@@ -14,6 +13,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
 	//problem fact
 	private List<Classroom> classroomList;
 	private List<Day> dayList;
+	private List<BlockedClassroom> blockedClassroomList;
+	private List<CourseTotalSize> courseTotalSizeList;
 //	private List<DayWeek> dayWeekList;
 //	private List<Week> weekList;
 //  private List<Course> courseList;
@@ -33,10 +34,15 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
 		this.courseList=courseList;
 	}*/
 	
-	public PlannerSolution(List<Schedule> scheduleList, List<Classroom> classroomList, List<Day> dayList) {
+	public PlannerSolution(List<Schedule> scheduleList, List<Classroom> classroomList, 
+			List<Day> dayList, List<BlockedClassroom> blockedClassroomList, 
+			List<CourseTotalSize> courseTotalSizeList) {
+		
 		this.classroomList=classroomList;
 		this.scheduleList=scheduleList;
 		this.dayList = dayList;
+		this.blockedClassroomList = blockedClassroomList;
+		this.courseTotalSizeList = courseTotalSizeList;
 	}
 	
 	//setter - getter
@@ -65,6 +71,22 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
 		this.dayList = dayList;
 	}
 
+	public List<BlockedClassroom> getBlockedClassroomList() {
+		return blockedClassroomList;
+	}
+
+	public void setBlockedClassroomList(List<BlockedClassroom> blockedClassroomList) {
+		this.blockedClassroomList = blockedClassroomList;
+	}
+
+	public List<CourseTotalSize> getCourseTotalSizeList() {
+		return courseTotalSizeList;
+	}
+
+	public void setCourseTotalSizeList(List<CourseTotalSize> courseTotalSizeList) {
+		this.courseTotalSizeList = courseTotalSizeList;
+	}
+	
 /*	public List<DayWeek> getDayWeekList() {
 		return dayWeekList;
 	}
@@ -106,6 +128,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
         List<Object> facts = new ArrayList<Object>();
         facts.addAll(classroomList);
         facts.addAll(dayList);
+        facts.addAll(blockedClassroomList);
+        facts.addAll(courseTotalSizeList);
 //      facts.addAll(courseList);
 //      facts.addAll(dayWeekList);
 //      facts.addAll(weekList);
@@ -120,6 +144,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
 //    	clone.courseList = courseList;
         clone.dayList = dayList;
         clone.classroomList = classroomList;
+        clone.courseTotalSizeList = courseTotalSizeList;
+        clone.blockedClassroomList = blockedClassroomList;
 //      clone.dayWeekList = dayWeekList;
 //      clone.weekList = weekList;
 
@@ -141,4 +167,6 @@ public class PlannerSolution implements Solution<HardAndSoftScore>{
         }
         return hashCodeBuilder.toHashCode();
     }
+
+	
 }

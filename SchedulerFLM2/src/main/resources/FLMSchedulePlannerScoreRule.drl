@@ -12,7 +12,9 @@ import main.domain.Day;
 import main.domain.Classroom;
 import main.domain.DayWeek;
 import main.domain.Schedule;
-import main.domain.Week;
+import main.domain.Week
+import main.domain.CourseTotalSize;
+import main.domain.BlockedClassroom;
 
 //グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
@@ -65,7 +67,7 @@ end
 //ルール⑤：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
 rule "pcTypeRequirement"
 	when
-		$schedule : Schedule(checkPCRequirement() == false)
+		$schedule : Schedule(course.PC != null, checkPCRequirement() == false)
 	then
 	 insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
@@ -77,6 +79,7 @@ rule "fixedRoomRequirement"
 	when
 		$schedule : Schedule(checkFixedRoomRequirement() == false)
 	then
+		//System.out.println("fixedRoomRequirement");
 	 insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -84,24 +87,25 @@ end
 
 //ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
 //計画後定員数計算値のリセット
-rule "totalSizeRequirement-resetCount"
-		salience 1
-	when
-		//Empty
+
+rule "totalSizeRequirement-check"
+	when	
+		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+		accumulate( Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+				$total : sum($size);
+				$total < $totalSize)
 	then
-	 	courseTotalSize.countSize = 0;
+		//System.out.println("total of " + $course.toString() + " " + 
+		//	$total + " "  + $totalSize);
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
+                1,
+                $courseTotalSize));
 end
-//計画後定員数の算出
-rule "totalSizeRequirement-Count"
-	when
-		//Empty
-	then
-	 	.count = 0;
-end
+
 
 //ルール記述終了
 rule "hardConstraintsBroken"
-        salience -1 // Do the other rules first (optional, for performance)
+        salience -2 // Do the other rules first (optional, for performance)
     when
         $hardTotal : Number() from accumulate(
             IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),

@@ -109,6 +109,9 @@ public class Schedule {
     	if (course.getFixedRoomList() == null) {
     		return true;
     	}
+    	if ((course.getFixedRoomList().size()==1) && (course.getFixedRoomList().get(0).equals("")) ){
+    		return true;
+    	}
     	return course.getFixedRoomList().contains(classroom.getID());
     }
     

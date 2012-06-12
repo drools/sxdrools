@@ -49,7 +49,9 @@ public class FLMPlannerHelloWorld {
         // ----- Finish initializing solver ---------
         
         // ----- Set initial solution
-        PlannerSolution initialSolution = new PlannerSolution(storage.scheduleList,storage.classroomList,storage.dayList);
+        PlannerSolution initialSolution = new PlannerSolution(storage.scheduleList,
+        		storage.classroomList,storage.dayList,storage.blockedClassroomList,
+        		storage.courseTotalSizeList);
         solver.setPlanningProblem(initialSolution);
         // --------------------------
         
