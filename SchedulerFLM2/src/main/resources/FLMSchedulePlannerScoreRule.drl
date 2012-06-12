@@ -26,6 +26,7 @@ rule "classroomOccupancy"
         $rightSchedule : Schedule(scheduleID > $leftId, conflictDayCheck($leftSchedule) == true, classroom.equals($classroom))
         
     then
+    	//System.out.println("classroomOccupancy @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
         insertLogical(new IntConstraintOccurrence("classroomOccupancy", ConstraintType.NEGATIVE_HARD,
                 1,
                 $leftSchedule, $rightSchedule));
@@ -37,7 +38,7 @@ rule "overCapacity"
         
     then
         insertLogical(new IntConstraintOccurrence("overCapacity", ConstraintType.NEGATIVE_HARD,
-                2,
+                1,
                 $schedule));
 end
 
@@ -46,7 +47,7 @@ rule "notFinishInWeek"
         $schedule : Schedule( finishInWeek == false )       
     then
         insertLogical(new IntConstraintOccurrence("notFinishInWeek", ConstraintType.NEGATIVE_HARD,
-                3,
+                1,
                 $schedule));
 end
 
@@ -55,7 +56,7 @@ rule "pcRequirement"
         $schedule : Schedule(course.PC != null, classroom.PC != course.PC)
     then
         insertLogical(new IntConstraintOccurrence("pcRequirement", ConstraintType.NEGATIVE_HARD,
-                4,
+                1,
                 $schedule));
 end
 

@@ -81,7 +81,7 @@ public class Schedule {
     
     //finish in week check
     public boolean finishInWeek() {
-    	if (day ==null) {
+    	if (day == null) {
     		return false;
     	} else {
     		// would planning course finish in week? (FRI = 4) 
