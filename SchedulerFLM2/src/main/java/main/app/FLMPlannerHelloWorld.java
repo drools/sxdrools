@@ -62,7 +62,6 @@ public class FLMPlannerHelloWorld {
         // --------------------------
         
         // ----- Get planning score -----
-        ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
         System.out.println(solvedSolution.getScore());
         // --------------------------
         
@@ -80,6 +79,7 @@ public class FLMPlannerHelloWorld {
         listSch.get(6).setClassroom(storage.classroomList.get(1));
         solvedSolution.setScheduleList(listSch);
         
+        ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();
         System.out.println(solvedSolution.getScore()); */
