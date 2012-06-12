@@ -31,58 +31,67 @@ public class FLMPlannerHelloWorld {
 	
 	public static void runData(String inFile, String outFile) {
 		
-		//testMethod();
-		
-		
-		
+		// ----- Import data ---------
 		ImportData importer = new ImportData();
 		//importer.initialtest();
 		importer.importFromXLS(inFile);
 		DataStorage storage = importer.getStorage();
+		// ----- Finish import data ---------
 		
+		
+		
+		// ----- Initialize solver ---------		
 		long startTimeCounter = System.currentTimeMillis();
 		
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
         solverFactory.configure(SOLVER_CONFIG);
         Solver solver = solverFactory.buildSolver();
+        // ----- Finish initializing solver ---------
         
+        // ----- Set initial solution
         PlannerSolution initialSolution = new PlannerSolution(storage.scheduleList,storage.classroomList,storage.dayList);
         solver.setPlanningProblem(initialSolution);
+        // --------------------------
+        
+        // ----- Start solving
         solver.solve();
+        // --------------------------
         
-        ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
-
-        long elapsedTimeMillis = System.currentTimeMillis()-startTimeCounter;
-        
+        // ----- Get solution
         PlannerSolution solvedSolution = (PlannerSolution) solver.getBestSolution();
+        // --------------------------
         
+        // ----- Get planning score -----
+        ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
         System.out.println(solvedSolution.getScore());
+        // --------------------------
+        
+        // ----- Get calculation time -----
+        long elapsedTimeMillis = System.currentTimeMillis()-startTimeCounter;
         System.out.println("Elapsed time: " + (int) (elapsedTimeMillis/(60*1000F)) + "min "+ elapsedTimeMillis/1000F + "sec");
+        // --------------------------
         
-        scoreDirector.setWorkingSolution(solvedSolution);
-        scoreDirector.calculateScore();
         
+        /*
         List<Schedule> listSch = solvedSolution.getScheduleList();
         //listSch.get(0).setDay(storage.dayList.get(0));
         //listSch.get(0).setClassroom(storage.classroomList.get(0));
         listSch.get(6).setDay(storage.dayList.get(2));
         listSch.get(6).setClassroom(storage.classroomList.get(1));
-        //solvedSolution.setScheduleList(listSch);
-        solver.setPlanningProblem(solvedSolution);
-        solvedSolution.setScheduleList(initialSolution.getScheduleList());
-        System.out.println(solvedSolution.getScore());
+        solvedSolution.setScheduleList(listSch);
         
         scoreDirector.setWorkingSolution(solvedSolution);
         scoreDirector.calculateScore();
-        
+        System.out.println(solvedSolution.getScore()); */
 		
 		
+        // ----- Export result 
         ExportData exporter = new ExportData(solvedSolution.getScheduleList());
         
-        //exporter.showInitialTestResult();
-        
+        //exporter.showInitialTestResult();        
         //System.out.println("Export to XLS: " + exporter.exportToXLS(outFile));
         System.out.println("Export to XLS: " + exporter.exportToXLS_debug(outFile));
+        // --------------------------
         
         
 	}
