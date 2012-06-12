@@ -88,6 +88,18 @@ public class Schedule {
     	    		(this.day.getDayID()>=c.getDay().getDayID()));
     	}
     }
+
+  //コース開催日程の重複（ブロック）
+    public boolean conflictDayCheck(BlockedClassroom blockedClassroom) {
+    	if (blockedClassroom == null) {
+    		return false;
+    	} else {
+    		return ((blockedClassroom.getDay().getDayID() <= (this.day.getDayID() + this.course.getLength() - 1)) &&
+    				(blockedClassroom.getDay().getDayID()>=this.day.getDayID()))	||
+    				((this.day.getDayID() <= (blockedClassroom.getDay().getDayID() + blockedClassroom.getLength() - 1)) &&
+    	    		(this.day.getDayID()>= blockedClassroom.getDay().getDayID()));
+    	}
+    }
     
     //営業日内での開催
     public boolean finishInWeek() {

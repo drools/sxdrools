@@ -86,8 +86,6 @@ rule "fixedRoomRequirement"
 end
 
 //ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
-//計画後定員数計算値のリセット
-
 rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
@@ -102,6 +100,17 @@ rule "totalSizeRequirement-check"
                 $courseTotalSize));
 end
 
+//ルール⑧：ブロックされている教室にコースを割り当ててはならない
+rule "classroomBlock"
+	when
+		$blockedClassroom : BlockedClassroom($classroom : classroom)
+		$schedule : Schedule(classroom.equals($classroom), 
+			conflictDayCheck($blockedClassroom) == true)
+	then	
+		insertLogical(new IntConstraintOccurrence("classroomBlock", ConstraintType.NEGATIVE_HARD,
+                1,
+                $schedule));
+end
 
 //ルール記述終了
 rule "hardConstraintsBroken"
