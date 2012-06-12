@@ -2,7 +2,7 @@
 package main.solver;
 	dialect "java"
 
-//list any import classes here.
+//パッケージのインポート
 import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScoreHolder;
 import org.drools.planner.core.score.constraint.IntConstraintOccurrence;
 import org.drools.planner.core.score.constraint.ConstraintType;
@@ -14,11 +14,10 @@ import main.domain.DayWeek;
 import main.domain.Schedule;
 import main.domain.Week;
 
-//declare any global variables here
-
+//グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
 
-
+//ルール①：開催日程は重複してはならない
 rule "classroomOccupancy"
     when
         $leftSchedule : Schedule($leftId : scheduleID, $classroom : classroom)
@@ -32,6 +31,7 @@ rule "classroomOccupancy"
                 $leftSchedule, $rightSchedule));
 end
 
+//ルール②：コース定員が教室定員を上回ってはならない
 rule "overCapacity"
     when
         $schedule : Schedule(classroom.capacity < course.eSize)
@@ -42,6 +42,7 @@ rule "overCapacity"
                 $schedule));
 end
 
+//ルール③：コースを営業日以外に開催してはならない
 rule "notFinishInWeek"
     when
         $schedule : Schedule( finishInWeek == false )       
@@ -51,6 +52,7 @@ rule "notFinishInWeek"
                 $schedule));
 end
 
+//ルール④：PCの必要なコースをPCの無い教室に割り当ててはならない
 rule "pcRequirement"
     when
         $schedule : Schedule(course.PC != null, classroom.PC != course.PC)
@@ -60,6 +62,44 @@ rule "pcRequirement"
                 $schedule));
 end
 
+//ルール⑤：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
+rule "pcTypeRequirement"
+	when
+		$schedule : Schedule(checkPCRequirement() == false)
+	then
+	 insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
+                1,
+                $schedule));
+end
+
+//ルール⑥：コースに指定教室がある場合は、指定教室以外の教室に割り当ててはならない
+rule "fixedRoomRequirement"
+	when
+		$schedule : Schedule(checkFixedRoomRequirement() == false)
+	then
+	 insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
+                1,
+                $schedule));
+end
+
+//ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
+//計画後定員数計算値のリセット
+rule "totalSizeRequirement-resetCount"
+		salience 1
+	when
+		//Empty
+	then
+	 	courseTotalSize.countSize = 0;
+end
+//計画後定員数の算出
+rule "totalSizeRequirement-Count"
+	when
+		//Empty
+	then
+	 	.count = 0;
+end
+
+//ルール記述終了
 rule "hardConstraintsBroken"
         salience -1 // Do the other rules first (optional, for performance)
     when

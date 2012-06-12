@@ -2,6 +2,7 @@
 package main.domain;
 
 public enum Week {
+	
 	FIRST(0), MIDDLE(1), LAST(2);
 	
 	//ƒƒ“ƒo•Ï”‚Ì’è‹`

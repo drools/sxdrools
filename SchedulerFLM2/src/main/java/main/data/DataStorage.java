@@ -3,6 +3,7 @@ package main.data;
 //パッケージのインポート
 import main.domain.BlockedClassroom;
 import main.domain.Classroom;
+import main.domain.CourseTotalSize;
 import main.domain.Day;
 import main.domain.Course;
 import main.domain.Schedule;
@@ -24,6 +25,8 @@ public class DataStorage {
 	//スケジュール
 	public final List<Schedule> scheduleList;
 	
+	public final List<CourseTotalSize> courseTotalSizeList;
+	
 	//データ倉庫の作成
 	public DataStorage() {
 		classroomList = new ArrayList<Classroom>();
@@ -32,6 +35,7 @@ public class DataStorage {
 		
 		scheduleList = new ArrayList<Schedule>();
 		blockedClassroomList = new ArrayList<BlockedClassroom>();
+		courseTotalSizeList = new ArrayList<CourseTotalSize>();
 	}
 	//ゲッター・セッター
 	//営業日
@@ -47,6 +51,15 @@ public class DataStorage {
 	public Classroom getClassroom(String classroom) {
 		for (Classroom c : classroomList) {
 			if (c.getID().equals(classroom)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public Course getCourse(String course) {
+		for (Course c : courseList) {
+			if (c.getID().equals(course)) {
 				return c;
 			}
 		}

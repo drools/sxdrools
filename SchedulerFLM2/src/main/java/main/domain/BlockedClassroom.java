@@ -4,6 +4,7 @@ package main.domain;
 import java.io.Serializable;
 
 public class BlockedClassroom implements Serializable{
+	
 	//ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private Classroom classroom;
 	private Day day;

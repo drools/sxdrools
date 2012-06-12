@@ -7,6 +7,10 @@ import java.util.Arrays;
 
 public class Course implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1887271211307841703L;
 	//ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private int courseID;
 	private int eSize;

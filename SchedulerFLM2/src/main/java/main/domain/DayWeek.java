@@ -8,10 +8,15 @@ public enum DayWeek {
 	private final int dayweek;
 	
 	//コンストラクタの設定
+	//引数あり
 	DayWeek (int dayweek) {
 		this.dayweek = dayweek;
 	}
 	
+	//ゲッター・セッター
+	public int getDayweek() {
+		return dayweek;	
+	}
 	//??
 	static DayWeek parseDayWeek(String dayweek) {
 		if (dayweek == "MON") {
@@ -41,8 +46,5 @@ public enum DayWeek {
 		}
 			
 	}
-	
-	public int getDayweek() {
-		return dayweek;
-	}
+
 }

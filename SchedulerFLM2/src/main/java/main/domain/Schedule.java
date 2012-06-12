@@ -8,6 +8,7 @@ import org.drools.planner.api.domain.variable.ValueRangeType;
 
 @PlanningEntity
 public class Schedule {
+	
 	//•Ï”’è‹`
 	private Course course;
 	private int scheduleID;

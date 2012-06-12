@@ -126,6 +126,30 @@ public class ImportData {
 		
 		return true;
 	}
+	
+	private boolean importCourseTotalSize(Sheet sheet) {
+		if (!(sheet.getName().equals("TotalSize"))||
+				(!sheet.getCell(0, 0).getContents().equals("Course"))||
+				(!sheet.getCell(1, 0).getContents().equals("Total Size"))) {
+			return false;
+		}
+		
+		for (int i=1;i<sheet.getRows();i++) {
+			try {
+				
+				storage.courseTotalSizeList.add(new CourseTotalSize(
+						storage.getCourse(sheet.getCell(0, i).getContents()),
+						sheet.getCell(1, i).getContents()));
+			}
+			catch (Exception e)
+			{
+				System.out.println("Error in CourseMaster row " + i);
+			}
+    	}
+		
+		return true;
+	}
+	
 	//営業日マスタのインポート
 	private boolean importDayMaster(Sheet sheet) {
 		if ((!sheet.getName().equals("DayMaster"))||
@@ -172,6 +196,7 @@ public class ImportData {
         	System.out.println("Import Classroom = " + importClassroomMaster(workbook.getSheet(1)));
         	System.out.println("Import Day = " + importDayMaster(workbook.getSheet(2)));
         	System.out.println("Import BlockedClassroom = " + importBlockedClassroomMaster(workbook.getSheet(3)));
+        	System.out.println("Import TotalCourseSize = " + importCourseTotalSize(workbook.getSheet(4)));
         	
         	// Initialize Schedule Data
         	
