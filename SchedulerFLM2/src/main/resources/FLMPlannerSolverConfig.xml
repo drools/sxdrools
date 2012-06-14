@@ -15,7 +15,7 @@
 
   <!-- Optimization algorithms configuration -->
   <termination>
-    <maximumSecondsSpend>1800</maximumSecondsSpend>
+    <maximumSecondsSpend>3600</maximumSecondsSpend>
   </termination>
   <constructionHeuristic>
     <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>

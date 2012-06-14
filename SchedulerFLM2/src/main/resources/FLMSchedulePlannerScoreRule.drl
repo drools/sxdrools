@@ -19,6 +19,10 @@ import main.domain.BlockedClassroom;
 //グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
 
+// ############################################################################
+// ハード制約
+// ############################################################################
+
 //ルール①：開催日程は重複してはならない
 rule "classroomOccupancy"
     when
@@ -104,7 +108,7 @@ end
 rule "classroomBlock"
 	when
 		$blockedClassroom : BlockedClassroom($classroom : classroom)
-		$schedule : Schedule(classroom.equals($classroom), 
+		$schedule : Schedule(classroom.equals($classroom) == true, 
 			conflictDayCheck($blockedClassroom) == true)
 	then	
 		insertLogical(new IntConstraintOccurrence("classroomBlock", ConstraintType.NEGATIVE_HARD,
@@ -112,9 +116,76 @@ rule "classroomBlock"
                 $schedule));
 end
 
-//ルール記述終了
+//ルール⑨：同じコースの開催開始日が同じになってはならない
+rule "SameCourseDayConflict"
+	when
+        $leftSchedule : Schedule($leftID : scheduleID, $leftCourse : course ,$leftDay : day)
+        //rightSchedule not being held between active time of leftSchedule
+        $rightSchedule : Schedule(scheduleID > $leftID, course.equals($leftCourse) == true, day.equals($leftDay) == true)
+        
+    then
+    	System.out.println("SameCourseDayConflict @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
+        insertLogical(new IntConstraintOccurrence("SameCourseDayConflict", ConstraintType.NEGATIVE_HARD,
+                1,
+                $leftSchedule, $rightSchedule));
+end
+
+// ############################################################################
+// ソフト制約
+// ############################################################################
+/*
+//ルール①：教室定員とコース定員が近い方がよい
+//（教室定員-コース定員）を減点する。
+
+/*rule "roomOptimization"
+    when
+        $classroom : Classroom($capacity : capacity)
+        $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize())
+    then
+        insertLogical(new IntConstraintOccurrence("roomOptimization", ConstraintType.NEGATIVE_SOFT,
+                ($capacity-$eSize),
+                $classroom, $schedule));
+				//System.out.println("Schedule" + $schedule.toString());
+				//System.out.println("classroom" + $classroom.toString());
+
+end
+
+//ルール②：開催期間が一日のコースは金曜日に優先的に開催する。
+//金曜日に割り当てなかった場合に1点減点する
+
+rule "favoriteDayWeek-Friday"
+    when
+        $schedule : Schedule(course.getLength() == 1, day.getDayweek().getDayweek == 1 || day.getDayweek().getDayweek == 3)
+    then
+        insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
+                1,
+                $schedule));
+				System.out.println("Schedule" + $schedule.toString());
+				
+end
+
+//ルール③：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
+//月曜日か木曜日に割り当てなかった場合に1点減点する。
+
+rule "favoriteDayWeek-Monday,Thursday"
+    when
+        $schedule : Schedule(course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3)
+    then
+        insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
+                1,
+                $schedule));
+				System.out.println("Schedule" + $schedule.toString());
+				end
+*/			
+
+
+// ############################################################################
+// スコアの計算
+// ############################################################################
+
+//ハード制約のスコア計算
 rule "hardConstraintsBroken"
-        salience -2 // Do the other rules first (optional, for performance)
+        salience -1 // Do the other rules first (optional, for performance)
     when
         $hardTotal : Number() from accumulate(
             IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_HARD, $weight : weight),
@@ -123,5 +194,18 @@ rule "hardConstraintsBroken"
     then
         scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
 end
+
+//ソフト制約のスコア計算
+rule "softConstraintsBroken"
+        salience -1 // Do the other rules first (optional, for performance)
+    when
+        $softTotal : Number() from accumulate(
+            IntConstraintOccurrence(constraintType == ConstraintType.NEGATIVE_SOFT, $weight : weight),
+            sum($weight) // Vote for http://jira.jboss.com/jira/browse/JBRULES-1075
+        )
+    then
+        scoreHolder.setSoftConstraintsBroken($softTotal.intValue());
+end
+
 
 
