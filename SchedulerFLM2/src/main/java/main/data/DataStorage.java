@@ -1,44 +1,46 @@
 //パッケージの作成
 package main.data;
+
 //パッケージのインポート
+import java.util.ArrayList;
+import java.util.List;
+
 import main.domain.BlockedClassroom;
 import main.domain.Classroom;
+import main.domain.Course;
 import main.domain.CourseTotalSize;
 import main.domain.Day;
-import main.domain.Course;
 import main.domain.Schedule;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class DataStorage {
-	
-	//メンバ変数の定義
-	//教室
+
+	// メンバ変数の定義
+	// 教室
 	public final List<Classroom> classroomList;
-	//営業日
+	// 営業日
 	public final List<Day> dayList;
-	//コース
+	// コース
 	public final List<Course> courseList;
-	//ブロック教室
+	// ブロック教室
 	public final List<BlockedClassroom> blockedClassroomList;
-	//スケジュール
+	// スケジュール
 	public final List<Schedule> scheduleList;
-	
+
 	public final List<CourseTotalSize> courseTotalSizeList;
-	
-	//データ倉庫の作成
+
+	// データ倉庫の作成
 	public DataStorage() {
 		classroomList = new ArrayList<Classroom>();
 		dayList = new ArrayList<Day>();
 		courseList = new ArrayList<Course>();
-		
+
 		scheduleList = new ArrayList<Schedule>();
 		blockedClassroomList = new ArrayList<BlockedClassroom>();
 		courseTotalSizeList = new ArrayList<CourseTotalSize>();
 	}
-	//ゲッター・セッター
-	//営業日
+
+	// ゲッター・セッター
+	// 営業日
 	public Day getDay(String day) {
 		for (Day d : dayList) {
 			if (d.getID().equals(day)) {
@@ -47,7 +49,8 @@ public class DataStorage {
 		}
 		return null;
 	}
-	//教室
+
+	// 教室
 	public Classroom getClassroom(String classroom) {
 		for (Classroom c : classroomList) {
 			if (c.getID().equals(classroom)) {
@@ -56,7 +59,7 @@ public class DataStorage {
 		}
 		return null;
 	}
-	
+
 	public Course getCourse(String course) {
 		for (Course c : courseList) {
 			if (c.getID().equals(course)) {
@@ -65,5 +68,5 @@ public class DataStorage {
 		}
 		return null;
 	}
-	
+
 }

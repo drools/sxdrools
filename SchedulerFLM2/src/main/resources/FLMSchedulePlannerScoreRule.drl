@@ -133,11 +133,11 @@ end
 // ############################################################################
 // ソフト制約
 // ############################################################################
-/*
+
 //ルール①：教室定員とコース定員が近い方がよい
 //（教室定員-コース定員）を減点する。
 
-/*rule "roomOptimization"
+rule "roomOptimization"
     when
         $classroom : Classroom($capacity : capacity)
         $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize())
@@ -150,22 +150,35 @@ end
 
 end
 
-//ルール②：開催期間が一日のコースは金曜日に優先的に開催する。
-//金曜日に割り当てなかった場合に1点減点する
+//ルール②：開催期間が四日のコースは火曜日に優先的に開催する。
+//火曜日以外に割り当てた場合に1点減点する
 
-rule "favoriteDayWeek-Friday"
+rule "favoriteDayWeek-length4-Tuesday"
     when
-        $schedule : Schedule(course.getLength() == 1, day.getDayweek().getDayweek == 1 || day.getDayweek().getDayweek == 3)
+        $schedule : Schedule(course.getLength() == 4, day.getDayweek().getDayweek != 1)
     then
-        insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
+        insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
                 1,
                 $schedule));
-				System.out.println("Schedule" + $schedule.toString());
+				//System.out.println("Schedule" + $schedule.toString());
 				
 end
 
-//ルール③：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
-//月曜日か木曜日に割り当てなかった場合に1点減点する。
+//ルール③：開催期間が3日のコースの開催開始日は、月曜日か水曜日に優先的に開催する。
+//月曜日・水曜日以外に割り当てた場合に1点減点する。
+
+rule "favoriteDayWeek-length3-Monday,Wednesday"
+    when
+        $schedule : Schedule(course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2)
+    then
+        insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
+                1,
+                $schedule));
+				//System.out.println("Schedule" + $schedule.toString());
+				end
+				
+//ルール④：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
+//月曜日・木曜日以外に割り当てた場合に1点減点する。
 
 rule "favoriteDayWeek-Monday,Thursday"
     when
@@ -174,9 +187,8 @@ rule "favoriteDayWeek-Monday,Thursday"
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
                 1,
                 $schedule));
-				System.out.println("Schedule" + $schedule.toString());
-				end
-*/			
+				//System.out.println("Schedule" + $schedule.toString());
+				end		
 
 
 // ############################################################################

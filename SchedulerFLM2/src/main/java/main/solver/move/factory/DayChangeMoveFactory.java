@@ -1,13 +1,12 @@
 package main.solver.move.factory;
 
-import main.domain.Schedule;
-import main.domain.Day;
-import main.domain.PlannerSolution;
-import main.solver.move.DayChangeMove;
-
-
 import java.util.ArrayList;
 import java.util.List;
+
+import main.domain.Day;
+import main.domain.PlannerSolution;
+import main.domain.Schedule;
+import main.solver.move.DayChangeMove;
 
 import org.drools.planner.core.move.Move;
 import org.drools.planner.core.move.factory.CachedMoveFactory;
