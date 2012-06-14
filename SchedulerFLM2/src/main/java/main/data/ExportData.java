@@ -1,7 +1,5 @@
-//パッケージの作成
 package main.data;
 
-//パッケージのインポート
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +12,7 @@ import jxl.write.WriteException;
 import main.domain.Schedule;
 
 public class ExportData {
+
 	// メンバ変数の定義
 	// スケジュール
 	private List<Schedule> scheduleList;

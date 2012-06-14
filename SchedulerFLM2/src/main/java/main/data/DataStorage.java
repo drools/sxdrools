@@ -1,7 +1,5 @@
-//パッケージの作成
 package main.data;
 
-//パッケージのインポート
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class DataStorage {
 	public final List<BlockedClassroom> blockedClassroomList;
 	// スケジュール
 	public final List<Schedule> scheduleList;
-
+	// コース総定員（コースの定員が教室定員によるもの）
 	public final List<CourseTotalSize> courseTotalSizeList;
 
 	// データ倉庫の作成
@@ -39,7 +37,7 @@ public class DataStorage {
 		courseTotalSizeList = new ArrayList<CourseTotalSize>();
 	}
 
-	// ゲッター・セッター
+	// ゲッター
 	// 営業日
 	public Day getDay(String day) {
 		for (Day d : dayList) {

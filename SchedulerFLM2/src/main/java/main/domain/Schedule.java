@@ -1,7 +1,5 @@
-//パッケージの作成
 package main.domain;
 
-//パッケージのインポート
 import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.variable.PlanningVariable;
 import org.drools.planner.api.domain.variable.ValueRange;
@@ -10,7 +8,7 @@ import org.drools.planner.api.domain.variable.ValueRangeType;
 @PlanningEntity
 public class Schedule {
 
-	// 変数定義
+	// 変数の定義
 	private Course course;
 	private int scheduleID;
 
@@ -71,6 +69,7 @@ public class Schedule {
 	}
 
 	// complex method
+	// スケジュールのコピー
 	public Schedule clone() {
 		Schedule c = new Schedule();
 		c.course = course.clone();
@@ -80,6 +79,7 @@ public class Schedule {
 		return c;
 	}
 
+	// スケジュール情報の表示
 	@Override
 	public String toString() {
 		return course.toString() + "@" + classroom.toString() + " on "

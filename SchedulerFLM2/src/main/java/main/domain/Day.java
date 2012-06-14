@@ -1,13 +1,19 @@
 //パッケージの作成
 package main.domain;
 
-public class Day {
+import java.io.Serializable;
+
+public class Day implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2317568149056438509L;
 
 	// メンバ変数の定義
 	private int dayID;
 	private DayWeek dayweek;
 	// dayWeek1は、一週間内に祝日が含まれる場合に使用する。
-	// dayWeek1 is used only when there is holiday below this day in a week
 	private DayWeek dayweek1;
 	private Week week;
 	private String ID;
@@ -98,15 +104,7 @@ public class Day {
 	}
 
 	// complex method
-	public boolean equals(Day c) {
-		return (c.getDayID() == dayID);
-	}
-
-	@Override
-	public String toString() {
-		return "Day " + ID;
-	}
-
+	// 営業日のコピー
 	public Day clone() {
 		Day c = new Day();
 		c.dayID = dayID;
@@ -116,4 +114,16 @@ public class Day {
 		c.ID = ID;
 		return c;
 	}
+
+	// 営業日の一致
+	public boolean equals(Day c) {
+		return (c.getDayID() == dayID);
+	}
+
+	// 営業日情報の表示
+	@Override
+	public String toString() {
+		return "Day " + ID;
+	}
+
 }

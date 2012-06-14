@@ -6,6 +6,11 @@ import java.io.Serializable;
 
 public class Classroom implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5750305416548495970L;
+
 	// ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private int capacity;
 	private Boolean PC;
@@ -101,15 +106,15 @@ public class Classroom implements Serializable {
 		return c;
 	}
 
+	// ‹³º‚Ìˆê’v
+	public boolean equals(Classroom c) {
+		return (c.getClassroomID() == classroomID);
+	}
+
 	// ‹³ºî•ñ‚Ì•\¦
 	@Override
 	public String toString() {
 		return "RoomID " + ID + " limit " + capacity + " PC " + PC;
-	}
-
-	// ‹³º‚Ìˆê’v
-	public boolean equals(Classroom c) {
-		return (c.getClassroomID() == classroomID);
 	}
 
 }

@@ -12,6 +12,7 @@ public class Course implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1887271211307841703L;
+
 	// メンバ変数の定義
 	private int courseID;
 	private int eSize;
@@ -144,6 +145,7 @@ public class Course implements Serializable {
 	}
 
 	// complex method
+	// コースのコピー
 	public Course clone() {
 		Course c = new Course();
 		c.courseID = courseID;
@@ -162,6 +164,7 @@ public class Course implements Serializable {
 		return c;
 	}
 
+	// コースの一致
 	public boolean equals(Course c) {
 		if (c == null) {
 			return false;
@@ -172,7 +175,8 @@ public class Course implements Serializable {
 			return false;
 		}
 	}
-
+	//コース情報の表示
+	@Override
 	public String toString() {
 		return "CourseID " + ID + " size " + eSize + " PC " + PC;
 	}

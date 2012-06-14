@@ -1,4 +1,3 @@
-//パッケージの作成
 package main.domain;
 
 public enum Week {

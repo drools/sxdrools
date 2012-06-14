@@ -1,7 +1,5 @@
-//パッケージの作成
 package main.data;
 
-//パッケージのインポート
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -128,7 +126,8 @@ public class ImportData {
 
 		return true;
 	}
-
+	
+	// コース総定員のインポート
 	private boolean importCourseTotalSize(Sheet sheet) {
 		if (!(sheet.getName().equals("TotalSize"))
 				|| (!sheet.getCell(0, 0).getContents().equals("Course"))

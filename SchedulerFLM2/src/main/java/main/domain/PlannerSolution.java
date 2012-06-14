@@ -10,6 +10,7 @@ import org.drools.planner.core.score.buildin.hardandsoft.HardAndSoftScore;
 import org.drools.planner.core.solution.Solution;
 
 public class PlannerSolution implements Solution<HardAndSoftScore> {
+
 	// problem fact
 	private List<Classroom> classroomList;
 	private List<Day> dayList;
@@ -24,8 +25,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 
 	private HardAndSoftScore score;
 
-	// constructer
-
+	// コンストラクタの設定
+	// 引数なし
 	public PlannerSolution() {
 	}
 
@@ -35,7 +36,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 	 * this.classroomList=classroomList; this.scheduleList=scheduleList;
 	 * this.courseList=courseList; }
 	 */
-
+	// 引数あり
 	public PlannerSolution(List<Schedule> scheduleList,
 			List<Classroom> classroomList, List<Day> dayList,
 			List<BlockedClassroom> blockedClassroomList,
@@ -48,8 +49,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.courseTotalSizeList = courseTotalSizeList;
 	}
 
-	// setter - getter
-
+	// セッター・ゲッター
+	// スコア
 	public HardAndSoftScore getScore() {
 		return score;
 	}
@@ -58,6 +59,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.score = score;
 	}
 
+	// 教室リスト
 	public List<Classroom> getClassroomList() {
 		return classroomList;
 	}
@@ -66,6 +68,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.classroomList = classroomList;
 	}
 
+	// 営業日リスト
 	public List<Day> getDayList() {
 		return dayList;
 	}
@@ -74,6 +77,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.dayList = dayList;
 	}
 
+	// ブロック教室リスト
 	public List<BlockedClassroom> getBlockedClassroomList() {
 		return blockedClassroomList;
 	}
@@ -83,6 +87,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.blockedClassroomList = blockedClassroomList;
 	}
 
+	// コース総定員リスト
 	public List<CourseTotalSize> getCourseTotalSizeList() {
 		return courseTotalSizeList;
 	}
@@ -110,6 +115,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 	 * courseList; }
 	 */
 
+	// スケジュールリスト
 	@PlanningEntityCollectionProperty
 	public List<Schedule> getScheduleList() {
 		return scheduleList;
@@ -119,10 +125,8 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.scheduleList = scheduleList;
 	}
 
-	// ************************************************************************
 	// Complex methods
-	// ************************************************************************
-
+	// 　problemFactsの集約
 	public Collection<? extends Object> getProblemFacts() {
 		List<Object> facts = new ArrayList<Object>();
 		facts.addAll(classroomList);
@@ -138,6 +142,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		return facts;
 	}
 
+	// 計画結果のコピー
 	public PlannerSolution cloneSolution() {
 		PlannerSolution clone = new PlannerSolution();
 
@@ -160,6 +165,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		return clone;
 	}
 
+	// hashCode
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
 		for (Schedule schedule : scheduleList) {

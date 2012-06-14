@@ -15,6 +15,7 @@ import org.drools.planner.core.Solver;
 
 public class FLMPlannerHelloWorld {
 
+	// ソルバーの設置
 	public static final String SOLVER_CONFIG = "/FLMPlannerSolverConfig.xml";
 
 	public static void testMethod() {
@@ -32,47 +33,39 @@ public class FLMPlannerHelloWorld {
 
 	public static void runData(String inFile, String outFile) {
 
-		// ----- Import data ---------
+		// データのインポート
 		ImportData importer = new ImportData();
 		// importer.initialtest();
 		importer.importFromXLS(inFile);
 		DataStorage storage = importer.getStorage();
-		// ----- Finish import data ---------
 
-		// ----- Initialize solver ---------
+		// ソルバーの初期化
 		long startTimeCounter = System.currentTimeMillis();
-
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
 		solverFactory.configure(SOLVER_CONFIG);
 		Solver solver = solverFactory.buildSolver();
-		// ----- Finish initializing solver ---------
 
-		// ----- Set initial solution
+		// 初期解決値の設定
 		PlannerSolution initialSolution = new PlannerSolution(
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
 		solver.setPlanningProblem(initialSolution);
-		// --------------------------
 
-		// ----- Start solving
+		// 開催日程計画開始
 		solver.solve();
-		// --------------------------
 
-		// ----- Get solution
+		// 開催日程計画結果の取得
 		PlannerSolution solvedSolution = (PlannerSolution) solver
 				.getBestSolution();
-		// --------------------------
 
-		// ----- Get planning score -----
+		// 最終結果のスコアの表示
 		System.out.println(solvedSolution.getScore());
-		// --------------------------
 
-		// ----- Get calculation time -----
+		// 計算時間の表示
 		long elapsedTimeMillis = System.currentTimeMillis() - startTimeCounter;
 		System.out.println("Elapsed time: "
 				+ (int) (elapsedTimeMillis / (60 * 1000F)) + "min "
 				+ elapsedTimeMillis / 1000F + "sec");
-		// --------------------------
 
 		/*
 		 * List<Schedule> listSch = solvedSolution.getScheduleList();
@@ -89,7 +82,7 @@ public class FLMPlannerHelloWorld {
 		 * System.out.println(solvedSolution.getScore());
 		 */
 
-		// ----- Export result
+		// データのエクスポート
 		ExportData exporter = new ExportData(solvedSolution.getScheduleList());
 
 		// exporter.showInitialTestResult();
@@ -97,8 +90,6 @@ public class FLMPlannerHelloWorld {
 		// exporter.exportToXLS(outFile));
 		System.out.println("Export to XLS: "
 				+ exporter.exportToXLS_debug(outFile));
-		// --------------------------
-
 	}
 
 	public static void main(String[] args) {
