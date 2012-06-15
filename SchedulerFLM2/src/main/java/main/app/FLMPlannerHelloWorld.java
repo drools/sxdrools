@@ -12,11 +12,15 @@ import main.domain.Schedule;
 
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
+import org.drools.planner.core.score.director.ScoreDirector;
 
 public class FLMPlannerHelloWorld {
 
+	public static DataStorage storage;
+	
 	// ソルバーの設置
 	public static final String SOLVER_CONFIG = "/FLMPlannerSolverConfig.xml";
+	public static final String TEST_CONFIG = "/FLMPlannerRuleCheck.xml";
 
 	public static void testMethod() {
 		Course c1 = new Course(1, 13, 1, true);
@@ -37,7 +41,7 @@ public class FLMPlannerHelloWorld {
 		ImportData importer = new ImportData();
 		// importer.initialtest();
 		importer.importFromXLS(inFile);
-		DataStorage storage = importer.getStorage();
+		storage = importer.getStorage();
 
 		// ソルバーの初期化
 		long startTimeCounter = System.currentTimeMillis();
@@ -67,21 +71,6 @@ public class FLMPlannerHelloWorld {
 				+ (int) (elapsedTimeMillis / (60 * 1000F)) + "min "
 				+ elapsedTimeMillis / 1000F + "sec");
 
-		/*
-		 * List<Schedule> listSch = solvedSolution.getScheduleList();
-		 * //listSch.get(0).setDay(storage.dayList.get(0));
-		 * //listSch.get(0).setClassroom(storage.classroomList.get(0));
-		 * listSch.get(6).setDay(storage.dayList.get(2));
-		 * listSch.get(6).setClassroom(storage.classroomList.get(1));
-		 * solvedSolution.setScheduleList(listSch);
-		 * 
-		 * ScoreDirector scoreDirector =
-		 * solver.getScoreDirectorFactory().buildScoreDirector();
-		 * scoreDirector.setWorkingSolution(solvedSolution);
-		 * scoreDirector.calculateScore();
-		 * System.out.println(solvedSolution.getScore());
-		 */
-
 		// データのエクスポート
 		ExportData exporter = new ExportData(solvedSolution.getScheduleList());
 
@@ -92,8 +81,27 @@ public class FLMPlannerHelloWorld {
 				+ exporter.exportToXLS_debug(outFile));
 	}
 
+	public static void checkOutput() {
+		XmlSolverFactory solverFactory = new XmlSolverFactory();
+		solverFactory.configure(TEST_CONFIG);
+		Solver solver = solverFactory.buildSolver();
+
+		// 初期解決値の設定
+		PlannerSolution initialSolution = new PlannerSolution(
+				storage.scheduleList, storage.classroomList, storage.dayList,
+				storage.blockedClassroomList, storage.courseTotalSizeList);
+
+		 ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
+		 scoreDirector.setWorkingSolution(initialSolution);
+	     scoreDirector.calculateScore();
+		
+		// 最終結果のスコアの表示
+	     System.out.println(initialSolution.getScore());
+	}
+	
 	public static void main(String[] args) {
 		runData(args[0], args[1]);
+		checkOutput();
 	}
 
 }
