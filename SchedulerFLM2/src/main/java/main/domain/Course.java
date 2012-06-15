@@ -144,7 +144,9 @@ public class Course implements Serializable {
 		this.minESize = minESize;
 	}
 
-	// complex method
+	// ***********************************************************************************
+	// Complex methods
+	// ***********************************************************************************
 	// コースのコピー
 	public Course clone() {
 		Course c = new Course();

@@ -68,7 +68,9 @@ public class Schedule {
 		this.day = day;
 	}
 
-	// complex method
+	// ***********************************************************************************
+	// Complex methods
+	// ***********************************************************************************
 	// スケジュールのコピー
 	public Schedule clone() {
 		Schedule c = new Schedule();
@@ -120,8 +122,10 @@ public class Schedule {
 			return false;
 		} else {
 			// would planning course finish in week? (FRI = 4)
-			return ((int) day.getDayweek1().getDayweek() <= 5 - course
-					.getLength());
+			if ((int) day.getDayweek1().getDayweek() <= 5 -	course.getLength())
+				return true;
+			else
+				return false;
 		}
 	}
 

@@ -1,4 +1,4 @@
-package main.solver.move;
+ package main.solver.move;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,9 +12,12 @@ import org.drools.planner.core.move.Move;
 import org.drools.planner.core.score.director.ScoreDirector;
 
 public class ClassroomChangeMove implements Move {
+	
+	//ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private Schedule schedule;
 	private Classroom toClassroom;
-
+	
+	//Move
 	public ClassroomChangeMove(Schedule schedule, Classroom toClassroom) {
 		this.schedule = schedule;
 		this.toClassroom = toClassroom;

@@ -125,8 +125,10 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.scheduleList = scheduleList;
 	}
 
+	// ***********************************************************************************
 	// Complex methods
-	// @problemFacts‚ÌW–ñ
+	// ***********************************************************************************
+	// problemFacts‚ÌW–ñ
 	public Collection<? extends Object> getProblemFacts() {
 		List<Object> facts = new ArrayList<Object>();
 		facts.addAll(classroomList);

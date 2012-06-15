@@ -1,7 +1,5 @@
-//パッケージの作成
 package main.domain;
 
-//パッケージのインポート
 import java.io.Serializable;
 
 public class Classroom implements Serializable {
@@ -94,7 +92,9 @@ public class Classroom implements Serializable {
 		this.pcType = pcType;
 	}
 
-	// complex method
+	// ***********************************************************************************
+	// Complex methods
+	// ***********************************************************************************
 	// 教室のコピー
 	public Classroom clone() {
 		Classroom c = new Classroom();

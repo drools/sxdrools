@@ -93,12 +93,13 @@ end
 rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-		accumulate( Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+		accumulate(
+			 Schedule( course.equals($course) == true , $size : classroom.getCapacity);
 				$total : sum($size);
 				$total < $totalSize)
 	then
 		//System.out.println("total of " + $course.toString() + " " + 
-		//	$total + " "  + $totalSize);
+		//$total + " "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
                 1,
                 $courseTotalSize));
@@ -124,12 +125,12 @@ rule "SameCourseDayConflict"
         $rightSchedule : Schedule(scheduleID > $leftID, course.equals($leftCourse) == true, day.equals($leftDay) == true)
         
     then
-    	System.out.println("SameCourseDayConflict @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
+    	//System.out.println("SameCourseDayConflict @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
         insertLogical(new IntConstraintOccurrence("SameCourseDayConflict", ConstraintType.NEGATIVE_HARD,
                 1,
                 $leftSchedule, $rightSchedule));
 end
-
+/*
 // ############################################################################
 // ソフト制約
 // ############################################################################
@@ -190,7 +191,7 @@ rule "favoriteDayWeek-Monday,Thursday"
 				//System.out.println("Schedule" + $schedule.toString());
 				end		
 
-
+*/
 // ############################################################################
 // スコアの計算
 // ############################################################################

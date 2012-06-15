@@ -1,4 +1,3 @@
-//パッケージの作成
 package main.domain;
 
 import java.io.Serializable;
@@ -103,7 +102,9 @@ public class Day implements Serializable {
 		this.dayweek1 = dayWeek1;
 	}
 
-	// complex method
+	// ***********************************************************************************
+	// Complex methods
+	// ***********************************************************************************
 	// 営業日のコピー
 	public Day clone() {
 		Day c = new Day();
