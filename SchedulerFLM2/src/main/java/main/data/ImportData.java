@@ -67,11 +67,6 @@ public class ImportData {
 		return true;
 	}
 
-	/*
-	 * private static boolean parseBool(String s) { if (s.equals("")) { return
-	 * (boolean) null; } }
-	 */
-
 	// コース開催条件マスタのインポート
 	private boolean importCourseMaster(Sheet sheet) {
 		if (!(sheet.getName().equals("CourseMaster"))
@@ -289,8 +284,9 @@ public class ImportData {
 		}
 
 	}		
-		// スケジュールアウトプットのインポート
-		private boolean importScheduleOutput(Sheet sheet) {
+		
+	// スケジュールアウトプットのインポート
+	private boolean importScheduleOutput(Sheet sheet) {
 			if ((!sheet.getName().equals("Schedule"))
 					|| (!sheet.getCell(0, 0).getContents().equals("Course"))
 					|| (!sheet.getCell(1, 0).getContents().equals("Day"))
@@ -319,7 +315,7 @@ public class ImportData {
 			}
 
 			return true;
-		}
+	}
 	
 		
 }

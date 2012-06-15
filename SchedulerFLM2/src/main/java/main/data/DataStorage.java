@@ -22,7 +22,7 @@ public class DataStorage {
 	// ブロック教室
 	public final List<BlockedClassroom> blockedClassroomList;
 	// スケジュール
-	public final List<Schedule> scheduleList;
+	public List<Schedule> scheduleList;
 	// コース総定員（コースの定員が教室定員によるもの）
 	public final List<CourseTotalSize> courseTotalSizeList;
 
@@ -67,4 +67,6 @@ public class DataStorage {
 		return null;
 	}
 
+
+	
 }

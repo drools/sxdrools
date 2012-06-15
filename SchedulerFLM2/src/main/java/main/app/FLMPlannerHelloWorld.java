@@ -73,6 +73,8 @@ public class FLMPlannerHelloWorld {
 
 		// データのエクスポート
 		ExportData exporter = new ExportData(solvedSolution.getScheduleList());
+		
+		storage.scheduleList = solvedSolution.getScheduleList();
 
 		// exporter.showInitialTestResult();
 		// System.out.println("Export to XLS: " +
