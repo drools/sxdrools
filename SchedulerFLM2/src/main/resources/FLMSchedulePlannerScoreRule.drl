@@ -71,7 +71,7 @@ end
 //ルール⑤：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
 rule "pcTypeRequirement"
 	when
-		$schedule : Schedule(course.PC != null, checkPCRequirement() == false)
+		$schedule : Schedule(course.PC == true, checkPCRequirement() == false)
 	then
 	 insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
                 1,

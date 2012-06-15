@@ -122,7 +122,7 @@ public class Schedule {
 			return false;
 		} else {
 			// would planning course finish in week? (FRI = 4)
-			if ((int) day.getDayweek1().getDayweek() <= 5 -	course.getLength())
+			if ((int) day.getDayweek1().getDayweek() <= 5 - course.getLength())
 				return true;
 			else
 				return false;
@@ -131,6 +131,9 @@ public class Schedule {
 
 	// PCの種類チェック
 	public boolean checkPCRequirement() {
+		if (course.getFixedRoomList().size() != 0) {
+			return true;
+		}
 		return course.getSupportedPCList().contains(classroom.getPcType());
 	}
 
