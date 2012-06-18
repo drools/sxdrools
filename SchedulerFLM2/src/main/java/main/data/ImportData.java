@@ -195,16 +195,10 @@ public class ImportData {
 			
 			for (Course course : storage.courseList) {
 				storage.scheduleList.add(new Schedule(course,
-						storage.classroomList.get(2), storage.dayList.get(0)));
+						storage.classroomList.get(0),storage.dayList.get(0)));
 			}
 			
-
 			workbook.close();
-
-			/*
-			 * storage.scheduleList.get(0).setDay(storage.dayList.get(2));
-			 * System.out.println(storage.scheduleList.get(0).finishInWeek());
-			 */
 
 		} catch (IOException e) {
 			e.printStackTrace();

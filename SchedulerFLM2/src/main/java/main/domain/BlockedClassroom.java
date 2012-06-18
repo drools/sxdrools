@@ -27,6 +27,11 @@ public class BlockedClassroom implements Serializable {
 		this.day = day;
 		this.length = Integer.parseInt(length);
 	}
+	
+	public BlockedClassroom(Classroom classroom, Day day) {
+		this.classroom = classroom;
+		this.day = day;
+	}
 
 	// ゲッター・セッター
 	// 教室

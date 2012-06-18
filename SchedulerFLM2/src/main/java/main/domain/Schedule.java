@@ -1,11 +1,15 @@
 package main.domain;
 
+import main.domain.solver.ClassroomStrengthWeightFactory;
+import main.domain.solver.ScheduleDifficultyWeightFactory;
+import main.domain.solver.DayStrengthWeightFactory;
+
 import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.variable.PlanningVariable;
 import org.drools.planner.api.domain.variable.ValueRange;
 import org.drools.planner.api.domain.variable.ValueRangeType;
 
-@PlanningEntity
+@PlanningEntity(difficultyWeightFactoryClass = ScheduleDifficultyWeightFactory.class)
 public class Schedule {
 
 	// ïœêîÇÃíËã`
@@ -48,7 +52,7 @@ public class Schedule {
 		this.course = course;
 	}
 
-	@PlanningVariable
+	@PlanningVariable(strengthWeightFactoryClass = ClassroomStrengthWeightFactory.class)
 	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "classroomList")
 	public Classroom getClassroom() {
 		return classroom;
@@ -58,7 +62,7 @@ public class Schedule {
 		this.classroom = classroom;
 	}
 
-	@PlanningVariable
+	@PlanningVariable(strengthWeightFactoryClass = DayStrengthWeightFactory.class)
 	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "dayList")
 	public Day getDay() {
 		return day;

@@ -4,10 +4,10 @@
   <artifactId>SchedulerFLM2</artifactId>
   <version>0.0.1-SNAPSHOT</version>
     <dependencies>
-    <dependency>
-    	<groupId>org.drools.planner</groupId>
-    	<artifactId>drools-planner-core</artifactId>
-    	<version>5.4.0.Final</version>
-    </dependency>
+	    <dependency>
+	    	<groupId>org.drools.planner</groupId>
+	    	<artifactId>drools-planner-core</artifactId>
+	    	<version>5.4.0.Final</version>
+	    </dependency>
     </dependencies>
 </project>

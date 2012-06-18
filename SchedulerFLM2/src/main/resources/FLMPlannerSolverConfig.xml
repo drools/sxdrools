@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solver>
-  <!--<environmentMode>DEBUG</environmentMode>-->
+  <environmentMode>DEBUG</environmentMode>
 
   <!-- Domain model configuration -->
   <solutionClass>main.domain.PlannerSolution</solutionClass>
@@ -18,7 +18,7 @@
     <maximumSecondsSpend>800</maximumSecondsSpend>
   </termination>
   <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+    <constructionHeuristicType>BEST_FIT_DECREASING</constructionHeuristicType>
     <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
   </constructionHeuristic>
   <localSearch>
