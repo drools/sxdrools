@@ -32,6 +32,13 @@ public class Schedule {
 		this.classroom = classroom;
 		this.day = day;
 	}
+	
+	public Schedule(int scheduleID, Course course, Classroom classroom, Day day) {
+		this.scheduleID = scheduleID;
+		this.course = course;
+		this.classroom = classroom;
+		this.day = day;
+	}
 
 	// ゲッター・セッター
 	// スケジュールID

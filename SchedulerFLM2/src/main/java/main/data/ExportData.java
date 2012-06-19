@@ -2,13 +2,26 @@ package main.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import org.drools.ClassObjectFilter;
+import org.drools.WorkingMemory;
+import org.drools.planner.core.score.constraint.ConstraintOccurrence;
+import org.drools.planner.core.score.constraint.ConstraintType;
+import org.drools.planner.core.score.director.ScoreDirector;
+import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import main.app.ScoreDetail;
 import main.domain.Schedule;
 
 public class ExportData {
@@ -16,15 +29,18 @@ public class ExportData {
 	// メンバ変数の定義
 	// スケジュール
 	private List<Schedule> scheduleList;
-
+	private ScoreDirector scoreDirector;
+	
+	
 	// コンストラクタの設定
 	// 引数なし
 	public ExportData() {
 	}
 
 	// 引数あり
-	public ExportData(List<Schedule> scheduleList) {
+	public ExportData(List<Schedule> scheduleList, ScoreDirector scoreDirector) {
 		this.scheduleList = scheduleList;
+		this.scoreDirector = scoreDirector;
 	}
 
 	// メソッド
@@ -88,6 +104,8 @@ public class ExportData {
 		try {
 			WritableWorkbook workbook = Workbook.createWorkbook(new File(
 					filename));
+			
+			//write Schedule List
 			WritableSheet sheet = workbook.createSheet("Schedule", 0);
 
 			int i = 0;
@@ -103,6 +121,32 @@ public class ExportData {
 				sheet.addCell(new Label(2, i, schedule.getClassroom().getID()));
 				i++;
 			}
+			
+			//write Rules list
+			
+			sheet = workbook.createSheet("BrokenRule", 1);
+
+			i = 0;
+			int j = 0;
+
+			sheet.addCell(new Label(0, i, "Broken Rule Name"));
+			sheet.addCell(new Label(1, i, "Broken Elements"));
+			i++;
+
+			for (ScoreDetail scoreDetail : getScoreDetailList()) {
+				if (scoreDetail.getConstraintType() == ConstraintType.NEGATIVE_HARD) {
+		    		 for (ConstraintOccurrence con : scoreDetail.getConstraintOccurrenceSet()) {
+		    			 sheet.addCell(new Label(0, i, scoreDetail.getRuleId()));
+			    		 //System.out.println(scoreDetail.getRuleId());
+		    			 j = 1;
+		    			 for (Object o : con.getCauses()) {
+		    				 j++;
+		    				 sheet.addCell(new Label(j, i, o.toString()));
+		    			 }
+		    			 i++;
+		    		 }
+		    	}
+			}
 
 			workbook.write();
 			workbook.close();
@@ -117,4 +161,28 @@ public class ExportData {
 
 	}
 
+	private List<ScoreDetail> getScoreDetailList() {
+	    if (!(scoreDirector instanceof DroolsScoreDirector)) {
+	        return null;
+	    }
+	    Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
+	    WorkingMemory workingMemory = ((DroolsScoreDirector) scoreDirector).getWorkingMemory();
+	    if (workingMemory == null) {
+	        return Collections.emptyList();
+	    }
+	    Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
+	            new ClassObjectFilter(ConstraintOccurrence.class));
+	    while (it.hasNext()) {
+	        ConstraintOccurrence constraintOccurrence = it.next();
+	        ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
+	        if (scoreDetail == null) {
+	            scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());
+	            scoreDetailMap.put(constraintOccurrence.getRuleId(), scoreDetail);
+	        }
+	        scoreDetail.addConstraintOccurrence(constraintOccurrence);
+	    }
+	    List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
+	    Collections.sort(scoreDetailList);
+	    return scoreDetailList;
+	}
 }

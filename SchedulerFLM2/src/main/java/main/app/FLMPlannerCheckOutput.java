@@ -66,14 +66,19 @@ public class FLMPlannerCheckOutput {
 		 scoreDirector.setWorkingSolution(initialSolution);
 		 
 	     scoreDirector.calculateScore();
-	     for (ScoreDetail score : getScoreDetailList(scoreDirector)) {
+	     
+	     ExportData exporter = new ExportData(storage.scheduleList, scoreDirector);
+	     
+	     exporter.exportToXLS("OutputTest.xls");
+	     
+	     /*for (ScoreDetail score : getScoreDetailList(scoreDirector)) {
 	    	 if (score.getConstraintType() == ConstraintType.NEGATIVE_HARD) {
 	    		 System.out.println(score.getRuleId());
 	    		 for (ConstraintOccurrence con : score.getConstraintOccurrenceSet()) {
 	    			 con.toString();
 	    		 }
 	    	 }
-	     }
+	     }*/
 	     //System.out.println("total rule size = " + getScoreDetailList(scoreDirector).size());
 		
 		// 開催日程計画開始
@@ -88,30 +93,7 @@ public class FLMPlannerCheckOutput {
 	     System.out.println(initialSolution.getScore());
 	}
 
-	public static List<ScoreDetail> getScoreDetailList(ScoreDirector scoreDirector) {
-	    if (!(scoreDirector instanceof DroolsScoreDirector)) {
-	        return null;
-	    }
-	    Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
-	    WorkingMemory workingMemory = ((DroolsScoreDirector) scoreDirector).getWorkingMemory();
-	    if (workingMemory == null) {
-	        return Collections.emptyList();
-	    }
-	    Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
-	            new ClassObjectFilter(ConstraintOccurrence.class));
-	    while (it.hasNext()) {
-	        ConstraintOccurrence constraintOccurrence = it.next();
-	        ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
-	        if (scoreDetail == null) {
-	            scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());
-	            scoreDetailMap.put(constraintOccurrence.getRuleId(), scoreDetail);
-	        }
-	        scoreDetail.addConstraintOccurrence(constraintOccurrence);
-	    }
-	    List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
-	    Collections.sort(scoreDetailList);
-	    return scoreDetailList;
-	}
+	
 	
 	public static void main(String[] args) {
 		checkData(args[0], args[1]);

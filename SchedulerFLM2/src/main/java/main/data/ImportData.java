@@ -316,7 +316,7 @@ public class ImportData {
 					 * Week.parseWeek(Integer.parseInt(sheet.getCell(2,
 					 * i).getContents()))));
 					 */
-					storage.scheduleList.add(new Schedule(
+					storage.scheduleList.add(new Schedule(i,
 							storage.getCourse(sheet.getCell(0, i).getContents()),
 							storage.getClassroom(sheet.getCell(3, i).getContents()), 
 							storage.getDay(sheet.getCell(1, i).getContents())));

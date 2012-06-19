@@ -89,7 +89,7 @@ rule "fixedRoomRequirement"
 	then
 		//System.out.println("fixedRoomRequirement @" + $schedule.toString());
 	 	insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
-                1,
+                3,
                 $schedule));
 end
 
@@ -98,14 +98,17 @@ rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			 Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+			$schedule : Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+				//$minSize : min($size),
+				$minID : min($scheduleID),
 				$total : sum($size);
 				$total < $totalSize)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
 		//System.out.println("totalSizeRequirement @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
                 1,
-                $courseTotalSize));
+                $schedule ));
 end
 
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない

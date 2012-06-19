@@ -98,12 +98,12 @@ rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			 Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
-				$minSize : min($size),
+			$schedule : Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+				//$minSize : min($size),
+				$minID : min($scheduleID),
 				$total : sum($size);
-				$total < $totalSize
-				$minID : min($scheduleID))
-		$schedule : Schedule( course.equals($course) == true, classroom.getCapacity == $minSize.intValue()  )
+				$total < $totalSize)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
 		//System.out.println("totalSizeRequirement @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,

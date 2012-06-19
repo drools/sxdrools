@@ -98,8 +98,8 @@ rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
-				$minSize : min($size),
+			$schedule : Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+				//$minSize : min($size),
 				$minID : min($scheduleID),
 				$total : sum($size);
 				$total < $totalSize
@@ -107,11 +107,12 @@ rule "totalSizeRequirement-check"
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 
 	then
-		//System.out.println("totalSizeRequirement @ " + $course.toString() + " minsize: " + $minSize);
-		System.out.println("totalSizeRequirement @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		//System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " minsize: " + $minSize);
+		System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
                 1,
-                $schedule ));
+				$schedule ));
+			//$course));
 end
 
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない

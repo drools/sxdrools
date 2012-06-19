@@ -124,7 +124,7 @@ public class Day implements Serializable {
 	// ‰c‹Æ“úî•ñ‚Ì•\¦
 	@Override
 	public String toString() {
-		return "Day " + ID;
+		return "(Day " + ID + ")";
 	}
 
 }

@@ -189,6 +189,7 @@ public class Course implements Serializable {
 	//コース情報の表示
 	@Override
 	public String toString() {
-		return "CourseID " + ID + " size " + eSize + " PC " + PC;
+		//return "CourseID " + ID + " size " + eSize + " PC " + PC;
+		return "CourseID " + ID;
 	}
 }

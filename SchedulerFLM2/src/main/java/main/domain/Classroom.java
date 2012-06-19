@@ -114,7 +114,8 @@ public class Classroom implements Serializable {
 	// ‹³ºî•ñ‚Ì•\¦
 	@Override
 	public String toString() {
-		return "RoomID " + ID + " limit " + capacity + " PC " + PC;
+		//return "RoomID " + ID ; //+ " limit " + capacity + " PC " + PC;
+		return "(Room " + ID + ")";
 	}
 
 }
