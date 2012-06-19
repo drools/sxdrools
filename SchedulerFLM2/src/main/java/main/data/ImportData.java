@@ -2,6 +2,7 @@ package main.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import jxl.Sheet;
@@ -82,13 +83,23 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				storage.courseList.add(new Course(i - 1, sheet.getCell(0, i)
+				Course c = new Course(i - 1, sheet.getCell(0, i)
 						.getContents(), sheet.getCell(1, i).getContents(),
 						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
 								.getContents(), sheet.getCell(4, i)
 								.getContents(), sheet.getCell(5, i)
 								.getContents(), sheet.getCell(6, i)
-								.getContents()));
+								.getContents());
+				
+				ArrayList<String> newFixedList = new ArrayList<String>();
+				for (String s : c.getFixedRoomList()) {
+					if (storage.getClassroom(s) != null) {
+						newFixedList.add(s);
+					}
+				}
+				c.setFixedRoomList(newFixedList);
+				
+				storage.courseList.add(c);
 			} catch (Exception e) {
 				System.out.println("Error in CourseMaster row " + i);
 				e.printStackTrace();
@@ -179,8 +190,6 @@ public class ImportData {
 			ws.setLocale(new Locale("er", "ER"));
 			Workbook workbook = Workbook.getWorkbook(f1, ws);
 
-			System.out.println("Import Course = "
-					+ importCourseMaster(workbook.getSheet(0)));
 			System.out.println("Import Classroom = "
 					+ importClassroomMaster(workbook.getSheet(1)));
 			System.out.println("Import Day = "
@@ -189,13 +198,22 @@ public class ImportData {
 					+ importBlockedClassroomMaster(workbook.getSheet(3)));
 			System.out.println("Import TotalCourseSize = "
 					+ importCourseTotalSize(workbook.getSheet(4)));
+			System.out.println("Import Course = "
+					+ importCourseMaster(workbook.getSheet(0)));
 
 			// Initialize Schedule Data
 
 			
 			for (Course course : storage.courseList) {
-				storage.scheduleList.add(new Schedule(course,
-						storage.classroomList.get(0),storage.dayList.get(0)));
+				if (course.getFixedRoomList().size()>0) {
+					storage.scheduleList.add(new Schedule(course,
+							storage.getClassroom(course.getFixedRoomList().get(0)),
+							storage.dayList.get(0)));
+				} else {
+					storage.scheduleList.add(new Schedule(course,
+							storage.classroomList.get(0),
+							storage.dayList.get(0)));
+				}
 			}
 			
 			workbook.close();

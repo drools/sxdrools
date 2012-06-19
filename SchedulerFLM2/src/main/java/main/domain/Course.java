@@ -65,10 +65,19 @@ public class Course implements Serializable {
 			this.PC = Boolean.parseBoolean(PC);
 		}
 		this.ID = ID;
-		this.supportedPCList = new ArrayList<String>(Arrays.asList(supportedPC
-				.split(",")));
-		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom
-				.split(",")));
+		if (!supportedPC.replace(" ", "").equals("")) {
+			this.supportedPCList = new ArrayList<String>(Arrays.asList(supportedPC
+					.split(",")));
+		} else {
+			this.supportedPCList = new ArrayList<String>();
+		}
+		/*if (!fixedRoom.replace(" ", "").equals("")) {
+			this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom
+					.split(",")));
+		} else {
+			this.fixedRoomList = new ArrayList<String>();
+		}*/
+		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom.split(",")));
 	}
 
 	// ゲッター・セッター
