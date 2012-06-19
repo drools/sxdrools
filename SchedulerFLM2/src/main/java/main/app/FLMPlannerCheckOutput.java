@@ -1,6 +1,11 @@
 package main.app;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import main.data.DataStorage;
 import main.data.ExportData;
@@ -10,9 +15,14 @@ import main.domain.Course;
 import main.domain.PlannerSolution;
 import main.domain.Schedule;
 
+import org.drools.ClassObjectFilter;
+import org.drools.WorkingMemory;
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
+import org.drools.planner.core.score.constraint.ConstraintOccurrence;
+import org.drools.planner.core.score.constraint.ConstraintType;
 import org.drools.planner.core.score.director.ScoreDirector;
+import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 
 public class FLMPlannerCheckOutput {
 
@@ -51,10 +61,20 @@ public class FLMPlannerCheckOutput {
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
 		//solver.setPlanningProblem(initialSolution);
-
+		
 		 ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
 		 scoreDirector.setWorkingSolution(initialSolution);
+		 
 	     scoreDirector.calculateScore();
+	     for (ScoreDetail score : getScoreDetailList(scoreDirector)) {
+	    	 if (score.getConstraintType() == ConstraintType.NEGATIVE_HARD) {
+	    		 System.out.println(score.getRuleId());
+	    		 for (ConstraintOccurrence con : score.getConstraintOccurrenceSet()) {
+	    			 con.toString();
+	    		 }
+	    	 }
+	     }
+	     //System.out.println("total rule size = " + getScoreDetailList(scoreDirector).size());
 		
 		// 開催日程計画開始
 		//solver.solve();
@@ -68,6 +88,31 @@ public class FLMPlannerCheckOutput {
 	     System.out.println(initialSolution.getScore());
 	}
 
+	public static List<ScoreDetail> getScoreDetailList(ScoreDirector scoreDirector) {
+	    if (!(scoreDirector instanceof DroolsScoreDirector)) {
+	        return null;
+	    }
+	    Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
+	    WorkingMemory workingMemory = ((DroolsScoreDirector) scoreDirector).getWorkingMemory();
+	    if (workingMemory == null) {
+	        return Collections.emptyList();
+	    }
+	    Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
+	            new ClassObjectFilter(ConstraintOccurrence.class));
+	    while (it.hasNext()) {
+	        ConstraintOccurrence constraintOccurrence = it.next();
+	        ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
+	        if (scoreDetail == null) {
+	            scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());
+	            scoreDetailMap.put(constraintOccurrence.getRuleId(), scoreDetail);
+	        }
+	        scoreDetail.addConstraintOccurrence(constraintOccurrence);
+	    }
+	    List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
+	    Collections.sort(scoreDetailList);
+	    return scoreDetailList;
+	}
+	
 	public static void main(String[] args) {
 		checkData(args[0], args[1]);
 	}

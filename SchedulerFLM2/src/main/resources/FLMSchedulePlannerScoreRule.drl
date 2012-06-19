@@ -43,6 +43,7 @@ rule "overCapacity"
         $schedule : Schedule(classroom.capacity < course.eSize)
         
     then
+    	//System.out.println("overCapacity @" + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("overCapacity", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -53,6 +54,7 @@ rule "notFinishInWeek"
     when
         $schedule : Schedule( finishInWeek == false )       
     then
+    	//System.out.println("notFinishInWeek @" + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("notFinishInWeek", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -61,8 +63,9 @@ end
 //ルール④：PCの必要なコースをPCの無い教室に割り当ててはならない
 rule "pcRequirement"
     when
-        $schedule : Schedule(course.PC != null, classroom.PC != course.PC)
+        $schedule : Schedule(course.PC != null, classroom.PC != course.PC, course.getFixedRoomList().size() == 0)
     then
+    	//System.out.println("pcRequirement @" + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("pcRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -71,9 +74,10 @@ end
 //ルール⑤：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
 rule "pcTypeRequirement"
 	when
-		$schedule : Schedule(course.PC == true, checkPCRequirement() == false)
+		$schedule : Schedule(course.PC == true, checkPCRequirement() == false, course.getFixedRoomList().size() == 0)
 	then
-	 insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
+		//System.out.println("pcTypeRequirement @" + $schedule.toString());
+	 	insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
 end
@@ -83,9 +87,9 @@ rule "fixedRoomRequirement"
 	when
 		$schedule : Schedule(checkFixedRoomRequirement() == false)
 	then
-		//System.out.println("fixedRoomRequirement");
-	 insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
-                1,
+		//System.out.println("fixedRoomRequirement @" + $schedule.toString());
+	 	insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
+                3,
                 $schedule));
 end
 
@@ -94,15 +98,17 @@ rule "totalSizeRequirement-check"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			 Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+			 Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+				$minSize : min($size),
 				$total : sum($size);
-				$total < $totalSize)
+				$total < $totalSize
+				$minID : min($scheduleID))
+		$schedule : Schedule( course.equals($course) == true, classroom.getCapacity == $minSize.intValue()  )
 	then
-		//System.out.println("total of " + $course.toString() + " " + 
-		//$total + " "  + $totalSize);
+		//System.out.println("totalSizeRequirement @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
                 1,
-                $courseTotalSize));
+                $schedule ));
 end
 
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない
@@ -111,7 +117,8 @@ rule "classroomBlock"
 		$blockedClassroom : BlockedClassroom($classroom : classroom)
 		$schedule : Schedule(classroom.equals($classroom) == true, 
 			conflictDayCheck($blockedClassroom) == true)
-	then	
+	then
+		//System.out.println("classroomBlock @ " + $schedule.toString() + " @ " + $blockedClassroom.toString());	
 		insertLogical(new IntConstraintOccurrence("classroomBlock", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -130,20 +137,19 @@ rule "SameCourseDayConflict"
                 1,
                 $leftSchedule, $rightSchedule));
 end
-/*
+
 // ############################################################################
 // ソフト制約
 // ############################################################################
 
-//ルール①：教室定員とコース定員が近い方がよい
+//ルール①：教室定員とコース定員が近い方がよい（固定定員）
 //（教室定員-コース定員）を減点する。
-
-rule "roomOptimization"
+rule "roomOptimization1"
     when
         $classroom : Classroom($capacity : capacity)
         $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize())
     then
-        insertLogical(new IntConstraintOccurrence("roomOptimization", ConstraintType.NEGATIVE_SOFT,
+        insertLogical(new IntConstraintOccurrence("roomOptimization1", ConstraintType.NEGATIVE_SOFT,
                 ($capacity-$eSize),
                 $classroom, $schedule));
 				//System.out.println("Schedule" + $schedule.toString());
@@ -151,7 +157,25 @@ rule "roomOptimization"
 
 end
 
-//ルール②：開催期間が四日のコースは火曜日に優先的に開催する。
+//ルール②：計画後定員と総定員は近いほうが。（教室定員）
+//（教室定員-コース定員）を減点する。
+rule "roomOptimization2"
+	when	
+		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+		accumulate(
+			 Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+				$total : sum($size);
+				$total > $totalSize)
+	then
+		//System.out.println("total of " + $course.toString() + " " + 
+		//$total + " "  + $totalSize);
+	 	insertLogical(new IntConstraintOccurrence("roomOptimization2", ConstraintType.NEGATIVE_SOFT,
+	 			($total.intValue() - $totalSize),
+               	$courseTotalSize));
+end
+
+/*
+//ルール③：開催期間が四日のコースは火曜日に優先的に開催する。
 //火曜日以外に割り当てた場合に1点減点する
 
 rule "favoriteDayWeek-length4-Tuesday"
@@ -165,7 +189,7 @@ rule "favoriteDayWeek-length4-Tuesday"
 				
 end
 
-//ルール③：開催期間が3日のコースの開催開始日は、月曜日か水曜日に優先的に開催する。
+//ルール④：開催期間が3日のコースの開催開始日は、月曜日か水曜日に優先的に開催する。
 //月曜日・水曜日以外に割り当てた場合に1点減点する。
 
 rule "favoriteDayWeek-length3-Monday,Wednesday"
@@ -178,7 +202,7 @@ rule "favoriteDayWeek-length3-Monday,Wednesday"
 				//System.out.println("Schedule" + $schedule.toString());
 				end
 				
-//ルール④：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
+//ルール⑤：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
 //月曜日・木曜日以外に割り当てた場合に1点減点する。
 
 rule "favoriteDayWeek-Monday,Thursday"
@@ -190,8 +214,8 @@ rule "favoriteDayWeek-Monday,Thursday"
                 $schedule));
 				//System.out.println("Schedule" + $schedule.toString());
 				end		
-
 */
+
 // ############################################################################
 // スコアの計算
 // ############################################################################

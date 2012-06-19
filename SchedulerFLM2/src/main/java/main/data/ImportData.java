@@ -196,10 +196,10 @@ public class ImportData {
 					+ importDayMaster(workbook.getSheet(2)));
 			System.out.println("Import BlockedClassroom = "
 					+ importBlockedClassroomMaster(workbook.getSheet(3)));
-			System.out.println("Import TotalCourseSize = "
-					+ importCourseTotalSize(workbook.getSheet(4)));
 			System.out.println("Import Course = "
 					+ importCourseMaster(workbook.getSheet(0)));
+			System.out.println("Import TotalCourseSize = "
+					+ importCourseTotalSize(workbook.getSheet(4)));
 
 			// Initialize Schedule Data
 

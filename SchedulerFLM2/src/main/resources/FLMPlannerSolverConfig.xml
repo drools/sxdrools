@@ -10,16 +10,17 @@
   <!-- Score configuration -->
   <scoreDirectorFactory>
     <scoreDefinitionType>HARD_AND_SOFT</scoreDefinitionType>
-     <scoreDrl>/FLMSchedulePlannerScoreRule.drl</scoreDrl>
+    <scoreDrl>/FLMSchedulePlannerScoreRule.drl</scoreDrl>
   </scoreDirectorFactory>
 
   <!-- Optimization algorithms configuration -->
   <termination>
-    <maximumSecondsSpend>800</maximumSecondsSpend>
+    <terminationCompositionStyle>OR</terminationCompositionStyle>
+    <maximumSecondsSpend>1000</maximumSecondsSpend>
   </termination>
   <constructionHeuristic>
     <constructionHeuristicType>BEST_FIT_DECREASING</constructionHeuristicType>
-    <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
+    <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
   </constructionHeuristic>
   <localSearch>
     <selector>
@@ -35,6 +36,7 @@
     </selector>
     <acceptor>
       <planningEntityTabuSize>10</planningEntityTabuSize>
+      <solutionTabuSize>1500</solutionTabuSize>
     </acceptor>
     <forager>
       <pickEarlyType>NEVER</pickEarlyType>
