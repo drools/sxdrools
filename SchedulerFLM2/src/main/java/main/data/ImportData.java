@@ -83,14 +83,14 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				Course c = new Course(i - 1, sheet.getCell(0, i)
-						.getContents(), sheet.getCell(1, i).getContents(),
-						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
+				Course c = new Course(i - 1, sheet.getCell(0, i).getContents(),
+						sheet.getCell(1, i).getContents(), sheet.getCell(2, i)
+								.getContents(), sheet.getCell(3, i)
 								.getContents(), sheet.getCell(4, i)
 								.getContents(), sheet.getCell(5, i)
 								.getContents(), sheet.getCell(6, i)
 								.getContents());
-				
+
 				ArrayList<String> newFixedList = new ArrayList<String>();
 				for (String s : c.getFixedRoomList()) {
 					if (storage.getClassroom(s) != null) {
@@ -98,7 +98,7 @@ public class ImportData {
 					}
 				}
 				c.setFixedRoomList(newFixedList);
-				
+
 				storage.courseList.add(c);
 			} catch (Exception e) {
 				System.out.println("Error in CourseMaster row " + i);
@@ -203,19 +203,18 @@ public class ImportData {
 
 			// Initialize Schedule Data
 
-			
 			for (Course course : storage.courseList) {
-				if (course.getFixedRoomList().size()>0) {
-					storage.scheduleList.add(new Schedule(course,
-							storage.getClassroom(course.getFixedRoomList().get(0)),
+				if (course.getFixedRoomList().size() > 0) {
+					storage.scheduleList.add(new Schedule(course, storage
+							.getClassroom(course.getFixedRoomList().get(0)),
 							storage.dayList.get(0)));
 				} else {
 					storage.scheduleList.add(new Schedule(course,
-							storage.classroomList.get(0),
-							storage.dayList.get(0)));
+							storage.classroomList.get(0), storage.dayList
+									.get(0)));
 				}
 			}
-			
+
 			workbook.close();
 
 		} catch (IOException e) {
@@ -260,12 +259,12 @@ public class ImportData {
 
 		storage.scheduleList.get(0).setDay(storage.dayList.get(2));
 		System.out.println(storage.scheduleList.get(0).finishInWeek());
-		}
+	}
 
 	// ***********************************************************************************
 	// アウトプットスケジュール確認用
 	// ***********************************************************************************
-	
+
 	// エクセルシートのインポート
 	public void importFromOutputXLS(String filename) {
 
@@ -276,7 +275,7 @@ public class ImportData {
 			Workbook workbook = Workbook.getWorkbook(f1, ws);
 
 			storage.scheduleList.clear();
-			
+
 			System.out.println("Import Schedule = "
 					+ importScheduleOutput(workbook.getSheet(0)));
 
@@ -295,39 +294,38 @@ public class ImportData {
 			e.printStackTrace();
 		}
 
-	}		
-		
+	}
+
 	// スケジュールアウトプットのインポート
 	private boolean importScheduleOutput(Sheet sheet) {
-			if ((!sheet.getName().equals("Schedule"))
-					|| (!sheet.getCell(0, 0).getContents().equals("Course"))
-					|| (!sheet.getCell(1, 0).getContents().equals("Day"))
-					|| (!sheet.getCell(3, 0).getContents().equals("Classroom"))) {
-				return false;
-			}
+		if ((!sheet.getName().equals("Schedule"))
+				|| (!sheet.getCell(0, 0).getContents().equals("Course"))
+				|| (!sheet.getCell(1, 0).getContents().equals("Day"))
+				|| (!sheet.getCell(3, 0).getContents().equals("Classroom"))) {
+			return false;
+		}
 
-			for (int i = 1; i < sheet.getRows(); i++) {
-				try {
-					/*
-					 * storage.dayList.add(new Day(i-1, sheet.getCell(0,
-					 * i).getContents(),
-					 * DayWeek.parseDayWeek(Integer.parseInt(sheet.getCell(1,
-					 * i).getContents())),
-					 * Week.parseWeek(Integer.parseInt(sheet.getCell(2,
-					 * i).getContents()))));
-					 */
-					storage.scheduleList.add(new Schedule(i,
-							storage.getCourse(sheet.getCell(0, i).getContents()),
-							storage.getClassroom(sheet.getCell(3, i).getContents()), 
-							storage.getDay(sheet.getCell(1, i).getContents())));
-					
-				} catch (Exception e) {
-					System.out.println("Error in ScheduleOutput row " + i);
-				}
-			}
+		for (int i = 1; i < sheet.getRows(); i++) {
+			try {
+				/*
+				 * storage.dayList.add(new Day(i-1, sheet.getCell(0,
+				 * i).getContents(),
+				 * DayWeek.parseDayWeek(Integer.parseInt(sheet.getCell(1,
+				 * i).getContents())),
+				 * Week.parseWeek(Integer.parseInt(sheet.getCell(2,
+				 * i).getContents()))));
+				 */
+				storage.scheduleList.add(new Schedule(i, storage
+						.getCourse(sheet.getCell(0, i).getContents()), storage
+						.getClassroom(sheet.getCell(3, i).getContents()),
+						storage.getDay(sheet.getCell(1, i).getContents())));
 
-			return true;
+			} catch (Exception e) {
+				System.out.println("Error in ScheduleOutput row " + i);
+			}
+		}
+
+		return true;
 	}
-	
-		
+
 }

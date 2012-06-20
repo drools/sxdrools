@@ -13,13 +13,12 @@ import main.domain.Schedule;
 
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
-import org.drools.planner.core.score.director.ScoreDirector;
 import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 
 public class FLMPlannerHelloWorld {
 
 	public static DataStorage storage;
-	
+
 	// ソルバーの設置
 	public static final String SOLVER_CONFIG = "/FLMPlannerSolverConfig.xml";
 	public static final String TEST_CONFIG = "/FLMPlannerRuleCheck.xml";
@@ -61,7 +60,8 @@ public class FLMPlannerHelloWorld {
 		solver.solve();
 
 		// 開催日程計画結果の取得
-		PlannerSolution solvedSolution = (PlannerSolution) solver.getBestSolution();
+		PlannerSolution solvedSolution = (PlannerSolution) solver
+				.getBestSolution();
 
 		// 最終結果のスコアの表示
 		System.out.println(solvedSolution.getScore());
@@ -73,8 +73,7 @@ public class FLMPlannerHelloWorld {
 				+ elapsedTimeMillis / 1000F + "sec");
 
 		// データのエクスポート
-		
-		
+
 		storage.scheduleList = solvedSolution.getScheduleList();
 
 		// exporter.showInitialTestResult();
@@ -92,26 +91,30 @@ public class FLMPlannerHelloWorld {
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
 
-		 DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver.getScoreDirectorFactory().buildScoreDirector();
-		 scoreDirector.setWorkingSolution(initialSolution);
-		 
-		 //Set Logger to System
-		 scoreDirector.getWorkingMemory().setGlobal("ruleLog", new ArrayList<RuleLogger>());
-		 
-	     scoreDirector.calculateScore();
-		
-	     storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector.getWorkingMemory().getGlobal("ruleLog");
-		
+		DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver
+				.getScoreDirectorFactory().buildScoreDirector();
+		scoreDirector.setWorkingSolution(initialSolution);
+
+		// Set Logger to System
+		scoreDirector.getWorkingMemory().setGlobal("ruleLog",
+				new ArrayList<RuleLogger>());
+
+		scoreDirector.calculateScore();
+
+		storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector
+				.getWorkingMemory().getGlobal("ruleLog");
+
 		// 最終結果のスコアの表示
-	     System.out.println(initialSolution.getScore());
+		System.out.println(initialSolution.getScore());
 	}
-	
+
 	public static void exportResult(String outFile) {
-		ExportData exporter = new ExportData(storage.scheduleList, storage.ruleLog);
+		ExportData exporter = new ExportData(storage.scheduleList,
+				storage.ruleLog);
 		System.out.println("Export to XLS: "
 				+ exporter.exportToXLS_debug(outFile));
 	}
-	
+
 	public static void main(String[] args) {
 		runData(args[0]);
 		checkOutput();

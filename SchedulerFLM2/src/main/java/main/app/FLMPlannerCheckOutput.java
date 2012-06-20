@@ -6,10 +6,7 @@ import main.data.DataStorage;
 import main.data.ExportData;
 import main.data.ImportData;
 import main.data.RuleLogger;
-import main.domain.Classroom;
-import main.domain.Course;
 import main.domain.PlannerSolution;
-import main.domain.Schedule;
 
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
@@ -38,27 +35,29 @@ public class FLMPlannerCheckOutput {
 		PlannerSolution initialSolution = new PlannerSolution(
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
-		//solver.setPlanningProblem(initialSolution);
-		
-		 DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver.getScoreDirectorFactory().buildScoreDirector();
-		 scoreDirector.setWorkingSolution(initialSolution);
-		 
-		 //Set Logger to System
-		 scoreDirector.getWorkingMemory().setGlobal("ruleLog", new ArrayList<RuleLogger>());
-		 
-	     scoreDirector.calculateScore();
-	     
-	     storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector.getWorkingMemory().getGlobal("ruleLog");
-	     
-	     ExportData exporter = new ExportData(storage.scheduleList, storage.ruleLog);
-	     
-	     exporter.exportToXLS("OutputTest.xls");
-	     
-	     System.out.println(initialSolution.getScore());
+		// solver.setPlanningProblem(initialSolution);
+
+		DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver
+				.getScoreDirectorFactory().buildScoreDirector();
+		scoreDirector.setWorkingSolution(initialSolution);
+
+		// Set Logger to System
+		scoreDirector.getWorkingMemory().setGlobal("ruleLog",
+				new ArrayList<RuleLogger>());
+
+		scoreDirector.calculateScore();
+
+		storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector
+				.getWorkingMemory().getGlobal("ruleLog");
+
+		ExportData exporter = new ExportData(storage.scheduleList,
+				storage.ruleLog);
+
+		exporter.exportToXLS("OutputTest.xls");
+
+		System.out.println(initialSolution.getScore());
 	}
 
-	
-	
 	public static void main(String[] args) {
 		checkData(args[0], args[1]);
 	}

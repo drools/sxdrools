@@ -1,5 +1,4 @@
 
-
 /*
  * Copyright 2010 JBoss Inc
  *
@@ -35,104 +34,108 @@ import org.drools.planner.core.score.constraint.LongConstraintOccurrence;
 import org.drools.planner.core.score.constraint.UnweightedConstraintOccurrence;
 
 /**
- * TODO Replace this class with the ConstraintOccurrenceTotal class: https://jira.jboss.org/jira/browse/JBRULES-2510
+ * TODO Replace this class with the ConstraintOccurrenceTotal class:
+ * https://jira.jboss.org/jira/browse/JBRULES-2510
  */
 public class ScoreDetail implements Comparable<ScoreDetail> {
 
-    private String ruleId;
-    private ConstraintType constraintType;
+	private String ruleId;
+	private ConstraintType constraintType;
 
-    private Set<ConstraintOccurrence> constraintOccurrenceSet = new HashSet<ConstraintOccurrence>();
-    private double scoreTotal = 0.0;
+	private Set<ConstraintOccurrence> constraintOccurrenceSet = new HashSet<ConstraintOccurrence>();
+	private double scoreTotal = 0.0;
 
-    public ScoreDetail(String ruleId, ConstraintType constraintType) {
-        this.ruleId = ruleId;
-        this.constraintType = constraintType;
-    }
+	public ScoreDetail(String ruleId, ConstraintType constraintType) {
+		this.ruleId = ruleId;
+		this.constraintType = constraintType;
+	}
 
-    public String getRuleId() {
-        return ruleId;
-    }
+	public String getRuleId() {
+		return ruleId;
+	}
 
-    public ConstraintType getConstraintType() {
-        return constraintType;
-    }
+	public ConstraintType getConstraintType() {
+		return constraintType;
+	}
 
-    public Set<ConstraintOccurrence> getConstraintOccurrenceSet() {
-        return constraintOccurrenceSet;
-    }
+	public Set<ConstraintOccurrence> getConstraintOccurrenceSet() {
+		return constraintOccurrenceSet;
+	}
 
-    public int getOccurrenceSize() {
-        return constraintOccurrenceSet.size();
-    }
+	public int getOccurrenceSize() {
+		return constraintOccurrenceSet.size();
+	}
 
-    public double getScoreTotal() {
-        return scoreTotal;
-    }
+	public double getScoreTotal() {
+		return scoreTotal;
+	}
 
-    public void addConstraintOccurrence(ConstraintOccurrence constraintOccurrence) {
-        boolean added = constraintOccurrenceSet.add(constraintOccurrence);
-        if (!added) {
-            throw new IllegalArgumentException("Add the same constraintOccurrence (" + constraintOccurrence
-                    + ") twice.");
-        }
-        double occurrenceScore;
-        if (constraintOccurrence instanceof IntConstraintOccurrence) {
-            occurrenceScore = ((IntConstraintOccurrence) constraintOccurrence).getWeight();
-        } else if (constraintOccurrence instanceof DoubleConstraintOccurrence) {
-            occurrenceScore = ((DoubleConstraintOccurrence) constraintOccurrence).getWeight();
-        } else if (constraintOccurrence instanceof LongConstraintOccurrence) {
-            occurrenceScore = ((LongConstraintOccurrence) constraintOccurrence).getWeight();
-        } else if (constraintOccurrence instanceof UnweightedConstraintOccurrence) {
-            occurrenceScore = 1.0;
-        } else {
-            throw new IllegalStateException("Cannot determine occurrenceScore of ConstraintOccurrence class: "
-                    + constraintOccurrence.getClass());
-        }
-        scoreTotal += occurrenceScore;
-    }
+	public void addConstraintOccurrence(
+			ConstraintOccurrence constraintOccurrence) {
+		boolean added = constraintOccurrenceSet.add(constraintOccurrence);
+		if (!added) {
+			throw new IllegalArgumentException(
+					"Add the same constraintOccurrence ("
+							+ constraintOccurrence + ") twice.");
+		}
+		double occurrenceScore;
+		if (constraintOccurrence instanceof IntConstraintOccurrence) {
+			occurrenceScore = ((IntConstraintOccurrence) constraintOccurrence)
+					.getWeight();
+		} else if (constraintOccurrence instanceof DoubleConstraintOccurrence) {
+			occurrenceScore = ((DoubleConstraintOccurrence) constraintOccurrence)
+					.getWeight();
+		} else if (constraintOccurrence instanceof LongConstraintOccurrence) {
+			occurrenceScore = ((LongConstraintOccurrence) constraintOccurrence)
+					.getWeight();
+		} else if (constraintOccurrence instanceof UnweightedConstraintOccurrence) {
+			occurrenceScore = 1.0;
+		} else {
+			throw new IllegalStateException(
+					"Cannot determine occurrenceScore of ConstraintOccurrence class: "
+							+ constraintOccurrence.getClass());
+		}
+		scoreTotal += occurrenceScore;
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o instanceof ScoreDetail) {
-            ScoreDetail other = (ScoreDetail) o;
-            return new EqualsBuilder()
-                    .append(ruleId, other.ruleId)
-                    .append(constraintType, other.constraintType)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		} else if (o instanceof ScoreDetail) {
+			ScoreDetail other = (ScoreDetail) o;
+			return new EqualsBuilder().append(ruleId, other.ruleId)
+					.append(constraintType, other.constraintType).isEquals();
+		} else {
+			return false;
+		}
+	}
 
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(ruleId)
-                .append(constraintType)
-                .toHashCode();
-    }
+	public int hashCode() {
+		return new HashCodeBuilder().append(ruleId).append(constraintType)
+				.toHashCode();
+	}
 
-    public int compareTo(ScoreDetail other) {
-        return new CompareToBuilder()
-                .append(constraintType, other.constraintType)
-                .append(ruleId, other.ruleId)
-                .toComparison();
-    }
+	public int compareTo(ScoreDetail other) {
+		return new CompareToBuilder()
+				.append(constraintType, other.constraintType)
+				.append(ruleId, other.ruleId).toComparison();
+	}
 
-    public String toString() {
-        return ruleId + "/" + constraintType + " (" + getOccurrenceSize() + ") = " + scoreTotal;
-    }
+	public String toString() {
+		return ruleId + "/" + constraintType + " (" + getOccurrenceSize()
+				+ ") = " + scoreTotal;
+	}
 
-    public String buildConstraintOccurrenceListText() {
-        List<ConstraintOccurrence> constraintOccurrenceList = new ArrayList(constraintOccurrenceSet);
-        Collections.sort(constraintOccurrenceList);
-        StringBuilder text = new StringBuilder(constraintOccurrenceList.size() * 80);
-        for (ConstraintOccurrence constraintOccurrence : constraintOccurrenceList) {
-            text.append(constraintOccurrence.toString()).append("\n");
-        }
-        return text.toString();
-    }
+	public String buildConstraintOccurrenceListText() {
+		List<ConstraintOccurrence> constraintOccurrenceList = new ArrayList(
+				constraintOccurrenceSet);
+		Collections.sort(constraintOccurrenceList);
+		StringBuilder text = new StringBuilder(
+				constraintOccurrenceList.size() * 80);
+		for (ConstraintOccurrence constraintOccurrence : constraintOccurrenceList) {
+			text.append(constraintOccurrence.toString()).append("\n");
+		}
+		return text.toString();
+	}
 
 }
-

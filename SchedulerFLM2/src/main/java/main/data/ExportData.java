@@ -9,13 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.drools.ClassObjectFilter;
-import org.drools.WorkingMemory;
-import org.drools.planner.core.score.constraint.ConstraintOccurrence;
-import org.drools.planner.core.score.constraint.ConstraintType;
-import org.drools.planner.core.score.director.ScoreDirector;
-import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
-
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
@@ -23,6 +16,12 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import main.app.ScoreDetail;
 import main.domain.Schedule;
+
+import org.drools.ClassObjectFilter;
+import org.drools.WorkingMemory;
+import org.drools.planner.core.score.constraint.ConstraintOccurrence;
+import org.drools.planner.core.score.director.ScoreDirector;
+import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 
 public class ExportData {
 

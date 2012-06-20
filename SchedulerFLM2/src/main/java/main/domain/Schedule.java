@@ -1,8 +1,8 @@
 package main.domain;
 
 import main.domain.solver.ClassroomStrengthWeightFactory;
-import main.domain.solver.ScheduleDifficultyWeightFactory;
 import main.domain.solver.DayStrengthWeightFactory;
+import main.domain.solver.ScheduleDifficultyWeightFactory;
 
 import org.drools.planner.api.domain.entity.PlanningEntity;
 import org.drools.planner.api.domain.variable.PlanningVariable;

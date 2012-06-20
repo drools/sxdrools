@@ -1,7 +1,6 @@
 package main.domain.solver;
 
 import main.domain.Classroom;
-//import main.domain.PlannerSolution;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.drools.planner.api.domain.variable.PlanningValueStrengthWeightFactory;
