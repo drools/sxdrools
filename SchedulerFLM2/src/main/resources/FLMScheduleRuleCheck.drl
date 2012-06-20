@@ -18,6 +18,7 @@ import main.domain.BlockedClassroom;
 import main.data.RuleLogger;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 //グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
@@ -104,11 +105,12 @@ rule "fixedRoomRequirement"
 end
 
 //ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
-rule "totalSizeRequirement-check"
+//（教室定員）
+rule "totalSizeRequirement-check1"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			$schedule : Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.geteSize() == 0, $size : classroom.getCapacity());
 				//$minSize : min($size),
 				$minID : min($scheduleID),
 				$total : sum($size);
@@ -118,14 +120,36 @@ rule "totalSizeRequirement-check"
 
 	then
 		//System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " minsize: " + $minSize);
-		System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		System.out.println("totalSizeRequirement1 @ Id: " + $minID + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 		ruleLog.add(new RuleLogger("totalSizeRequirement",$course.toString() + " asis: " + $total + " tobe: "  + $totalSize));
-	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check1", ConstraintType.NEGATIVE_HARD,
                 1,
 				$schedule ));
 			//$course));
 end
 
+//（固定値＝ＭＡＸ値）
+rule "totalSizeRequirement-check2"
+	when	
+		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+		accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity(), course.geteSize() != 0, $eSize : course.geteSize());
+				//$minSize : min($size),
+				$minID : min($scheduleID),
+				$total : sum(Math.max($size,$eSize));
+				$total < $totalSize
+				)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
+
+	then
+		//System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " minsize: " + $minSize);
+		System.out.println("totalSizeRequirement2 @ Id: " + $minID + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		ruleLog.add(new RuleLogger("totalSizeRequirement",$course.toString() + " asis: " + $total + " tobe: "  + $totalSize));
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check2", ConstraintType.NEGATIVE_HARD,
+                1,
+				$schedule ));
+			//$course));
+end
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない
 rule "classroomBlock"
 	when

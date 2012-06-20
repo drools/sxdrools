@@ -16,6 +16,8 @@ import main.domain.Week
 import main.domain.CourseTotalSize;
 import main.domain.BlockedClassroom;
 
+import java.lang.Math;
+
 //グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
 
@@ -94,22 +96,43 @@ rule "fixedRoomRequirement"
 end
 
 //ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
-rule "totalSizeRequirement-check"
+//（教室定員）
+rule "totalSizeRequirement-check1"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			$schedule : Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity);
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.geteSize() == 0, $size : classroom.getCapacity());
 				//$minSize : min($size),
 				$minID : min($scheduleID),
 				$total : sum($size);
 				$total < $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-		//System.out.println("totalSizeRequirement @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
-	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
+		//System.out.println("totalSizeRequirement1 @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check1", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule ));
 end
+
+//（固定値=ＭＡＸ値）
+rule "totalSizeRequirement-check2"
+	when	
+		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+		accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity(), course.geteSize() != 0, $eSize : course.geteSize());
+				//$minSize : min($size),
+				$minID : min($scheduleID),
+				$total : sum(Math.max($size,$eSize));
+				$total < $totalSize)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
+	then
+		//System.out.println("MAX :"+ Math.max(5,10));
+		//System.out.println("totalSizeRequirement2 @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check2", ConstraintType.NEGATIVE_HARD,
+                1,
+                $schedule ));
+end
+
 
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない
 rule "classroomBlock"
