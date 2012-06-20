@@ -26,6 +26,8 @@ public class DataStorage {
 	// コース総定員（コースの定員が教室定員によるもの）
 	public final List<CourseTotalSize> courseTotalSizeList;
 
+    public ArrayList<RuleLogger> ruleLog;
+	
 	// データ倉庫の作成
 	public DataStorage() {
 		classroomList = new ArrayList<Classroom>();
@@ -35,6 +37,8 @@ public class DataStorage {
 		scheduleList = new ArrayList<Schedule>();
 		blockedClassroomList = new ArrayList<BlockedClassroom>();
 		courseTotalSizeList = new ArrayList<CourseTotalSize>();
+		
+		ruleLog = new ArrayList<RuleLogger>();
 	}
 
 	// ゲッター

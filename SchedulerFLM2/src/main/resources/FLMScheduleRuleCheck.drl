@@ -15,9 +15,13 @@ import main.domain.Schedule;
 import main.domain.Week
 import main.domain.CourseTotalSize;
 import main.domain.BlockedClassroom;
+import main.data.RuleLogger;
+
+import java.util.ArrayList;
 
 //グローバル変数の宣言
 global HardAndSoftScoreHolder scoreHolder;
+global ArrayList<RuleLogger> ruleLog;
 
 // ############################################################################
 // ハード制約
@@ -32,6 +36,7 @@ rule "classroomOccupancy"
         
     then
     	System.out.println("classroomOccupancy @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
+    	ruleLog.add(new RuleLogger("classroomOccupancy",$leftSchedule.toString() + " & " + $rightSchedule.toString()));
         insertLogical(new IntConstraintOccurrence("classroomOccupancy", ConstraintType.NEGATIVE_HARD,
                 1,
                 $leftSchedule, $rightSchedule));
@@ -44,6 +49,7 @@ rule "overCapacity"
         
     then
     	System.out.println("overCapacity @" + $schedule.toString());
+    	ruleLog.add(new RuleLogger("overCapacity",$schedule.toString()));
         insertLogical(new IntConstraintOccurrence("overCapacity", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -55,6 +61,7 @@ rule "notFinishInWeek"
         $schedule : Schedule( finishInWeek == false )       
     then
     	System.out.println("notFinishInWeek @" + $schedule.toString());
+    	ruleLog.add(new RuleLogger("notFinishInWeek",$schedule.toString()));
         insertLogical(new IntConstraintOccurrence("notFinishInWeek", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -66,6 +73,7 @@ rule "pcRequirement"
         $schedule : Schedule(course.PC != null, classroom.PC != course.PC, course.getFixedRoomList().size() == 0)
     then
     	System.out.println("pcRequirement @" + $schedule.toString());
+    	ruleLog.add(new RuleLogger("pcRequirement",$schedule.toString()));
         insertLogical(new IntConstraintOccurrence("pcRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -77,6 +85,7 @@ rule "pcTypeRequirement"
 		$schedule : Schedule(course.PC == true, checkPCRequirement() == false, course.getFixedRoomList().size() == 0)
 	then
 		System.out.println("pcTypeRequirement @" + $schedule.toString());
+		ruleLog.add(new RuleLogger("pcTypeRequirement",$schedule.toString()));
 	 	insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -88,6 +97,7 @@ rule "fixedRoomRequirement"
 		$schedule : Schedule(checkFixedRoomRequirement() == false)
 	then
 		System.out.println("fixedRoomRequirement @" + $schedule.toString());
+		ruleLog.add(new RuleLogger("fixedRoomRequirement",$schedule.toString()));
 	 	insertLogical(new IntConstraintOccurrence("fixedRoomRequirement", ConstraintType.NEGATIVE_HARD,
                 3,
                 $schedule));
@@ -109,6 +119,7 @@ rule "totalSizeRequirement-check"
 	then
 		//System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " minsize: " + $minSize);
 		System.out.println("totalSizeRequirement @ Id: " + $minID + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		ruleLog.add(new RuleLogger("totalSizeRequirement",$course.toString() + " asis: " + $total + " tobe: "  + $totalSize));
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check", ConstraintType.NEGATIVE_HARD,
                 1,
 				$schedule ));
@@ -122,7 +133,8 @@ rule "classroomBlock"
 		$schedule : Schedule(classroom.equals($classroom) == true, 
 			conflictDayCheck($blockedClassroom) == true)
 	then
-		System.out.println("classroomBlock @ " + $schedule.toString() + " @ " + $blockedClassroom.toString());	
+		System.out.println("classroomBlock @ " + $schedule.toString() + " @ " + $blockedClassroom.toString());
+		ruleLog.add(new RuleLogger("classroomBlock",$schedule.toString() + " @ " + $blockedClassroom.toString()));	
 		insertLogical(new IntConstraintOccurrence("classroomBlock", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -137,6 +149,7 @@ rule "SameCourseDayConflict"
         
     then
     	System.out.println("SameCourseDayConflict @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
+    	ruleLog.add(new RuleLogger("SameCourseDayConflict",$leftSchedule.toString() + " & " + $rightSchedule.toString()));
         insertLogical(new IntConstraintOccurrence("SameCourseDayConflict", ConstraintType.NEGATIVE_HARD,
                 1,
                 $leftSchedule, $rightSchedule));
@@ -234,7 +247,7 @@ rule "hardConstraintsBroken"
         )
     then
         scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
-		System.out.println($hardTotal.intValue());
+		//System.out.println($hardTotal.intValue());
 end
 
 //ソフト制約のスコア計算

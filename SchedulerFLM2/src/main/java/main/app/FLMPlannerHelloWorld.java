@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import main.data.DataStorage;
 import main.data.ExportData;
 import main.data.ImportData;
+import main.data.RuleLogger;
 import main.domain.Classroom;
 import main.domain.Course;
 import main.domain.PlannerSolution;
@@ -13,6 +14,7 @@ import main.domain.Schedule;
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
 import org.drools.planner.core.score.director.ScoreDirector;
+import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 
 public class FLMPlannerHelloWorld {
 
@@ -35,7 +37,7 @@ public class FLMPlannerHelloWorld {
 		System.out.println(s1.checkPCRequirement());
 	}
 
-	public static void runData(String inFile, String outFile) {
+	public static void runData(String inFile) {
 
 		// データのインポート
 		ImportData importer = new ImportData();
@@ -59,8 +61,7 @@ public class FLMPlannerHelloWorld {
 		solver.solve();
 
 		// 開催日程計画結果の取得
-		PlannerSolution solvedSolution = (PlannerSolution) solver
-				.getBestSolution();
+		PlannerSolution solvedSolution = (PlannerSolution) solver.getBestSolution();
 
 		// 最終結果のスコアの表示
 		System.out.println(solvedSolution.getScore());
@@ -72,15 +73,13 @@ public class FLMPlannerHelloWorld {
 				+ elapsedTimeMillis / 1000F + "sec");
 
 		// データのエクスポート
-		ExportData exporter = new ExportData(solvedSolution.getScheduleList());
+		
 		
 		storage.scheduleList = solvedSolution.getScheduleList();
 
 		// exporter.showInitialTestResult();
 		// System.out.println("Export to XLS: " +
 		// exporter.exportToXLS(outFile));
-		System.out.println("Export to XLS: "
-				+ exporter.exportToXLS_debug(outFile));
 	}
 
 	public static void checkOutput() {
@@ -93,17 +92,30 @@ public class FLMPlannerHelloWorld {
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
 
-		 ScoreDirector scoreDirector = solver.getScoreDirectorFactory().buildScoreDirector();
+		 DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver.getScoreDirectorFactory().buildScoreDirector();
 		 scoreDirector.setWorkingSolution(initialSolution);
+		 
+		 //Set Logger to System
+		 scoreDirector.getWorkingMemory().setGlobal("ruleLog", new ArrayList<RuleLogger>());
+		 
 	     scoreDirector.calculateScore();
+		
+	     storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector.getWorkingMemory().getGlobal("ruleLog");
 		
 		// 最終結果のスコアの表示
 	     System.out.println(initialSolution.getScore());
 	}
 	
+	public static void exportResult(String outFile) {
+		ExportData exporter = new ExportData(storage.scheduleList, storage.ruleLog);
+		System.out.println("Export to XLS: "
+				+ exporter.exportToXLS_debug(outFile));
+	}
+	
 	public static void main(String[] args) {
-		runData(args[0], args[1]);
+		runData(args[0]);
 		checkOutput();
+		exportResult(args[1]);
 	}
 
 }

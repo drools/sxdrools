@@ -30,7 +30,7 @@ public class ExportData {
 	// スケジュール
 	private List<Schedule> scheduleList;
 	private ScoreDirector scoreDirector;
-	
+	private ArrayList<RuleLogger> ruleLog;
 	
 	// コンストラクタの設定
 	// 引数なし
@@ -41,6 +41,15 @@ public class ExportData {
 	public ExportData(List<Schedule> scheduleList, ScoreDirector scoreDirector) {
 		this.scheduleList = scheduleList;
 		this.scoreDirector = scoreDirector;
+	}
+	
+	public ExportData(List<Schedule> scheduleList) {
+		this.scheduleList = scheduleList;
+	}
+	
+	public ExportData(List<Schedule> scheduleList, ArrayList<RuleLogger> ruleLog) {
+		this.scheduleList = scheduleList;
+		this.ruleLog = ruleLog;
 	}
 
 	// メソッド
@@ -85,6 +94,22 @@ public class ExportData {
 				i++;
 			}
 
+			//write Rules list
+			
+			sheet = workbook.createSheet("BrokenRule", 1);
+
+			i = 0;
+
+			sheet.addCell(new Label(0, i, "Broken Rule Name"));
+			sheet.addCell(new Label(1, i, "Broken Elements"));
+			i++;
+
+			for (RuleLogger brokenRule : ruleLog) {
+				sheet.addCell(new Label(0, i, brokenRule.getRuleID()));
+				sheet.addCell(new Label(1, i, brokenRule.getMessage()));
+				i++;
+			}
+			
 			workbook.write();
 			workbook.close();
 			return true;
@@ -127,25 +152,15 @@ public class ExportData {
 			sheet = workbook.createSheet("BrokenRule", 1);
 
 			i = 0;
-			int j = 0;
 
 			sheet.addCell(new Label(0, i, "Broken Rule Name"));
 			sheet.addCell(new Label(1, i, "Broken Elements"));
 			i++;
 
-			for (ScoreDetail scoreDetail : getScoreDetailList()) {
-				if (scoreDetail.getConstraintType() == ConstraintType.NEGATIVE_HARD) {
-		    		 for (ConstraintOccurrence con : scoreDetail.getConstraintOccurrenceSet()) {
-		    			 sheet.addCell(new Label(0, i, scoreDetail.getRuleId()));
-			    		 //System.out.println(scoreDetail.getRuleId());
-		    			 j = 1;
-		    			 for (Object o : con.getCauses()) {
-		    				 j++;
-		    				 sheet.addCell(new Label(j, i, o.toString()));
-		    			 }
-		    			 i++;
-		    		 }
-		    	}
+			for (RuleLogger brokenRule : ruleLog) {
+				sheet.addCell(new Label(0, i, brokenRule.getRuleID()));
+				sheet.addCell(new Label(1, i, brokenRule.getMessage()));
+				i++;
 			}
 
 			workbook.write();
@@ -184,5 +199,14 @@ public class ExportData {
 	    List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
 	    Collections.sort(scoreDetailList);
 	    return scoreDetailList;
+	}
+
+
+	public ArrayList<RuleLogger> getRuleLog() {
+		return ruleLog;
+	}
+
+	public void setRuleLog(ArrayList<RuleLogger> ruleLog) {
+		this.ruleLog = ruleLog;
 	}
 }
