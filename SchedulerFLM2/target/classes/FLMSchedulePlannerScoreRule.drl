@@ -122,7 +122,7 @@ rule "totalSizeRequirement-check2"
 			Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity(), course.geteSize() != 0, $eSize : course.geteSize());
 				//$minSize : min($size),
 				$minID : min($scheduleID),
-				$total : sum(Math.max($size,$eSize));
+				$total : sum(Math.min($size,$eSize));
 				$total < $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
@@ -164,37 +164,58 @@ end
 // ############################################################################
 // ソフト制約
 // ############################################################################
-
-//ルール①：教室定員とコース定員が近い方がよい（固定定員）
-//（教室定員-コース定員）を減点する。
-rule "roomOptimization1"
+//ルール①：定員の固定値を持つコースは、大きすぎる教室に割り当てないほうがよい。
+rule "roomOptimization"
     when
         $classroom : Classroom($capacity : capacity)
-        $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize())
+        $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize(), $size : classroom.getCapacity(),$size > $eSize)
     then
         insertLogical(new IntConstraintOccurrence("roomOptimization1", ConstraintType.NEGATIVE_SOFT,
-                ($capacity-$eSize),
+                ($size-$eSize),
                 $classroom, $schedule));
-				//System.out.println("Schedule" + $schedule.toString());
-				//System.out.println("classroom" + $classroom.toString());
+				System.out.println("Schedule" + $schedule.toString());
+				System.out.println("classroom" + $classroom.toString());
 
 end
 
-//ルール②：計画後定員と総定員は近いほうが。（教室定員）
-//（教室定員-コース定員）を減点する。
-rule "roomOptimization2"
+//ルール②：計画後定員と総定員は近いほうがよい。（教室定員）
+//（計画後定員-総定員）を減点する。
+//教室定員
+rule "totalSizeRequirement-Soft1"
 	when	
 		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
 		accumulate(
-			 Schedule( course.equals($course) == true , $size : classroom.getCapacity);
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.geteSize() == 0, $size : classroom.getCapacity());
+				//$minSize : min($size),
+				$minID : min($scheduleID),
 				$total : sum($size);
 				$total > $totalSize)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-		//System.out.println("total of " + $course.toString() + " " + 
+		//System.out.println("total of2 " + $course.toString() + " " + 
 		//$total + " "  + $totalSize);
-	 	insertLogical(new IntConstraintOccurrence("roomOptimization2", ConstraintType.NEGATIVE_SOFT,
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-Soft1", ConstraintType.NEGATIVE_SOFT,
 	 			($total.intValue() - $totalSize),
-               	$courseTotalSize));
+               	$schedule));
+end
+
+//固定値＝ＭＡＸ値
+rule "totalSizeRequirement-Soft2"
+	when	
+		$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+		accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , $size : classroom.getCapacity(), course.geteSize() != 0, $eSize : course.geteSize());
+				//$minSize : min($size),
+				$minID : min($scheduleID),
+				$total : sum(Math.min($size,$eSize));
+				$total > $totalSize)
+		$schedule : Schedule( scheduleID == $minID.intValue() )
+	then
+		//System.out.println("total of1 " + $course.toString() + " " + 
+		//$total + " "  + $totalSize);
+	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-Soft2", ConstraintType.NEGATIVE_SOFT,
+	 			($total.intValue() - $totalSize),
+               	$schedule));
 end
 
 /*
