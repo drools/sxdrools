@@ -164,7 +164,7 @@ end
 // ############################################################################
 // ソフト制約
 // ############################################################################
-//ルール①：定員の固定値を持つコースは、大きすぎる教室に割り当てないほうがよい。
+//ルール①：定員の固定値を持つコースは、固定値より大きすぎる教室に割り当てないほうがよい。
 rule "roomOptimization"
     when
         $classroom : Classroom($capacity : capacity)
@@ -173,8 +173,8 @@ rule "roomOptimization"
         insertLogical(new IntConstraintOccurrence("roomOptimization1", ConstraintType.NEGATIVE_SOFT,
                 ($size-$eSize),
                 $classroom, $schedule));
-				System.out.println("Schedule" + $schedule.toString());
-				System.out.println("classroom" + $classroom.toString());
+				//System.out.println("Schedule" + $schedule.toString());
+				//System.out.println("classroom" + $classroom.toString());
 
 end
 
@@ -218,18 +218,19 @@ rule "totalSizeRequirement-Soft2"
                	$schedule));
 end
 
-/*
+
 //ルール③：開催期間が四日のコースは火曜日に優先的に開催する。
 //火曜日以外に割り当てた場合に1点減点する
 
 rule "favoriteDayWeek-length4-Tuesday"
     when
-        $schedule : Schedule(course.getLength() == 4, day.getDayweek().getDayweek != 1)
+    	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
+        $schedule : Schedule(course.equals($course) == true, course.getLength() == 4, day.getDayweek().getDayweek != 1)
     then
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
-                1,
-                $schedule));
-				//System.out.println("Schedule" + $schedule.toString());
+                $totalSize,
+                $courseTotalSize,$schedule));
+				System.out.println("Schedule1" + $schedule.toString());
 				
 end
 
@@ -238,27 +239,28 @@ end
 
 rule "favoriteDayWeek-length3-Monday,Wednesday"
     when
+    	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
         $schedule : Schedule(course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2)
     then
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
-                1,
-                $schedule));
-				//System.out.println("Schedule" + $schedule.toString());
-				end
+                $totalSize,
+                $courseTotalSize,$schedule));
+				System.out.println("Schedule2" + $schedule.toString());
+end
 				
 //ルール⑤：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する。
 //月曜日・木曜日以外に割り当てた場合に1点減点する。
 
 rule "favoriteDayWeek-Monday,Thursday"
     when
+        $courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
         $schedule : Schedule(course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3)
     then
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
-                1,
-                $schedule));
-				//System.out.println("Schedule" + $schedule.toString());
-				end		
-*/
+                $totalSize,
+                $courseTotalSize,$schedule));
+				System.out.println("Schedule3" + $schedule.toString());
+end		
 
 // ############################################################################
 // スコアの計算
