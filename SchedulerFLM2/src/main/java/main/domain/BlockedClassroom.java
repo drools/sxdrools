@@ -61,4 +61,8 @@ public class BlockedClassroom implements Serializable {
 		this.length = length;
 	}
 
+	public String toString() {
+		return "(Blocked) " + classroom.toString() + " for " + length 
+				+ " days starting from " + day.toString(); 
+	}
 }
