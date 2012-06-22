@@ -31,7 +31,6 @@ rule "classroomOccupancy"
         $leftSchedule : Schedule($leftId : scheduleID, $classroom : classroom)
         //rightSchedule not being held between active time of leftSchedule
         $rightSchedule : Schedule(scheduleID > $leftId, conflictDayCheck($leftSchedule) == true, classroom.equals($classroom))
-        
     then
     	//System.out.println("classroomOccupancy @" + $leftSchedule.toString() + " & " + $rightSchedule.toString());
         insertLogical(new IntConstraintOccurrence("classroomOccupancy", ConstraintType.NEGATIVE_HARD,
@@ -96,7 +95,7 @@ rule "totalSizeRequirement-check1"
 				$total < $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-		//System.out.println("totalSizeRequirement1 @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		//System.out.println("totalSizeRequirement1 @" + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check1", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule ));
@@ -115,12 +114,11 @@ rule "totalSizeRequirement-check2"
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
 		//System.out.println("MAX :"+ Math.max(5,10));
-		//System.out.println("totalSizeRequirement2 @ " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
+		//System.out.println("totalSizeRequirement2 @" + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-check2", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule ));
 end
-
 
 //ルール⑧：ブロックされている教室にコースを割り当ててはならない
 rule "classroomBlock"
@@ -129,7 +127,7 @@ rule "classroomBlock"
 		$schedule : Schedule(classroom.equals($classroom) == true, 
 			conflictDayCheck($blockedClassroom) == true)
 	then
-		//System.out.println("classroomBlock @ " + $schedule.toString() + " @ " + $blockedClassroom.toString());	
+		//System.out.println("classroomBlock @" + $schedule.toString() + " @ " + $blockedClassroom.toString());	
 		insertLogical(new IntConstraintOccurrence("classroomBlock", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));
@@ -152,6 +150,7 @@ end
 // ############################################################################
 // ソフト制約
 // ############################################################################
+
 //ルール①：定員の固定値（ＭＡＸ値）を持つコースは、固定値より大きすぎる教室に割り当てないほうがよい。
 //（教室定員-総定員）分を減点する。
 rule "roomOptimization"
@@ -159,12 +158,10 @@ rule "roomOptimization"
         $classroom : Classroom($capacity : capacity)
         $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize(), $size : classroom.getCapacity(),$size > $eSize)
     then
-    	//System.out.println("Soft1: "roomOptimization"" + " " + "Schedule: " + $schedule.toString());
+    	//System.out.println("Soft1: roomOptimization" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("roomOptimization1", ConstraintType.NEGATIVE_SOFT,
                 ($size-$eSize),
                 $classroom, $schedule));
-
-
 end
 
 //ルール②：計画後定員と総定員は近いほうがよい。
@@ -181,12 +178,11 @@ rule "totalSizeRequirement-overpenalty1"
 				$total > $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-	 	//System.out.println("Soft2: "totalSizeRequirement-overpenalty1"" +　" " + "course: " + $course.getID() + " " + 
+	 	//System.out.println("Soft2: totalSizeRequirement-overpenalty1" + " " + "course: " + $course.getID() + " " + 
 		//$total + "-" + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty1", ConstraintType.NEGATIVE_SOFT,
 	 			($total.intValue() - $totalSize),
                	$schedule));
-       
 end
 
 //固定値（ＭＡＸ値）
@@ -201,57 +197,62 @@ rule "totalSizeRequirement-overpenalty2"
 				$total > $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-	 	//System.out.println("Soft2: "totalSizeRequirement-overpenalty2"" +　"course: " + $course.getID() + " " + 
+	 	//System.out.println("Soft2: totalSizeRequirement-overpenalty2" + " " + "course: " + $course.getID() + " " + 
 		//$total + "-" + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty2", ConstraintType.NEGATIVE_SOFT,
 	 			($total.intValue() - $totalSize),
                	$schedule));
-
 end
-
 
 //ルール③：開催期間が四日のコースは火曜日に優先的に開催する（予測総定員が大きいものを優先する）。
 //火曜日以外に割り当てた場合に、予測総定員分を減点する
-
 rule "favoriteDayWeek-length4-Tuesday"
     when
     	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        $schedule : Schedule(course.equals($course) == true, course.getLength() == 4, day.getDayweek().getDayweek != 1)
+        accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 4, day.getDayweek().getDayweek != 1);
+				//$minSize : min($size),
+				$minID : min($scheduleID))
+		$schedule : Schedule( scheduleID == $minID.intValue())
     then
-        //System.out.println("Soft3: "favoriteDayWeek-length4-Tuesday"" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft3: favoriteDayWeek-length4-Tuesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
                 $totalSize,
-                $courseTotalSize,$schedule));
-
-				
+                $schedule));				
 end
 
 //ルール④：開催期間が3日のコースの開催開始日は、月曜日か水曜日に優先的に開催する（予測総定員が大きいものを優先する）。
 //月曜日・水曜日以外に割り当てた場合に、予測総定員分を減点する。
-
 rule "favoriteDayWeek-length3-Monday,Wednesday"
     when
     	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        $schedule : Schedule(course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2)
+        accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2);
+				//$minSize : min($size),
+				$minID : min($scheduleID))
+		$schedule : Schedule( scheduleID == $minID.intValue())
     then
-		//System.out.println("Soft4: "favoriteDayWeek-length3-Monday,Wednesday"" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft4: favoriteDayWeek-length3-Monday,Wednesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
                 $totalSize,
-                $courseTotalSize,$schedule));
+                $schedule));
 end
 				
 //ルール⑤：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する（予測総定員が大きいものを優先する）。
 //月曜日・木曜日以外に割り当てた場合に予測総定員分を減点する。
-
 rule "favoriteDayWeek-Monday,Thursday"
     when
         $courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        $schedule : Schedule(course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3)
+        accumulate(
+			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3);
+				//$minSize : min($size),
+				$minID : min($scheduleID))
+		$schedule : Schedule( scheduleID == $minID.intValue())
     then
-		//System.out.println("Soft5: "favoriteDayWeek-Monday,Thursday"" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft5: favoriteDayWeek-Monday,Thursday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
                 $totalSize,
-                $courseTotalSize,$schedule));
+                $schedule));
 end		
 
 // ############################################################################
@@ -282,6 +283,3 @@ rule "softConstraintsBroken"
     then
         scoreHolder.setSoftConstraintsBroken($softTotal.intValue());
 end
-
-
-
