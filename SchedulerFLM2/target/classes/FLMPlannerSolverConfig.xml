@@ -16,7 +16,7 @@
   <!-- Optimization algorithms configuration -->
   <termination>
     <terminationCompositionStyle>OR</terminationCompositionStyle>
-    <maximumSecondsSpend>15</maximumSecondsSpend>
+    <maximumSecondsSpend>1800</maximumSecondsSpend>
   </termination>
   <constructionHeuristic>
     <constructionHeuristicType>BEST_FIT_DECREASING</constructionHeuristicType>
