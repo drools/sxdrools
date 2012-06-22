@@ -85,9 +85,9 @@ public class Schedule {
 	// スケジュールのコピー
 	public Schedule clone() {
 		Schedule c = new Schedule();
-		c.course = course.clone();
-		c.classroom = classroom.clone();
-		c.day = day.clone();
+		c.course = course;
+		c.classroom = classroom;
+		c.day = day;
 		c.scheduleID = scheduleID;
 		return c;
 	}

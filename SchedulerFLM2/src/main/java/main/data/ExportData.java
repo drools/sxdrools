@@ -175,6 +175,10 @@ public class ExportData {
 
 	}
 
+	public boolean exportLog(String filename) {
+		return false;
+	}
+	
 	private List<ScoreDetail> getScoreDetailList() {
 	    if (!(scoreDirector instanceof DroolsScoreDirector)) {
 	        return null;

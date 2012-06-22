@@ -15,6 +15,7 @@ public class Classroom implements Serializable {
 	private int classroomID;
 	private String ID;
 	private String pcType;
+	private int groupCapacity;
 
 	// コンストラクタの設定
 	// 引数なし
@@ -38,12 +39,17 @@ public class Classroom implements Serializable {
 
 	// 引数あり（+PCの種類）
 	public Classroom(int classroomID, String ID, String capacity, String PC,
-			String pcType) {
+			String pcType, String groupCapacity) {
 		this.capacity = Integer.parseInt(capacity);
 		this.PC = Boolean.parseBoolean(PC);
 		this.classroomID = classroomID;
 		this.ID = ID;
 		this.pcType = pcType;
+		if (groupCapacity.equals("")) {
+			this.groupCapacity = 0;
+		} else {
+			this.groupCapacity = Integer.parseInt(groupCapacity);
+		}
 	}
 
 	// ゲッター・セッター
@@ -116,6 +122,14 @@ public class Classroom implements Serializable {
 	public String toString() {
 		//return "RoomID " + ID ; //+ " limit " + capacity + " PC " + PC;
 		return "(Room " + ID + ")";
+	}
+
+	public int getGroupCapacity() {
+		return groupCapacity;
+	}
+
+	public void setGroupCapacity(int groupCapacity) {
+		this.groupCapacity = groupCapacity;
 	}
 
 }
