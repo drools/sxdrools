@@ -108,17 +108,25 @@ public class FLMPlannerHelloWorld {
 		System.out.println(initialSolution.getScore());
 	}
 
-	public static void exportResult(String outFile) {
+	public static void exportResult(String outFile, String logFile) {
 		ExportData exporter = new ExportData(storage.scheduleList,
 				storage.ruleLog);
 		System.out.println("Export to XLS: "
 				+ exporter.exportToXLS_debug(outFile));
+		if (!logFile.equals("")) {
+			System.out.println("Export Log = "
+					+ exporter.exportLogText(logFile));
+		}
 	}
 
 	public static void main(String[] args) {
 		runData(args[0]);
 		checkOutput();
-		exportResult(args[1]);
+		if (args.length > 1) {
+			exportResult(args[1],"");
+		} else {
+			exportResult(args[1],args[2]);
+		}
 	}
 
 }

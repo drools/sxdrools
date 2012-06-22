@@ -169,7 +169,7 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				storage.dayList.add(new Day(i - 1, sheet.getCell(0, i)
+				storage.dayList.add(new Day(i - 1,sheet.getCell(0, i)
 						.getContents(), sheet.getCell(1, i).getContents(),
 						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
 								.getContents()));
@@ -189,7 +189,7 @@ public class ImportData {
 		try {
 			File f1 = new File(filename);
 			WorkbookSettings ws = new WorkbookSettings();
-			ws.setLocale(new Locale("er", "ER"));
+			ws.setLocale(Locale.JAPANESE);
 			Workbook workbook = Workbook.getWorkbook(f1, ws);
 
 			System.out.println("Import Classroom = "
@@ -273,7 +273,7 @@ public class ImportData {
 		try {
 			File f1 = new File(filename);
 			WorkbookSettings ws = new WorkbookSettings();
-			ws.setLocale(new Locale("er", "ER"));
+			ws.setLocale(Locale.JAPANESE);
 			Workbook workbook = Workbook.getWorkbook(f1, ws);
 
 			storage.scheduleList.clear();

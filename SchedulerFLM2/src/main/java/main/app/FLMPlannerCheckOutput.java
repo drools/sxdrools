@@ -17,7 +17,7 @@ public class FLMPlannerCheckOutput {
 	// ソルバーの設置
 	public static final String SOLVER_CONFIG = "/FLMPlannerRuleCheck.xml";
 
-	public static void checkData(String inFile, String outFile) {
+	public static void checkData(String inFile, String outFile, String logFile) {
 
 		// データのインポート
 		ImportData importer = new ImportData();
@@ -53,13 +53,20 @@ public class FLMPlannerCheckOutput {
 		ExportData exporter = new ExportData(storage.scheduleList,
 				storage.ruleLog);
 
-		exporter.exportToXLS("OutputTest.xls");
+		if (!logFile.equals("")) {
+			System.out.println("Export Log = "
+					+ exporter.exportLogText(logFile));
+		}
 
 		System.out.println(initialSolution.getScore());
 	}
 
 	public static void main(String[] args) {
-		checkData(args[0], args[1]);
+		if (args.length>2) {
+			checkData(args[0], args[1], args[2]);
+		} else {
+			checkData(args[0], args[1], "");
+		}
 	}
 
 }

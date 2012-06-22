@@ -1,6 +1,7 @@
 package main.data;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -175,8 +176,62 @@ public class ExportData {
 
 	}
 
-	public boolean exportLog(String filename) {
-		return false;
+	public boolean exportLogXLS(String filename) {
+		try {
+			WritableWorkbook workbook = Workbook.createWorkbook(new File(
+					filename));
+			
+			//write Schedule List
+			WritableSheet sheet = workbook.createSheet("BrokenRule", 1);
+
+			int i = 0;
+
+			sheet.addCell(new Label(0, i, "Broken Rule Name"));
+			sheet.addCell(new Label(1, i, "Broken Elements"));
+			i++;
+
+			for (RuleLogger brokenRule : ruleLog) {
+				sheet.addCell(new Label(0, i, brokenRule.getRuleID()));
+				sheet.addCell(new Label(1, i, brokenRule.getMessage()));
+				i++;
+			}
+
+			workbook.write();
+			workbook.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (WriteException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean exportLogText(String filename) {
+		try{
+			File f = new File(filename);
+			FileWriter out;
+			
+			if (!f.exists()) {
+				out = new FileWriter(filename);
+			} else {
+				out = new FileWriter(filename,true);
+			}
+			
+			for (RuleLogger brokenRule : ruleLog) {
+				out.write(brokenRule.getRuleID()+ "\t"+ brokenRule.getMessage()+ "\n");
+			}
+			
+			out.close();
+			
+			return true;
+		} 
+		catch (Exception e){//Catch exception if any
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 	
 	private List<ScoreDetail> getScoreDetailList() {
