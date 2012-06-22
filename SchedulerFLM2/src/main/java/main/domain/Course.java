@@ -22,7 +22,7 @@ public class Course implements Serializable {
 	private ArrayList<String> supportedPCList;
 	private ArrayList<String> fixedRoomList;
 	// minEsize == 0 means course size is fixed
-	private int minESize;
+	private Boolean group;
 
 	// コンストラクタの設定
 	// 引数なし
@@ -47,17 +47,12 @@ public class Course implements Serializable {
 	}
 
 	// 引数あり（+最小可能人数）
-	public Course(int courseID, String ID, String eSize, String minSize,
+	public Course(int courseID, String ID, String eSize, String group,
 			String length, String PC, String fixedRoom, String supportedPC) {
 		this.courseID = courseID;
 		this.eSize = Integer.parseInt(eSize);
 		this.length = Integer.parseInt(length);
-		if (!minSize.equals("")) {
-			this.minESize = Integer.parseInt(minSize);
-		} else {
-			// minEsize == 0 means course size is fixed
-			this.minESize = 0;
-		}
+		this.group = Boolean.parseBoolean(group);
 
 		if (PC.equals("")) {
 			this.PC = (Boolean) null;
@@ -144,15 +139,14 @@ public class Course implements Serializable {
 		this.fixedRoomList = fixedRoom;
 	}
 
-	// 最小可能人数
-	public int getMinESize() {
-		return minESize;
+	public Boolean getGroup() {
+		return group;
 	}
 
-	public void setMinESize(int minESize) {
-		this.minESize = minESize;
+	public void setGroup(Boolean group) {
+		this.group = group;
 	}
-
+	
 	// ***********************************************************************************
 	// Complex methods
 	// ***********************************************************************************

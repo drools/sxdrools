@@ -50,7 +50,8 @@ public class ImportData {
 				|| (!sheet.getCell(0, 0).getContents().equals("ID"))
 				|| (!sheet.getCell(1, 0).getContents().equals("Capacity"))
 				|| (!sheet.getCell(2, 0).getContents().equals("PC"))
-				|| (!sheet.getCell(3, 0).getContents().equals("PC Type"))) {
+				|| (!sheet.getCell(3, 0).getContents().equals("PC Type"))
+				|| (!sheet.getCell(4, 0).getContents().equals("Group Capacity"))) {
 			return false;
 		}
 
@@ -58,8 +59,9 @@ public class ImportData {
 			try {
 				storage.classroomList.add(new Classroom(i - 1, sheet.getCell(0,
 						i).getContents(), sheet.getCell(1, i).getContents(),
-						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
-								.getContents()));
+						sheet.getCell(2, i).getContents(),
+						sheet.getCell(3, i).getContents(),
+						sheet.getCell(4, i).getContents()));
 			} catch (Exception e) {
 				System.out.println("Error in ClassroomMaster row " + i);
 			}
@@ -73,7 +75,7 @@ public class ImportData {
 		if (!(sheet.getName().equals("CourseMaster"))
 				|| (!sheet.getCell(0, 0).getContents().equals("ID"))
 				|| (!sheet.getCell(1, 0).getContents().equals("Expected Size"))
-				|| (!sheet.getCell(2, 0).getContents().equals("Minimum Size"))
+				|| (!sheet.getCell(2, 0).getContents().equals("Group"))
 				|| (!sheet.getCell(3, 0).getContents().equals("Length"))
 				|| (!sheet.getCell(4, 0).getContents().equals("PC"))
 				|| (!sheet.getCell(5, 0).getContents().equals("Fixed Room"))
