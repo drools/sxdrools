@@ -42,7 +42,7 @@ rule "classroomOccupancy"
                 $leftSchedule, $rightSchedule));
 end
 
-//ルール③：コースを営業日以外に開催してはならない
+//ルール②：コースを営業日以外に開催してはならない
 rule "notFinishInWeek"
     when
         $schedule : Schedule( finishInWeek == false )       
@@ -54,7 +54,7 @@ rule "notFinishInWeek"
                 $schedule));
 end
 
-//ルール④：PCの必要なコースをPCの無い教室に割り当ててはならない
+//ルール③：PCの必要なコースをPCの無い教室に割り当ててはならない
 rule "pcRequirement"
     when
         $schedule : Schedule(course.PC != null, classroom.PC != course.PC, course.getFixedRoomList().size() == 0)
@@ -66,7 +66,7 @@ rule "pcRequirement"
                 $schedule));
 end
 
-//ルール⑤：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
+//ルール④：コースが要求するPCの種類が、教室が所有するPCの種類と違ってはならない
 rule "pcTypeRequirement"
 	when
 		$schedule : Schedule(course.PC == true, checkPCRequirement() == false, course.getFixedRoomList().size() == 0)
@@ -78,7 +78,7 @@ rule "pcTypeRequirement"
                 $schedule));
 end
 
-//ルール⑥：コースに指定教室がある場合は、指定教室以外の教室に割り当ててはならない
+//ルール⑤：コースに指定教室がある場合は、指定教室以外の教室に割り当ててはならない
 rule "fixedRoomRequirement"
 	when
 		$schedule : Schedule(checkFixedRoomRequirement() == false)
@@ -90,7 +90,7 @@ rule "fixedRoomRequirement"
                 $schedule));
 end
 
-//ルール⑦：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
+//ルール⑥：コース定員を教室定員とするものに関して、計画後の総定員数が目標総定員数を下回ってはならない
 //（教室定員）
 rule "totalSizeRequirement-check1"
 	when	
@@ -135,7 +135,7 @@ rule "totalSizeRequirement-check2"
 			//$course));
 end
 
-//ルール⑧：ブロックされている教室にコースを割り当ててはならない
+//ルール⑦：ブロックされている教室にコースを割り当ててはならない
 rule "classroomBlock"
 	when
 		$blockedClassroom : BlockedClassroom($classroom : classroom)
@@ -149,7 +149,7 @@ rule "classroomBlock"
                 $schedule));
 end
 
-//ルール⑨：同じコースの開催開始日が同じになってはならない
+//ルール⑧：同じコースの開催開始日が同じになってはならない
 rule "SameCourseDayConflict"
 	when
         $leftSchedule : Schedule($leftID : scheduleID, $leftCourse : course ,$leftDay : day)
@@ -224,12 +224,9 @@ end
 //火曜日以外に割り当てた場合に、予測総定員分を減点する
 rule "favoriteDayWeek-length4-Tuesday"
     when
-    	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        accumulate(
-			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 4, day.getDayweek().getDayweek != 1);
-				//$minSize : min($size),
-				$minID : min($scheduleID))
-		$schedule : Schedule( scheduleID == $minID.intValue())
+    	$schedule : Schedule($course : course, course.getLength() == 4, day.getDayweek().getDayweek != 1)
+    	$courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
+        
     then
 		System.out.println("Soft3: favoriteDayWeek-length4-Tuesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
@@ -241,36 +238,29 @@ end
 //月曜日・水曜日以外に割り当てた場合に、予測総定員分を減点する。
 rule "favoriteDayWeek-length3-Monday,Wednesday"
     when
-    	$courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        accumulate(
-			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2);
-				//$minSize : min($size),
-				$minID : min($scheduleID))
-		$schedule : Schedule( scheduleID == $minID.intValue())
-    then
+    	$schedule : Schedule($course : course, course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2)
+    	$courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
+   	then
 		System.out.println("Soft4: favoriteDayWeek-length3-Monday,Wednesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
                 $totalSize,
                 $schedule));
 end
-				
+
 //ルール⑤：開催期間が2日のコースの開催開始日は、月曜日か木曜日に優先的に開催する（予測総定員が大きいものを優先する）。
 //月曜日・木曜日以外に割り当てた場合に予測総定員分を減点する。
 rule "favoriteDayWeek-Monday,Thursday"
     when
-        $courseTotalSize : CourseTotalSize($course : course, $totalSize : totalSize)
-        accumulate(
-			Schedule($scheduleID : scheduleID, course.equals($course) == true , course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3);
-				//$minSize : min($size),
-				$minID : min($scheduleID))
-		$schedule : Schedule( scheduleID == $minID.intValue())
+    	$schedule : Schedule($course : course, course.getLength() == 2, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 3)
+        $courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
+        
     then
 		System.out.println("Soft5: favoriteDayWeek-Monday,Thursday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
                 $totalSize,
                 $schedule));
 end		
-
+	
 // ############################################################################
 // スコアの計算
 // ############################################################################
