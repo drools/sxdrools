@@ -9,5 +9,10 @@
 	    	<artifactId>drools-planner-core</artifactId>
 	    	<version>5.4.0.Final</version>
 	    </dependency>
+	    <dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
+			</dependency>
     </dependencies>
 </project>

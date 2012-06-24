@@ -122,7 +122,7 @@ public class FLMPlannerHelloWorld {
 	public static void main(String[] args) {
 		runData(args[0]);
 		checkOutput();
-		if (args.length > 1) {
+		if (args.length == 2) {
 			exportResult(args[1],"");
 		} else {
 			exportResult(args[1],args[2]);

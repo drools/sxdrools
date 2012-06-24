@@ -131,12 +131,16 @@ public class Schedule {
 	public boolean finishInWeek() {
 		if (day == null) {
 			return false;
+		} else { 
+			if (course.getLength() > 5) {
+				return true;
 		} else {
 			// would planning course finish in week? (FRI = 4)
 			if ((int) day.getDayweek1().getDayweek() <= 5 - course.getLength())
 				return true;
 			else
 				return false;
+			}
 		}
 	}
 
