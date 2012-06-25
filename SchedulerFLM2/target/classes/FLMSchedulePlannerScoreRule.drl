@@ -273,7 +273,7 @@ rule "hardConstraintsBroken"
         )
     then
         scoreHolder.setHardConstraintsBroken($hardTotal.intValue());
-		System.out.println($hardTotal.intValue());
+		//System.out.println($hardTotal.intValue());
 end
 
 //ソフト制約のスコア計算
