@@ -205,16 +205,37 @@ rule "totalSizeRequirement-overpenalty1"
                	$schedule));
 end
 
-//固定値：グループ・スクール形式両方
+//固定値：グループワークでない
 rule "totalSizeRequirement-overpenalty2"	
     when
-        $classroom : Classroom($capacity : capacity)
-        $schedule : Schedule(classroom.equals($classroom) == true, course.geteSize()!= 0 , $eSize : course.geteSize(), $size : classroom.getCapacity(),$size > $eSize)
+        $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == false, $eSize : course.geteSize(), $size : classroom.getCapacity(), $size > $eSize)
     then
     	//System.out.println("Soft1: totalSizeRequirement-overpenalty2" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty2", ConstraintType.NEGATIVE_SOFT,
                 ($size-$eSize),
-                $classroom, $schedule));
+                $schedule));
+end
+
+//固定値：グループワーク（グループ定員＞固定値）
+rule "totalSizeRequirement-overpenalty3-1"	
+    when
+        $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == true, $eSize : course.geteSize(), $gSize : classroom.getGroupCapacity(), $size : classroom.getCapacity(), $gSize>$eSize)
+    then
+    	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
+        insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-1", ConstraintType.NEGATIVE_SOFT,
+                ($size-$eSize),
+                $schedule));
+end
+
+//固定値：グループワーク（グループ定員<固定値）
+rule "totalSizeRequirement-overpenalty3-2"	
+    when
+        $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == true, $eSize : course.geteSize(), $gSize : classroom.getGroupCapacity(), $size : classroom.getCapacity(), $gSize<=$eSize)
+    then
+    	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
+        insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-2", ConstraintType.NEGATIVE_SOFT,
+                ($size-$gSize),
+                $schedule));
 end
 
 //ルール②：開催期間が四日のコースは火曜日に優先的に開催する（予測総定員が大きいものを優先する）。
@@ -257,7 +278,6 @@ rule "favoriteDayWeek-Monday,Thursday"
                 $totalSize,
                 $schedule));
 end		
-
 
 // ############################################################################
 // スコアの計算
