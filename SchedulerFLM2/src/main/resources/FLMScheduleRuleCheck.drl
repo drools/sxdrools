@@ -197,13 +197,13 @@ rule "totalSizeRequirement-overpenalty1"
 				//$minSize : min($size),
 				$minID : min($scheduleID),
 				$total : sum($size);
-				$total > $totalSize)
+				$total != $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
 	 	System.out.println("Soft1: totalSizeRequirement-overpenalty1" + " " + "course: " + $course.getID() + " " + 
 		$total + "-" + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty1", ConstraintType.NEGATIVE_SOFT,
-	 			($total.intValue() - $totalSize),
+	 			Math.abs($total.intValue() - $totalSize),
                	$schedule));
 end
 
