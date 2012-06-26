@@ -122,11 +122,13 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-
-				storage.blockedClassroomList.add(new BlockedClassroom(storage
-						.getClassroom(sheet.getCell(0, i).getContents()),
-						storage.getDay(sheet.getCell(1, i).getContents()),
-						sheet.getCell(2, i).getContents()));
+				if ((storage.getClassroom(sheet.getCell(0, i).getContents()) != null) &&
+					(storage.getDay(sheet.getCell(1, i).getContents()) != null)) {
+						storage.blockedClassroomList.add(new BlockedClassroom(storage
+								.getClassroom(sheet.getCell(0, i).getContents()),
+								storage.getDay(sheet.getCell(1, i).getContents()),
+								sheet.getCell(2, i).getContents()));
+				}
 			} catch (Exception e) {
 				System.out.println("Error in BlockedClassroom row " + i);
 			}

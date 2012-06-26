@@ -14,6 +14,7 @@ import main.domain.Schedule;
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
 import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
+import org.drools.planner.core.solver.DefaultSolver;
 
 public class FLMPlannerHelloWorld {
 
@@ -48,7 +49,7 @@ public class FLMPlannerHelloWorld {
 		long startTimeCounter = System.currentTimeMillis();
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
 		solverFactory.configure(SOLVER_CONFIG);
-		Solver solver = solverFactory.buildSolver();
+		DefaultSolver solver = (DefaultSolver) solverFactory.buildSolver();
 
 		// èâä˙âåàílÇÃê›íË
 		PlannerSolution initialSolution = new PlannerSolution(
@@ -76,6 +77,8 @@ public class FLMPlannerHelloWorld {
 
 		storage.scheduleList = solvedSolution.getScheduleList();
 
+		//solver.
+		
 		// exporter.showInitialTestResult();
 		// System.out.println("Export to XLS: " +
 		// exporter.exportToXLS(outFile));
