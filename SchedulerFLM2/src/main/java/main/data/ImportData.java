@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -19,6 +22,9 @@ import main.domain.Schedule;
 import main.domain.Week;
 
 public class ImportData {
+	
+	static final Logger logger = LoggerFactory.getLogger(ImportData.class);
+	
 	// ÉÅÉìÉoïœêîÇÃíËã`
 	private DataStorage storage;
 
@@ -63,7 +69,7 @@ public class ImportData {
 						sheet.getCell(3, i).getContents(),
 						sheet.getCell(4, i).getContents()));
 			} catch (Exception e) {
-				System.out.println("Error in ClassroomMaster row " + i);
+				logger.error("Error in ClassroomMaster row " + i);
 			}
 		}
 
@@ -103,8 +109,8 @@ public class ImportData {
 
 				storage.courseList.add(c);
 			} catch (Exception e) {
-				System.out.println("Error in CourseMaster row " + i);
-				e.printStackTrace();
+				logger.error("Error in CourseMaster row " + i);
+				//e.printStackTrace();
 			}
 		}
 
@@ -130,7 +136,7 @@ public class ImportData {
 								sheet.getCell(2, i).getContents()));
 				}
 			} catch (Exception e) {
-				System.out.println("Error in BlockedClassroom row " + i);
+				logger.error("Error in BlockedClassroom row " + i);
 			}
 		}
 
@@ -152,7 +158,7 @@ public class ImportData {
 						.getCourse(sheet.getCell(0, i).getContents()), sheet
 						.getCell(1, i).getContents()));
 			} catch (Exception e) {
-				System.out.println("Error in CourseTotalSize row " + i);
+				logger.error("Error in CourseTotalSize row " + i);
 			}
 		}
 
@@ -176,7 +182,7 @@ public class ImportData {
 						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
 								.getContents()));
 			} catch (Exception e) {
-				System.out.println("Error in DayMaster row " + i);
+				logger.error("Error in DayMaster row " + i);
 			}
 		}
 
@@ -194,15 +200,15 @@ public class ImportData {
 			ws.setLocale(Locale.JAPANESE);
 			Workbook workbook = Workbook.getWorkbook(f1, ws);
 
-			System.out.println("Import Classroom = "
+			logger.info("Import Classroom = "
 					+ importClassroomMaster(workbook.getSheet(1)));
-			System.out.println("Import Day = "
+			logger.info("Import Day = "
 					+ importDayMaster(workbook.getSheet(2)));
-			System.out.println("Import BlockedClassroom = "
+			logger.info("Import BlockedClassroom = "
 					+ importBlockedClassroomMaster(workbook.getSheet(3)));
-			System.out.println("Import Course = "
+			logger.info("Import Course = "
 					+ importCourseMaster(workbook.getSheet(0)));
-			System.out.println("Import TotalCourseSize = "
+			logger.info("Import TotalCourseSize = "
 					+ importCourseTotalSize(workbook.getSheet(4)));
 
 			// Initialize Schedule Data
@@ -222,11 +228,11 @@ public class ImportData {
 			workbook.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + "not found!");
 		}
 
 		catch (BiffException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + "contain Biff error!");
 		}
 
 	}
@@ -280,7 +286,7 @@ public class ImportData {
 
 			storage.scheduleList.clear();
 
-			System.out.println("Import Schedule = "
+			logger.info("Import Schedule = "
 					+ importScheduleOutput(workbook.getSheet(0)));
 
 			workbook.close();
@@ -291,11 +297,11 @@ public class ImportData {
 			 */
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + "not found!");
 		}
 
 		catch (BiffException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + "contain Biff error!");
 		}
 
 	}
@@ -311,21 +317,13 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				/*
-				 * storage.dayList.add(new Day(i-1, sheet.getCell(0,
-				 * i).getContents(),
-				 * DayWeek.parseDayWeek(Integer.parseInt(sheet.getCell(1,
-				 * i).getContents())),
-				 * Week.parseWeek(Integer.parseInt(sheet.getCell(2,
-				 * i).getContents()))));
-				 */
 				storage.scheduleList.add(new Schedule(i, storage
 						.getCourse(sheet.getCell(0, i).getContents()), storage
 						.getClassroom(sheet.getCell(3, i).getContents()),
 						storage.getDay(sheet.getCell(1, i).getContents())));
 
 			} catch (Exception e) {
-				System.out.println("Error in ScheduleOutput row " + i);
+				logger.error("Error in ScheduleOutput row " + i);
 			}
 		}
 

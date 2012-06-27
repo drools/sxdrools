@@ -72,7 +72,7 @@ rule "pcTypeRequirement"
 		$schedule : Schedule(course.PC == true, checkPCRequirement() == false, course.getFixedRoomList().size() == 0)
 	then
 		System.out.println("pcTypeRequirement @" + $schedule.toString());
-		ruleLog.add(new RuleLogger("pcTypeRequirement",$schedule.toString()));
+		ruleLog.add(new RuleLogger("pcTypeRequirement",$schedule.toStringPC()));
 	 	insertLogical(new IntConstraintOccurrence("pcTypeRequirement", ConstraintType.NEGATIVE_HARD,
                 1,
                 $schedule));

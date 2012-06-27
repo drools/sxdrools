@@ -11,9 +11,12 @@ import main.domain.PlannerSolution;
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
 import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FLMPlannerCheckOutput {
 
+	static final Logger logger = LoggerFactory.getLogger(FLMPlannerCheckOutput.class);
 	// ソルバーの設置
 	public static final String SOLVER_CONFIG = "/FLMPlannerRuleCheck.xml";
 
@@ -54,11 +57,11 @@ public class FLMPlannerCheckOutput {
 				storage.ruleLog);
 
 		if (!logFile.equals("")) {
-			System.out.println("Export Log = "
+			logger.info("Export Log = "
 					+ exporter.exportLogText(logFile));
 		}
 
-		System.out.println(initialSolution.getScore());
+		logger.info(initialSolution.getScore().toString());
 	}
 
 	public static void main(String[] args) {

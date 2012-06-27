@@ -15,9 +15,13 @@ import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
 import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
 import org.drools.planner.core.solver.DefaultSolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FLMPlannerHelloWorld {
 
+	static final Logger logger = LoggerFactory.getLogger(FLMPlannerHelloWorld.class);
+	
 	public static DataStorage storage;
 
 	// ソルバーの設置
@@ -65,7 +69,7 @@ public class FLMPlannerHelloWorld {
 				.getBestSolution();
 
 		// 最終結果のスコアの表示
-		System.out.println(solvedSolution.getScore());
+		logger.info(solvedSolution.getScore().toString());
 
 		// 計算時間の表示
 		long elapsedTimeMillis = System.currentTimeMillis() - startTimeCounter;
@@ -76,12 +80,6 @@ public class FLMPlannerHelloWorld {
 		// データのエクスポート
 
 		storage.scheduleList = solvedSolution.getScheduleList();
-
-		//solver.
-		
-		// exporter.showInitialTestResult();
-		// System.out.println("Export to XLS: " +
-		// exporter.exportToXLS(outFile));
 	}
 
 	public static void checkOutput() {
@@ -108,16 +106,16 @@ public class FLMPlannerHelloWorld {
 				.getWorkingMemory().getGlobal("ruleLog");
 
 		// 最終結果のスコアの表示
-		System.out.println(initialSolution.getScore());
+		logger.info(initialSolution.getScore().toString());
 	}
 
 	public static void exportResult(String outFile, String logFile) {
 		ExportData exporter = new ExportData(storage.scheduleList,
 				storage.ruleLog);
-		System.out.println("Export to XLS: "
+		logger.info("Export to XLS: "
 				+ exporter.exportToXLS_debug(outFile));
 		if (!logFile.equals("")) {
-			System.out.println("Export Log = "
+			logger.info("Export Log = "
 					+ exporter.exportLogText(logFile));
 		}
 	}
