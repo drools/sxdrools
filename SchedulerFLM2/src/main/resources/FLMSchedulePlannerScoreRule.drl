@@ -179,7 +179,6 @@ rule "SameCourseDayConflict"
                 $leftSchedule, $rightSchedule));
 end
 
-
 // ############################################################################
 // É\ÉtÉgêßñÒ
 // ############################################################################
@@ -201,7 +200,7 @@ rule "totalSizeRequirement-overpenalty1"
 	 	//System.out.println("Soft1: totalSizeRequirement-overpenalty1" + " " + "course: " + $course.getID() + " " + 
 		//$total + "-" + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty1", ConstraintType.NEGATIVE_SOFT,
-	 			Math.abs($total.intValue() - $totalSize),
+	 			Math.abs($total.intValue() - $totalSize)*100,
                	$schedule));
 end
 
@@ -212,7 +211,7 @@ rule "totalSizeRequirement-overpenalty2"
     then
     	//System.out.println("Soft1: totalSizeRequirement-overpenalty2" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty2", ConstraintType.NEGATIVE_SOFT,
-                ($size-$eSize),
+                ($size-$eSize)*100,
                 $schedule));
 end
 
@@ -223,7 +222,7 @@ rule "totalSizeRequirement-overpenalty3-1"
     then
     	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-1", ConstraintType.NEGATIVE_SOFT,
-                ($size-$eSize),
+                ($size-$eSize)*100,
                 $schedule));
 end
 
@@ -234,7 +233,7 @@ rule "totalSizeRequirement-overpenalty3-2"
     then
     	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-2", ConstraintType.NEGATIVE_SOFT,
-                ($size-$gSize),
+                ($size-$gSize)*100,
                 $schedule));
 end
 
@@ -248,7 +247,7 @@ rule "favoriteDayWeek-length4-Tuesday"
     then
 		//System.out.println("Soft2: favoriteDayWeek-length4-Tuesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*4,
                 $schedule));				
 end
 
@@ -261,7 +260,7 @@ rule "favoriteDayWeek-length3-Monday,Wednesday"
    	then
 		//System.out.println("Soft3: favoriteDayWeek-length3-Monday,Wednesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*3,
                 $schedule));
 end
 
@@ -275,7 +274,7 @@ rule "favoriteDayWeek-Monday,Thursday"
     then
 		//System.out.println("Soft4: favoriteDayWeek-Monday,Thursday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*2,
                 $schedule));
 end		
 

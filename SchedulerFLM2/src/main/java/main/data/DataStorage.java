@@ -25,7 +25,7 @@ public class DataStorage {
 	public List<Schedule> scheduleList;
 	// コース総定員（コースの定員が教室定員によるもの）
 	public final List<CourseTotalSize> courseTotalSizeList;
-
+	// ルールログ
 	public ArrayList<RuleLogger> ruleLog;
 
 	// データ倉庫の作成
@@ -62,6 +62,7 @@ public class DataStorage {
 		return null;
 	}
 
+	// コース
 	public Course getCourse(String course) {
 		for (Course c : courseList) {
 			if (c.getID().equals(course)) {

@@ -6,10 +6,7 @@ import main.data.DataStorage;
 import main.data.ExportData;
 import main.data.ImportData;
 import main.data.RuleLogger;
-import main.domain.Classroom;
-import main.domain.Course;
 import main.domain.PlannerSolution;
-import main.domain.Schedule;
 
 import org.drools.planner.config.XmlSolverFactory;
 import org.drools.planner.core.Solver;
@@ -20,32 +17,22 @@ import org.slf4j.LoggerFactory;
 
 public class FLMPlannerHelloWorld {
 
-	static final Logger logger = LoggerFactory.getLogger(FLMPlannerHelloWorld.class);
-	
+	// エンジン用ロガーの作成
+	static final Logger logger = LoggerFactory
+			.getLogger(FLMPlannerHelloWorld.class);
+
+	// データ倉庫の作成
 	public static DataStorage storage;
 
-	// ソルバーの設置
+	// ソルバーの作成
 	public static final String SOLVER_CONFIG = "/FLMPlannerSolverConfig.xml";
 	public static final String TEST_CONFIG = "/FLMPlannerRuleCheck.xml";
 
-	public static void testMethod() {
-		Course c1 = new Course(1, 13, 1, true);
-		ArrayList<String> sPC = new ArrayList<String>();
-		sPC.add("PRIMERGY");
-		sPC.add("D750/A");
-		c1.setSupportedPCList(sPC);
-		Classroom r1 = new Classroom(3, 15, true);
-		r1.setPcType("D750/A");
-		Schedule s1 = new Schedule(c1, r1, null);
-
-		System.out.println(s1.checkPCRequirement());
-	}
-
+	// 計算の実行
 	public static void runData(String inFile) {
 
 		// データのインポート
 		ImportData importer = new ImportData();
-		// importer.initialtest();
 		importer.importFromXLS(inFile);
 		storage = importer.getStorage();
 
@@ -77,12 +64,12 @@ public class FLMPlannerHelloWorld {
 				+ (int) (elapsedTimeMillis / (60 * 1000F)) + "min "
 				+ elapsedTimeMillis / 1000F + "sec");
 
-		// データのエクスポート
-
+		// スケジュールリストへの格納
 		storage.scheduleList = solvedSolution.getScheduleList();
 	}
 
-	public static void checkOutput() {
+	// 計算結果のチェック
+	public static void checkOutput(String exportMessage) {
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
 		solverFactory.configure(TEST_CONFIG);
 		Solver solver = solverFactory.buildSolver();
@@ -92,41 +79,40 @@ public class FLMPlannerHelloWorld {
 				storage.scheduleList, storage.classroomList, storage.dayList,
 				storage.blockedClassroomList, storage.courseTotalSizeList);
 
+		// スコアディレクターの作成
 		DroolsScoreDirector scoreDirector = (DroolsScoreDirector) solver
 				.getScoreDirectorFactory().buildScoreDirector();
 		scoreDirector.setWorkingSolution(initialSolution);
 
-		// Set Logger to System
-		scoreDirector.getWorkingMemory().setGlobal("ruleLog",
-				new ArrayList<RuleLogger>());
-
+		// ルールのロガーの作成・書き込み
+		ArrayList<RuleLogger> ruleLogList = new ArrayList<RuleLogger>();
+		ruleLogList.add(new RuleLogger(exportMessage, ""));
+		scoreDirector.getWorkingMemory().setGlobal("ruleLog", ruleLogList);
 		scoreDirector.calculateScore();
-
-		storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector
-				.getWorkingMemory().getGlobal("ruleLog");
+		storage.ruleLog = (ArrayList<RuleLogger>) scoreDirector.getWorkingMemory().getGlobal("ruleLog");
 
 		// 最終結果のスコアの表示
 		logger.info(initialSolution.getScore().toString());
 	}
 
+	// データのエクスポート
 	public static void exportResult(String outFile, String logFile) {
 		ExportData exporter = new ExportData(storage.scheduleList,
 				storage.ruleLog);
-		logger.info("Export to XLS: "
-				+ exporter.exportToXLS_debug(outFile));
+		logger.info("Export to XLS: " + exporter.exportToXLS(outFile));
 		if (!logFile.equals("")) {
-			logger.info("Export Log = "
-					+ exporter.exportLogText(logFile));
+			logger.info("Export Log = " + exporter.exportLogText(logFile));
 		}
 	}
 
 	public static void main(String[] args) {
 		runData(args[0]);
-		checkOutput();
+		checkOutput("Planning month: "
+				+ args[0].replace(".xls", "").replace("DroolsMaster", ""));
 		if (args.length == 2) {
-			exportResult(args[1],"");
+			exportResult(args[1], "");
 		} else {
-			exportResult(args[1],args[2]);
+			exportResult(args[1], args[2]);
 		}
 	}
 

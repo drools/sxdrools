@@ -200,10 +200,10 @@ rule "totalSizeRequirement-overpenalty1"
 				$total != $totalSize)
 		$schedule : Schedule( scheduleID == $minID.intValue() )
 	then
-	 	System.out.println("Soft1: totalSizeRequirement-overpenalty1" + " " + "course: " + $course.getID() + " " + 
-		$total + "-" + $totalSize);
+	 	//System.out.println("Soft1: totalSizeRequirement-overpenalty1" + " " + "course: " + $course.getID() + " " + 
+		//$total + "-" + $totalSize);
 	 	insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty1", ConstraintType.NEGATIVE_SOFT,
-	 			Math.abs($total.intValue() - $totalSize),
+	 			Math.abs($total.intValue() - $totalSize)*100,
                	$schedule));
 end
 
@@ -212,9 +212,9 @@ rule "totalSizeRequirement-overpenalty2"
     when
         $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == false, $eSize : course.geteSize(), $size : classroom.getCapacity(), $size > $eSize)
     then
-    	System.out.println("Soft1: totalSizeRequirement-overpenalty2" + " " + "Schedule: " + $schedule.toString());
+    	//System.out.println("Soft1: totalSizeRequirement-overpenalty2" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty2", ConstraintType.NEGATIVE_SOFT,
-                ($size-$eSize),
+                ($size-$eSize)*100,
                 $schedule));
 end
 
@@ -223,9 +223,9 @@ rule "totalSizeRequirement-overpenalty3-1"
     when
         $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == true, $eSize : course.geteSize(), $gSize : classroom.getGroupCapacity(), $size : classroom.getCapacity(), $gSize>$eSize)
     then
-    	System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
+    	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-1", ConstraintType.NEGATIVE_SOFT,
-                ($size-$eSize),
+                ($size-$eSize)*100,
                 $schedule));
 end
 
@@ -234,9 +234,9 @@ rule "totalSizeRequirement-overpenalty3-2"
     when
         $schedule : Schedule(course.geteSize()!= 0 , course.getGroup() == true, $eSize : course.geteSize(), $gSize : classroom.getGroupCapacity(), $size : classroom.getCapacity(), $gSize<=$eSize)
     then
-    	System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
+    	//System.out.println("Soft1: totalSizeRequirement-overpenalty3" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("totalSizeRequirement-overpenalty3-2", ConstraintType.NEGATIVE_SOFT,
-                ($size-$gSize),
+                ($size-$gSize)*100,
                 $schedule));
 end
 
@@ -249,9 +249,9 @@ rule "favoriteDayWeek-length4-Tuesday"
     	$courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
         
     then
-		System.out.println("Soft2: favoriteDayWeek-length4-Tuesday" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft2: favoriteDayWeek-length4-Tuesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length4-Tuesday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*4,
                 $schedule));				
 end
 
@@ -262,9 +262,9 @@ rule "favoriteDayWeek-length3-Monday,Wednesday"
     	$schedule : Schedule($course : course, course.getLength() == 3, day.getDayweek().getDayweek != 0 && day.getDayweek().getDayweek != 2)
     	$courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
    	then
-		System.out.println("Soft3: favoriteDayWeek-length3-Monday,Wednesday" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft3: favoriteDayWeek-length3-Monday,Wednesday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-length3-Monday,Wednesday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*3,
                 $schedule));
 end
 
@@ -276,16 +276,16 @@ rule "favoriteDayWeek-Monday,Thursday"
         $courseTotalSize : CourseTotalSize(course.equals($course) == true, $totalSize : totalSize)
         
     then
-		System.out.println("Soft4: favoriteDayWeek-Monday,Thursday" + " " + "Schedule: " + $schedule.toString());
+		//System.out.println("Soft4: favoriteDayWeek-Monday,Thursday" + " " + "Schedule: " + $schedule.toString());
         insertLogical(new IntConstraintOccurrence("favoriteDayWeek-Friday", ConstraintType.NEGATIVE_SOFT,
-                $totalSize,
+                $totalSize*2,
                 $schedule));
 end		
 
 // ############################################################################
 // スコアの計算
 // ############################################################################
-
+/*
 //計画後総定員の算出
 //教室定員
 rule "asis-1"
@@ -340,7 +340,7 @@ rule "asis-3"
 		System.out.println("asis-3" + " " + $course.toString() + " asis: " + $total + " tobe: "  + $totalSize);
 		//ruleLog.add(new RuleLogger("asis-3",$course.toString() + " asis: " + $total + " tobe: "  + $totalSize));
 end
-
+*/
 
 //ハード制約のスコア計算
 rule "hardConstraintsBroken"

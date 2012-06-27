@@ -32,7 +32,7 @@ public class Schedule {
 		this.classroom = classroom;
 		this.day = day;
 	}
-	
+
 	public Schedule(int scheduleID, Course course, Classroom classroom, Day day) {
 		this.scheduleID = scheduleID;
 		this.course = course;
@@ -99,6 +99,12 @@ public class Schedule {
 				+ day.toString();
 	}
 
+	public String toStringPC() {
+		return course.toString() + "@" + classroom.toString() + " on "
+				+ day.toString() + " asis: " + "[" + classroom.getPcType()
+				+ "]" + " tobe: " + course.getSupportedPCList();
+	}
+
 	// コース開催日程の重複
 	public boolean conflictDayCheck(Schedule c) {
 		if ((c == null) || (day == null) || (classroom == null)) {
@@ -131,15 +137,16 @@ public class Schedule {
 	public boolean finishInWeek() {
 		if (day == null) {
 			return false;
-		} else { 
+		} else {
 			if (course.getLength() > 5) {
 				return true;
-		} else {
-			// would planning course finish in week? (FRI = 4)
-			if ((int) day.getDayweek1().getDayweek() <= 5 - course.getLength())
-				return true;
-			else
-				return false;
+			} else {
+				// would planning course finish in week? (FRI = 4)
+				if ((int) day.getDayweek1().getDayweek() <= 5 - course
+						.getLength())
+					return true;
+				else
+					return false;
 			}
 		}
 	}
@@ -157,11 +164,11 @@ public class Schedule {
 		if (course.getFixedRoomList() == null) {
 			return true;
 		}
-		/*if ((course.getFixedRoomList().size() == 1)
-				&& (course.getFixedRoomList().get(0).equals(""))) {
-			return true;
-		}*/
-		if (course.getFixedRoomList().size() == 0){
+		/*
+		 * if ((course.getFixedRoomList().size() == 1) &&
+		 * (course.getFixedRoomList().get(0).equals(""))) { return true; }
+		 */
+		if (course.getFixedRoomList().size() == 0) {
 			return true;
 		}
 		return course.getFixedRoomList().contains(classroom.getID());

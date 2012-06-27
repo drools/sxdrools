@@ -61,18 +61,18 @@ public class Course implements Serializable {
 		}
 		this.ID = ID;
 		if (!supportedPC.replace(" ", "").equals("")) {
-			this.supportedPCList = new ArrayList<String>(Arrays.asList(supportedPC
-					.split(",")));
+			this.supportedPCList = new ArrayList<String>(
+					Arrays.asList(supportedPC.split(",")));
 		} else {
 			this.supportedPCList = new ArrayList<String>();
 		}
-		/*if (!fixedRoom.replace(" ", "").equals("")) {
-			this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom
-					.split(",")));
-		} else {
-			this.fixedRoomList = new ArrayList<String>();
-		}*/
-		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom.split(",")));
+		/*
+		 * if (!fixedRoom.replace(" ", "").equals("")) { this.fixedRoomList =
+		 * new ArrayList<String>(Arrays.asList(fixedRoom .split(","))); } else {
+		 * this.fixedRoomList = new ArrayList<String>(); }
+		 */
+		this.fixedRoomList = new ArrayList<String>(Arrays.asList(fixedRoom
+				.split(",")));
 	}
 
 	// ゲッター・セッター
@@ -146,7 +146,7 @@ public class Course implements Serializable {
 	public void setGroup(Boolean group) {
 		this.group = group;
 	}
-	
+
 	// ***********************************************************************************
 	// Complex methods
 	// ***********************************************************************************
@@ -180,10 +180,11 @@ public class Course implements Serializable {
 			return false;
 		}
 	}
-	//コース情報の表示
+
+	// コース情報の表示
 	@Override
 	public String toString() {
-		//return "CourseID " + ID + " size " + eSize + " PC " + PC;
+		// return "CourseID " + ID + " size " + eSize + " PC " + PC;
 		return "CourseID " + ID;
 	}
 }

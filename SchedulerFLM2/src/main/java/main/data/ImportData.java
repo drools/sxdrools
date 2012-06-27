@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -21,10 +18,13 @@ import main.domain.DayWeek;
 import main.domain.Schedule;
 import main.domain.Week;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ImportData {
-	
+
 	static final Logger logger = LoggerFactory.getLogger(ImportData.class);
-	
+
 	// ÉÅÉìÉoïœêîÇÃíËã`
 	private DataStorage storage;
 
@@ -65,9 +65,9 @@ public class ImportData {
 			try {
 				storage.classroomList.add(new Classroom(i - 1, sheet.getCell(0,
 						i).getContents(), sheet.getCell(1, i).getContents(),
-						sheet.getCell(2, i).getContents(),
-						sheet.getCell(3, i).getContents(),
-						sheet.getCell(4, i).getContents()));
+						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
+								.getContents(), sheet.getCell(4, i)
+								.getContents()));
 			} catch (Exception e) {
 				logger.error("Error in ClassroomMaster row " + i);
 			}
@@ -110,7 +110,7 @@ public class ImportData {
 				storage.courseList.add(c);
 			} catch (Exception e) {
 				logger.error("Error in CourseMaster row " + i);
-				//e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 
@@ -128,12 +128,13 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				if ((storage.getClassroom(sheet.getCell(0, i).getContents()) != null) &&
-					(storage.getDay(sheet.getCell(1, i).getContents()) != null)) {
-						storage.blockedClassroomList.add(new BlockedClassroom(storage
-								.getClassroom(sheet.getCell(0, i).getContents()),
-								storage.getDay(sheet.getCell(1, i).getContents()),
-								sheet.getCell(2, i).getContents()));
+				if ((storage.getClassroom(sheet.getCell(0, i).getContents()) != null)
+						&& (storage.getDay(sheet.getCell(1, i).getContents()) != null)) {
+					storage.blockedClassroomList.add(new BlockedClassroom(
+							storage.getClassroom(sheet.getCell(0, i)
+									.getContents()), storage.getDay(sheet
+									.getCell(1, i).getContents()), sheet
+									.getCell(2, i).getContents()));
 				}
 			} catch (Exception e) {
 				logger.error("Error in BlockedClassroom row " + i);
@@ -177,7 +178,7 @@ public class ImportData {
 
 		for (int i = 1; i < sheet.getRows(); i++) {
 			try {
-				storage.dayList.add(new Day(i - 1,sheet.getCell(0, i)
+				storage.dayList.add(new Day(i - 1, sheet.getCell(0, i)
 						.getContents(), sheet.getCell(1, i).getContents(),
 						sheet.getCell(2, i).getContents(), sheet.getCell(3, i)
 								.getContents()));
@@ -202,8 +203,7 @@ public class ImportData {
 
 			logger.info("Import Classroom = "
 					+ importClassroomMaster(workbook.getSheet(1)));
-			logger.info("Import Day = "
-					+ importDayMaster(workbook.getSheet(2)));
+			logger.info("Import Day = " + importDayMaster(workbook.getSheet(2)));
 			logger.info("Import BlockedClassroom = "
 					+ importBlockedClassroomMaster(workbook.getSheet(3)));
 			logger.info("Import Course = "

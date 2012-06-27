@@ -31,7 +31,7 @@ public class ExportData {
 	private List<Schedule> scheduleList;
 	private ScoreDirector scoreDirector;
 	private ArrayList<RuleLogger> ruleLog;
-	
+
 	// コンストラクタの設定
 	// 引数なし
 	public ExportData() {
@@ -42,11 +42,11 @@ public class ExportData {
 		this.scheduleList = scheduleList;
 		this.scoreDirector = scoreDirector;
 	}
-	
+
 	public ExportData(List<Schedule> scheduleList) {
 		this.scheduleList = scheduleList;
 	}
-	
+
 	public ExportData(List<Schedule> scheduleList, ArrayList<RuleLogger> ruleLog) {
 		this.scheduleList = scheduleList;
 		this.ruleLog = ruleLog;
@@ -70,7 +70,7 @@ public class ExportData {
 
 	// エクセルシートへのエクスポート（テスト用）
 	// export with length for TEST Convenience
-	public boolean exportToXLS_debug(String filename) {
+	public boolean exportToXLS(String filename) {
 
 		try {
 			WritableWorkbook workbook = Workbook.createWorkbook(new File(
@@ -94,61 +94,8 @@ public class ExportData {
 				i++;
 			}
 
-			//write Rules list
-			
-			sheet = workbook.createSheet("BrokenRule", 1);
+			// write Rules list
 
-			i = 0;
-
-			sheet.addCell(new Label(0, i, "Broken Rule Name"));
-			sheet.addCell(new Label(1, i, "Broken Elements"));
-			i++;
-
-			for (RuleLogger brokenRule : ruleLog) {
-				sheet.addCell(new Label(0, i, brokenRule.getRuleID()));
-				sheet.addCell(new Label(1, i, brokenRule.getMessage()));
-				i++;
-			}
-			
-			workbook.write();
-			workbook.close();
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} catch (WriteException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-	}
-
-	// エクセルシートのエクスポート（仮）
-	public boolean exportToXLS(String filename) {
-
-		try {
-			WritableWorkbook workbook = Workbook.createWorkbook(new File(
-					filename));
-			
-			//write Schedule List
-			WritableSheet sheet = workbook.createSheet("Schedule", 0);
-
-			int i = 0;
-
-			sheet.addCell(new Label(0, i, "Course"));
-			sheet.addCell(new Label(1, i, "Day"));
-			sheet.addCell(new Label(2, i, "Classroom"));
-			i++;
-
-			for (Schedule schedule : scheduleList) {
-				sheet.addCell(new Label(0, i, schedule.getCourse().getID()));
-				sheet.addCell(new Label(1, i, schedule.getDay().getID()));
-				sheet.addCell(new Label(2, i, schedule.getClassroom().getID()));
-				i++;
-			}
-			
-			//write Rules list
-			
 			sheet = workbook.createSheet("BrokenRule", 1);
 
 			i = 0;
@@ -180,8 +127,8 @@ public class ExportData {
 		try {
 			WritableWorkbook workbook = Workbook.createWorkbook(new File(
 					filename));
-			
-			//write Schedule List
+
+			// write Schedule List
 			WritableSheet sheet = workbook.createSheet("BrokenRule", 1);
 
 			int i = 0;
@@ -207,58 +154,63 @@ public class ExportData {
 			return false;
 		}
 	}
-	
+
 	public boolean exportLogText(String filename) {
-		try{
+		try {
 			File f = new File(filename);
 			FileWriter out;
-			
+
 			if (!f.exists()) {
 				out = new FileWriter(filename);
 			} else {
-				out = new FileWriter(filename,true);
+				out = new FileWriter(filename, true);
 			}
-			
+
 			for (RuleLogger brokenRule : ruleLog) {
-				out.write(brokenRule.getRuleID()+ "\t"+ brokenRule.getMessage()+ "\n");
+				out.write(brokenRule.getRuleID() + "\t"
+						+ brokenRule.getMessage() + "\n");
 			}
-			
+
 			out.close();
-			
+
 			return true;
-		} 
-		catch (Exception e){//Catch exception if any
+		} catch (Exception e) {// Catch exception if any
 			e.printStackTrace();
 			return false;
 		}
 
 	}
-	
-	private List<ScoreDetail> getScoreDetailList() {
-	    if (!(scoreDirector instanceof DroolsScoreDirector)) {
-	        return null;
-	    }
-	    Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
-	    WorkingMemory workingMemory = ((DroolsScoreDirector) scoreDirector).getWorkingMemory();
-	    if (workingMemory == null) {
-	        return Collections.emptyList();
-	    }
-	    Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
-	            new ClassObjectFilter(ConstraintOccurrence.class));
-	    while (it.hasNext()) {
-	        ConstraintOccurrence constraintOccurrence = it.next();
-	        ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
-	        if (scoreDetail == null) {
-	            scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());
-	            scoreDetailMap.put(constraintOccurrence.getRuleId(), scoreDetail);
-	        }
-	        scoreDetail.addConstraintOccurrence(constraintOccurrence);
-	    }
-	    List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
-	    Collections.sort(scoreDetailList);
-	    return scoreDetailList;
-	}
 
+	private List<ScoreDetail> getScoreDetailList() {
+		if (!(scoreDirector instanceof DroolsScoreDirector)) {
+			return null;
+		}
+		Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
+		WorkingMemory workingMemory = ((DroolsScoreDirector) scoreDirector)
+				.getWorkingMemory();
+		if (workingMemory == null) {
+			return Collections.emptyList();
+		}
+		Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory
+				.iterateObjects(new ClassObjectFilter(
+						ConstraintOccurrence.class));
+		while (it.hasNext()) {
+			ConstraintOccurrence constraintOccurrence = it.next();
+			ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence
+					.getRuleId());
+			if (scoreDetail == null) {
+				scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(),
+						constraintOccurrence.getConstraintType());
+				scoreDetailMap.put(constraintOccurrence.getRuleId(),
+						scoreDetail);
+			}
+			scoreDetail.addConstraintOccurrence(constraintOccurrence);
+		}
+		List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(
+				scoreDetailMap.values());
+		Collections.sort(scoreDetailList);
+		return scoreDetailList;
+	}
 
 	public ArrayList<RuleLogger> getRuleLog() {
 		return ruleLog;
