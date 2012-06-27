@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package main.app;
+package main.tools;
 
 import java.util.ArrayList;
 import java.util.Collections;

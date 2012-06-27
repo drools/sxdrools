@@ -15,8 +15,8 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import main.app.ScoreDetail;
 import main.domain.Schedule;
+import main.tools.ScoreDetail;
 
 import org.drools.ClassObjectFilter;
 import org.drools.WorkingMemory;
