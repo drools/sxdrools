@@ -53,23 +53,7 @@ public class ExportData {
 	}
 
 	// メソッド
-	// 初期テストの結果表示
-	public void showInitialTestResult() {
-		System.out.println(" ======Result====== ");
-		for (Schedule schedule : scheduleList) {
-			System.out.println(schedule.toString()
-					+ " ||||| "
-					+ "Size "
-					+ (schedule.getCourse().geteSize() <= schedule
-							.getClassroom().getCapacity())
-					+ " PC "
-					+ (schedule.getCourse().getPC() == schedule.getClassroom()
-							.getPC()));
-		}
-	}
-
-	// エクセルシートへのエクスポート（テスト用）
-	// export with length for TEST Convenience
+	// エクセルシートへのエクスポート
 	public boolean exportToXLS(String filename) {
 
 		try {
@@ -79,6 +63,7 @@ public class ExportData {
 
 			int i = 0;
 
+			// 各データの書き込み
 			sheet.addCell(new Label(0, i, "Course"));
 			sheet.addCell(new Label(1, i, "Day"));
 			sheet.addCell(new Label(2, i, "Length"));
@@ -94,8 +79,7 @@ public class ExportData {
 				i++;
 			}
 
-			// write Rules list
-
+			// ルールの書き込み
 			sheet = workbook.createSheet("BrokenRule", 1);
 
 			i = 0;
@@ -109,7 +93,6 @@ public class ExportData {
 				sheet.addCell(new Label(1, i, brokenRule.getMessage()));
 				i++;
 			}
-
 			workbook.write();
 			workbook.close();
 			return true;
@@ -123,12 +106,13 @@ public class ExportData {
 
 	}
 
+	// エクセルシートへのルールログのエクスポート
 	public boolean exportLogXLS(String filename) {
 		try {
 			WritableWorkbook workbook = Workbook.createWorkbook(new File(
 					filename));
 
-			// write Schedule List
+			// 制約エラーの書き込み
 			WritableSheet sheet = workbook.createSheet("BrokenRule", 1);
 
 			int i = 0;
@@ -155,6 +139,7 @@ public class ExportData {
 		}
 	}
 
+	// テキストファイルへのルールログの書き込み
 	public boolean exportLogText(String filename) {
 		try {
 			File f = new File(filename);
@@ -181,6 +166,7 @@ public class ExportData {
 
 	}
 
+	// スコア詳細リストの作成
 	private List<ScoreDetail> getScoreDetailList() {
 		if (!(scoreDirector instanceof DroolsScoreDirector)) {
 			return null;
@@ -212,6 +198,7 @@ public class ExportData {
 		return scoreDetailList;
 	}
 
+	// ゲッター・セッター
 	public ArrayList<RuleLogger> getRuleLog() {
 		return ruleLog;
 	}

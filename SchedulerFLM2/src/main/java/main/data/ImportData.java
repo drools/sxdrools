@@ -14,15 +14,18 @@ import main.domain.Classroom;
 import main.domain.Course;
 import main.domain.CourseTotalSize;
 import main.domain.Day;
-import main.domain.DayWeek;
 import main.domain.Schedule;
-import main.domain.Week;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// ***********************************************************************************
+// 開催日程計画作成用
+// ***********************************************************************************
+
 public class ImportData {
 
+	// ロガーの作成
 	static final Logger logger = LoggerFactory.getLogger(ImportData.class);
 
 	// メンバ変数の定義
@@ -211,7 +214,7 @@ public class ImportData {
 			logger.info("Import TotalCourseSize = "
 					+ importCourseTotalSize(workbook.getSheet(4)));
 
-			// Initialize Schedule Data
+			// 初期スケジュールデータ（ブロック教室）の書き込み
 
 			for (Course course : storage.courseList) {
 				if (course.getFixedRoomList().size() > 0) {
@@ -237,40 +240,6 @@ public class ImportData {
 
 	}
 
-	// 初期テスト用データ
-	public void initialtest() {
-		storage = new DataStorage();
-
-		storage.classroomList.add(new Classroom(1, 18, false));
-		storage.classroomList.add(new Classroom(2, 20, true));
-		storage.classroomList.add(new Classroom(3, 15, true));
-		storage.classroomList.add(new Classroom(4, 13, false));
-
-		storage.courseList.add(new Course(1, 13, 1, true));
-		storage.courseList.add(new Course(2, 10, 2, true));
-		storage.courseList.add(new Course(3, 13, 3, false));
-		storage.courseList.add(new Course(4, 10, 1, false));
-		storage.courseList.add(new Course(5, 11, 2, true));
-		storage.courseList.add(new Course(6, 15, 1, true));
-		storage.courseList.add(new Course(7, 12, 2, false));
-		storage.courseList.add(new Course(8, 18, 1, false));
-
-		storage.dayList.add(new Day(1, DayWeek.MON, Week.FIRST));
-		storage.dayList.add(new Day(2, DayWeek.TUE, Week.FIRST));
-		storage.dayList.add(new Day(3, DayWeek.WED, Week.FIRST));
-		storage.dayList.add(new Day(4, DayWeek.THU, Week.FIRST));
-		storage.dayList.add(new Day(5, DayWeek.FRI, Week.FIRST));
-
-		for (Course course : storage.courseList) {
-			// storage.scheduleList.add(new Schedule
-			// (course,storage.classroomList.get(2),storage.dayList.get(0)));
-			storage.scheduleList.add(new Schedule(course, null, null));
-		}
-
-		storage.scheduleList.get(0).setDay(storage.dayList.get(2));
-		System.out.println(storage.scheduleList.get(0).finishInWeek());
-	}
-
 	// ***********************************************************************************
 	// アウトプットスケジュール確認用
 	// ***********************************************************************************
@@ -290,11 +259,6 @@ public class ImportData {
 					+ importScheduleOutput(workbook.getSheet(0)));
 
 			workbook.close();
-
-			/*
-			 * storage.scheduleList.get(0).setDay(storage.dayList.get(2));
-			 * System.out.println(storage.scheduleList.get(0).finishInWeek());
-			 */
 
 		} catch (IOException e) {
 			logger.error("Input " + filename + "not found!");
