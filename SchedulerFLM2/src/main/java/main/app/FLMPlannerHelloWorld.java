@@ -107,8 +107,12 @@ public class FLMPlannerHelloWorld {
 
 	public static void main(String[] args) {
 		runData(args[0]);
-		checkOutput("Planning month: "
-				+ args[0].replace(".xls", "").replace("DroolsMaster", ""));
+		String msg = args[0];
+		msg = msg.replace(".xls", "").replace("DroolsMaster", "");
+		if (msg.lastIndexOf("\\") > 0) {
+			msg = msg.substring(msg.lastIndexOf("\\")+1);
+		}
+		checkOutput("Planning month: "	+ msg);
 		if (args.length == 2) {
 			exportResult(args[1], "");
 		} else {
