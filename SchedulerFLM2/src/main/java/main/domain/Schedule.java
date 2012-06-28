@@ -9,6 +9,7 @@ import org.drools.planner.api.domain.variable.PlanningVariable;
 import org.drools.planner.api.domain.variable.ValueRange;
 import org.drools.planner.api.domain.variable.ValueRangeType;
 
+//PlanningEntity
 @PlanningEntity(difficultyWeightFactoryClass = ScheduleDifficultyWeightFactory.class)
 public class Schedule {
 
@@ -16,7 +17,7 @@ public class Schedule {
 	private Course course;
 	private int scheduleID;
 
-	// Planning variable
+	// Planning Variable
 	private Classroom classroom;
 	private Day day;
 
@@ -59,6 +60,7 @@ public class Schedule {
 		this.course = course;
 	}
 
+	// Plannning Variable　(Sterngth)の設定　-教室
 	@PlanningVariable(strengthWeightFactoryClass = ClassroomStrengthWeightFactory.class)
 	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "classroomList")
 	public Classroom getClassroom() {
@@ -69,6 +71,7 @@ public class Schedule {
 		this.classroom = classroom;
 	}
 
+	// Plannning Variable　(Sterngth)の設定　-営業日
 	@PlanningVariable(strengthWeightFactoryClass = DayStrengthWeightFactory.class)
 	@ValueRange(type = ValueRangeType.FROM_SOLUTION_PROPERTY, solutionProperty = "dayList")
 	public Day getDay() {

@@ -12,9 +12,12 @@ import org.drools.planner.core.move.Move;
 import org.drools.planner.core.score.director.ScoreDirector;
 
 public class DayChangeMove implements Move {
+
+	// ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private Schedule schedule;
 	private Day toDay;
 
+	// Move
 	public DayChangeMove(Schedule schedule, Day toDay) {
 		this.schedule = schedule;
 		this.toDay = toDay;
@@ -29,7 +32,6 @@ public class DayChangeMove implements Move {
 	}
 
 	public void doMove(ScoreDirector scoreDirector) {
-		// System.out.println(this.toString());
 		ScheduleMoveHelper.moveDay(scoreDirector, schedule, toDay);
 	}
 
@@ -53,11 +55,13 @@ public class DayChangeMove implements Move {
 		}
 	}
 
+	// hashCode
 	public int hashCode() {
 		return new HashCodeBuilder().append(schedule).append(toDay)
 				.toHashCode();
 	}
 
+	// Moveî•ñ‚Ì•\Ž¦
 	public String toString() {
 		return schedule + " => " + toDay;
 	}

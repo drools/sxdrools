@@ -32,8 +32,6 @@ public class ClassroomChangeMove implements Move {
 	}
 
 	public void doMove(ScoreDirector scoreDirector) {
-		// System.out.println(scoreDirector.toString() + " " + this.toString());
-		// System.out.println(this.toString());
 		ScheduleMoveHelper.moveClassroom(scoreDirector, schedule, toClassroom);
 	}
 
@@ -57,11 +55,13 @@ public class ClassroomChangeMove implements Move {
 		}
 	}
 
+	// hashCode
 	public int hashCode() {
 		return new HashCodeBuilder().append(schedule).append(toClassroom)
 				.toHashCode();
 	}
 
+	// Moveî•ñ‚Ì•\Ž¦
 	public String toString() {
 		return schedule + " => " + toClassroom;
 	}

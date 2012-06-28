@@ -7,9 +7,12 @@ import main.domain.Schedule;
 import org.drools.planner.core.score.director.ScoreDirector;
 
 public class ScheduleMoveHelper {
+
+	// コンストラクタの設定
 	ScheduleMoveHelper() {
 	}
 
+	// 教室
 	public static void moveClassroom(ScoreDirector scoreDirector,
 			Schedule schedule, Classroom classroom) {
 		scoreDirector.beforeVariableChanged(schedule, "classroom");
@@ -17,6 +20,7 @@ public class ScheduleMoveHelper {
 		scoreDirector.afterVariableChanged(schedule, "classroom");
 	}
 
+	// 営業日
 	public static void moveDay(ScoreDirector scoreDirector, Schedule schedule,
 			Day day) {
 		scoreDirector.beforeVariableChanged(schedule, "day");
@@ -24,6 +28,7 @@ public class ScheduleMoveHelper {
 		scoreDirector.afterVariableChanged(schedule, "day");
 	}
 
+	// スケジュール
 	public static void moveSchedule(ScoreDirector scoreDirector,
 			Schedule schedule, Day day, Classroom classroom) {
 		scoreDirector.beforeAllVariablesChanged(schedule);

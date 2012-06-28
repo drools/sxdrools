@@ -12,6 +12,7 @@ import org.drools.planner.core.move.Move;
 import org.drools.planner.core.move.factory.CachedMoveFactory;
 import org.drools.planner.core.solution.Solution;
 
+//MoveListÅiã≥é∫ÅjÇÃçÏê¨
 public class ClassroomChangeMoveFactory extends CachedMoveFactory {
 	public List<Move> createCachedMoveList(Solution solution) {
 		PlannerSolution planner = (PlannerSolution) solution;

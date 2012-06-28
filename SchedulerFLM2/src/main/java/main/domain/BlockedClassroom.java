@@ -61,8 +61,9 @@ public class BlockedClassroom implements Serializable {
 		this.length = length;
 	}
 
+	// ブロック教室情報の表示
 	public String toString() {
-		return "(Blocked) " + classroom.toString() + " for " + length 
-				+ " days starting from " + day.toString(); 
+		return "(Blocked) " + classroom.toString() + " for " + length
+				+ " days starting from " + day.toString();
 	}
 }

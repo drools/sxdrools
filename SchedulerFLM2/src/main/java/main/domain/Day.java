@@ -43,13 +43,11 @@ public class Day implements Serializable {
 		this.dayID = dayID;
 		this.dayweek = DayWeek.parseDayWeek(Integer.parseInt(dayweek));
 		if (!dayweekHoliday.equals("")) {
-			// if there is holiday in this week, feed dayweek1 with appropriate
-			// data
+			// T“à‚Éj“ú‚ª‘¶İ‚·‚éê‡Aj“ú‘O“ú‚ğ‹à—j“ú‚ÉŒ©—§‚Ä‚ÄU‚ç‚ê‚½—j“ú‚ª—p‚¢‚ç‚ê‚éB
 			this.dayweek1 = DayWeek.parseDayWeek(Integer
 					.parseInt(dayweekHoliday));
 		} else {
-			// if there is no holiday in this week, feed dayweek1 with normal
-			// dayweek
+			// T“à‚Éj“ú‚ª‘¶İ‚·‚éê‡A‚»‚Ì‚Ü‚Ü‚Ì—j“ú‚ª—p‚¢‚ç‚ê‚éB
 			this.dayweek1 = this.dayweek;
 		}
 		this.week = Week.parseWeek(Integer.parseInt(week));

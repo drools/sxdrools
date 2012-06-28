@@ -11,7 +11,7 @@ import org.drools.planner.core.solution.Solution;
 
 public class PlannerSolution implements Solution<HardAndSoftScore> {
 
-	// problem fact
+	// Problem Fact
 	private List<Classroom> classroomList;
 	private List<Day> dayList;
 	private List<BlockedClassroom> blockedClassroomList;
@@ -20,9 +20,10 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 	// private List<Week> weekList;
 	// private List<Course> courseList;
 
-	// planning entity
+	// Planning Entity
 	private List<Schedule> scheduleList;
 
+	// Score
 	private HardAndSoftScore score;
 
 	// コンストラクタの設定
@@ -30,12 +31,6 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 	public PlannerSolution() {
 	}
 
-	/*
-	 * public PlannerSolution(List<Schedule> scheduleList, List<Course>
-	 * courseList, List<Classroom> classroomList, List<Day> dayList) {
-	 * this.classroomList=classroomList; this.scheduleList=scheduleList;
-	 * this.courseList=courseList; }
-	 */
 	// 引数あり
 	public PlannerSolution(List<Schedule> scheduleList,
 			List<Classroom> classroomList, List<Day> dayList,
@@ -96,25 +91,6 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		this.courseTotalSizeList = courseTotalSizeList;
 	}
 
-	/*
-	 * public List<DayWeek> getDayWeekList() { return dayWeekList; }
-	 * 
-	 * public void setDayWeekList(List<DayWeek> dayWeekList) { this.dayWeekList
-	 * = dayWeekList; }
-	 * 
-	 * public List<Week> getWeekList() { return weekList; }
-	 * 
-	 * public void setWeekList(List<Week> weekList) { this.weekList = weekList;
-	 * }
-	 */
-
-	/*
-	 * public List<Course> getCourseList() { return courseList; }
-	 * 
-	 * public void setCourseList(List<Course> courseList) { this.courseList =
-	 * courseList; }
-	 */
-
 	// スケジュールリスト
 	@PlanningEntityCollectionProperty
 	public List<Schedule> getScheduleList() {
@@ -138,9 +114,7 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 		// facts.addAll(courseList);
 		// facts.addAll(dayWeekList);
 		// facts.addAll(weekList);
-
-		// Do not add the planning entity's (scheduleList) because that will be
-		// done automatically
+		// Planning Entityであるscheduleは、自動的に追加されるためここに記載しなくてよい。
 		return facts;
 	}
 
@@ -148,13 +122,13 @@ public class PlannerSolution implements Solution<HardAndSoftScore> {
 	public PlannerSolution cloneSolution() {
 		PlannerSolution clone = new PlannerSolution();
 
-		// clone.courseList = courseList;
 		clone.dayList = dayList;
 		clone.classroomList = classroomList;
 		clone.courseTotalSizeList = courseTotalSizeList;
 		clone.blockedClassroomList = blockedClassroomList;
 		// clone.dayWeekList = dayWeekList;
 		// clone.weekList = weekList;
+		// clone.courseList = courseList;
 
 		List<Schedule> clonedscheduleList = new ArrayList<Schedule>(
 				scheduleList.size());

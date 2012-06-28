@@ -13,6 +13,8 @@ import org.drools.planner.core.move.Move;
 import org.drools.planner.core.score.director.ScoreDirector;
 
 public class ScheduleSwapMove implements Move {
+	
+	// ƒƒ“ƒo•Ï”‚Ì’è‹`
 	private Schedule leftSchedule;
 	private Schedule rightSchedule;
 

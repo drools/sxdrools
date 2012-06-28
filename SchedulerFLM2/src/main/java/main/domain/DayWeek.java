@@ -16,25 +16,8 @@ public enum DayWeek {
 	public int getDayweek() {
 		return dayweek;
 	}
-
-	// ??
-	static DayWeek parseDayWeek(String dayweek) {
-		if (dayweek == "MON") {
-			return MON;
-		} else if (dayweek == "TUE") {
-			return TUE;
-		} else if (dayweek == "WED") {
-			return WED;
-		} else if (dayweek == "THU") {
-			return THU;
-		} else if (dayweek == "FRI") {
-			return FRI;
-		} else {
-			return null;
-		}
-
-	}
-
+	
+	//”š‚ğ—j“ú‚É•ÏŠ·‚·‚é
 	static public DayWeek parseDayWeek(int dayweek) {
 		switch (dayweek) {
 		case 0:

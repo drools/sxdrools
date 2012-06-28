@@ -37,7 +37,7 @@ public class Classroom implements Serializable {
 		this.ID = ID;
 	}
 
-	// 引数あり（+PCの種類）
+	// 引数あり（+PCの種類, グループ定員）
 	public Classroom(int classroomID, String ID, String capacity, String PC,
 			String pcType, String groupCapacity) {
 		this.capacity = Integer.parseInt(capacity);
@@ -98,6 +98,15 @@ public class Classroom implements Serializable {
 		this.pcType = pcType;
 	}
 
+	// グループ教室定員
+	public int getGroupCapacity() {
+		return groupCapacity;
+	}
+
+	public void setGroupCapacity(int groupCapacity) {
+		this.groupCapacity = groupCapacity;
+	}
+
 	// ***********************************************************************************
 	// Complex methods
 	// ***********************************************************************************
@@ -120,16 +129,7 @@ public class Classroom implements Serializable {
 	// 教室情報の表示
 	@Override
 	public String toString() {
-		//return "RoomID " + ID ; //+ " limit " + capacity + " PC " + PC;
+		// return "RoomID " + ID ; //+ " limit " + capacity + " PC " + PC;
 		return "(Room " + ID + ")";
 	}
-
-	public int getGroupCapacity() {
-		return groupCapacity;
-	}
-
-	public void setGroupCapacity(int groupCapacity) {
-		this.groupCapacity = groupCapacity;
-	}
-
 }

@@ -12,6 +12,7 @@ import org.drools.planner.core.move.Move;
 import org.drools.planner.core.move.factory.CachedMoveFactory;
 import org.drools.planner.core.solution.Solution;
 
+//MoveList（スケジュール）の作成
 public class ScheduleSwapMoveFactory extends CachedMoveFactory {
 
 	public List<Move> createCachedMoveList(Solution solution) {
