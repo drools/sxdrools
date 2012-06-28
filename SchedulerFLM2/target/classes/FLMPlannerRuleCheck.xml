@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solver>
-  <environmentMode>PRODUCTION</environmentMode>
+  <environmentMode>DEBUG</environmentMode>
 
   <!-- Domain model configuration -->
   <solutionClass>main.domain.PlannerSolution</solutionClass>

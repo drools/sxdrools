@@ -13,7 +13,7 @@
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <append>true</append>
-    <file>droolslog-${bySecond}.txt</file>
+    <file>..\temp\droolslog-${bySecond}.txt</file>
     <encoder>
       <pattern>%logger{35} - %msg%n</pattern>
     </encoder>

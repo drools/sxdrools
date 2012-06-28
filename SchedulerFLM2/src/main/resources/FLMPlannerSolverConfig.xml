@@ -14,15 +14,15 @@
   </scoreDirectorFactory>
 
   <!-- Optimization algorithms configuration -->
-  <termination>
-    <terminationCompositionStyle>OR</terminationCompositionStyle>
-    <maximumSecondsSpend>1800</maximumSecondsSpend>
-  </termination>
   <constructionHeuristic>
     <constructionHeuristicType>BEST_FIT_DECREASING</constructionHeuristicType>
     <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
   </constructionHeuristic>
   <localSearch>
+    <termination>
+       <terminationCompositionStyle>OR</terminationCompositionStyle>
+       <maximumUnimprovedStepCount>150</maximumUnimprovedStepCount>
+    </termination>
     <selector>
       <selector>
         <moveFactoryClass>main.solver.move.factory.ClassroomChangeMoveFactory</moveFactoryClass>
