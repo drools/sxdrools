@@ -22,6 +22,7 @@
     <termination>
        <terminationCompositionStyle>OR</terminationCompositionStyle>
        <maximumUnimprovedStepCount>150</maximumUnimprovedStepCount>
+       <maximumMinutesSpend>60</maximumMinutesSpend>
     </termination>
     <selector>
       <selector>
