@@ -101,10 +101,10 @@ public class ExportData {
 			workbook.close();
 			return true;
 		} catch (IOException e) {
-			logger.error("Input " + filename + " cause IOException!");
+			logger.error("Output " + filename + " cause IOException!");
 			return false;
 		} catch (WriteException e) {
-			logger.error("Input " + filename + " cause WriteException!");
+			logger.error("Output " + filename + " cause WriteException!");
 			return false;
 		}
 
@@ -135,10 +135,10 @@ public class ExportData {
 			workbook.close();
 			return true;
 		} catch (IOException e) {
-			logger.error("Input " + filename + " cause IOException!");
+			logger.error("Output " + filename + " cause IOException!");
 			return false;
 		} catch (WriteException e) {
-			logger.error("Input " + filename + " cause WriteException!");
+			logger.error("Output " + filename + " cause WriteException!");
 			return false;
 		}
 	}
@@ -164,7 +164,7 @@ public class ExportData {
 
 			return true;
 		} catch (Exception e) {// Catch exception if any
-			logger.error("Input " + filename + " cause Exception!");
+			logger.error("Output " + filename + " cause Exception!");
 			return false;
 		}
 
