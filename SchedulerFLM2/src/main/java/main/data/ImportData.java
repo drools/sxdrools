@@ -231,11 +231,11 @@ public class ImportData {
 			workbook.close();
 
 		} catch (IOException e) {
-			logger.error("Input " + filename + "not found!");
+			logger.error("Input " + filename + " cause IOException!");
 		}
 
 		catch (BiffException e) {
-			logger.error("Input " + filename + "contain Biff error!");
+			logger.error("Input " + filename + " cause BiffException!");
 		}
 
 	}
@@ -261,11 +261,11 @@ public class ImportData {
 			workbook.close();
 
 		} catch (IOException e) {
-			logger.error("Input " + filename + "not found!");
+			logger.error("Input " + filename + " cause IOException!");
 		}
 
 		catch (BiffException e) {
-			logger.error("Input " + filename + "contain Biff error!");
+			logger.error("Input " + filename + " cause BiffException!");
 		}
 
 	}

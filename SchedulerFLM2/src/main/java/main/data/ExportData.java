@@ -23,9 +23,13 @@ import org.drools.WorkingMemory;
 import org.drools.planner.core.score.constraint.ConstraintOccurrence;
 import org.drools.planner.core.score.director.ScoreDirector;
 import org.drools.planner.core.score.director.drools.DroolsScoreDirector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExportData {
 
+	static final Logger logger = LoggerFactory.getLogger(ExportData.class);
+	
 	// メンバ変数の定義
 	// スケジュール
 	private List<Schedule> scheduleList;
@@ -97,10 +101,10 @@ public class ExportData {
 			workbook.close();
 			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + " cause IOException!");
 			return false;
 		} catch (WriteException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + " cause WriteException!");
 			return false;
 		}
 
@@ -131,10 +135,10 @@ public class ExportData {
 			workbook.close();
 			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + " cause IOException!");
 			return false;
 		} catch (WriteException e) {
-			e.printStackTrace();
+			logger.error("Input " + filename + " cause WriteException!");
 			return false;
 		}
 	}
@@ -160,7 +164,7 @@ public class ExportData {
 
 			return true;
 		} catch (Exception e) {// Catch exception if any
-			e.printStackTrace();
+			logger.error("Input " + filename + " cause Exception!");
 			return false;
 		}
 
